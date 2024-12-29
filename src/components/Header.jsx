@@ -5,18 +5,15 @@ export default function Header () {
     <header>
         
       <nav
-        className='navbar navbar-expand-lg bg-secondary py-3 px-5 container-fluid d-flex flex-column'
+        className='navbar navbar-expand-lg bg-secondary py-3 px-1 container-fluid d-flex flex-column'
       >
         {/* Logo */}
         <div className='row justify-content-center w-100'>
-          <a
-            className='navbar-brand fw-bold col-5 col-sm-3 col-md-2 col-xl-2'
+          <div
+            className='navbar-brand fw-bold d-flex justify-content-between w-100 justify-content-lg-center'
             to='/'
           >
-            <img src={logo} alt='Banannyland' className='w-100' />
-
-            {/* Mobile Toggle */}
-            <button
+              <button
               className='navbar-toggler'
               type='button'
               data-bs-toggle='collapse'
@@ -27,7 +24,10 @@ export default function Header () {
             >
               <span className='navbar-toggler-icon'></span>
             </button>
-          </a>
+            <img src={logo} alt='Banannyland' className='col-8 col-sm-4 col-md-3 col-xl-2 ' />
+
+          
+          </div>
         </div>
         <div className='row'>
           <div className='collapse navbar-collapse p-4' id='navbarNav'>
@@ -39,12 +39,17 @@ export default function Header () {
               </li>
               <li className='nav-item'>
                 <a className={`nav-link fw-bold `} to='/services'>
-                  Nuestros servicios
+                  Comprar por categoría
                 </a>
               </li>
               <li className='nav-item'>
                 <a className={`nav-link fw-bold`} to='/news'>
-                  Noticias
+                  Comprar por temporada
+                </a>
+              </li>
+              <li className='nav-item'>
+                <a className={`nav-link fw-bold`} to='/news'>
+                  Promociones
                 </a>
               </li>
             </ul>
@@ -57,28 +62,14 @@ export default function Header () {
                 rel='noopener noreferrer'
                 className='mx-2 h4'
               >
-                <i className='bi bi-facebook'></i>
-              </a>
-              <a
-                href='https://twitter.com'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='mx-2  h4'
-              >
-                <i className='bi bi-twitter'></i>
-              </a>
-              <a
-                href='https://instagram.com'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='mx-2 h4'
-              >
-                <i className='bi bi-instagram'></i>
+                <i className='bi bi-cart-check'></i>
               </a>
 
               {/* Call to Action Button */}
+              
+              {/* Call to Action Button */}
               <a className='btn btn-primary ms-3' to='/contact'>
-                Contáctanos
+                Inicia sesión
               </a>
             </div>
           </div>
