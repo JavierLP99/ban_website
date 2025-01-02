@@ -1,0 +1,23 @@
+{
+    "banner": {
+      "title": "Banannyland",
+      "description": "Banannyland.",
+      "buttonText": "Ver productos",
+      "buttonLink": "#catalog",
+      "backgroundImages": [
+        "/home/banner_background.jpg"
+      ],
+      "logo": "logo_basic.png"
+    },
+    "servicesSection": {
+      "title": "Nuestros Servicios",
+      "description": "Descubre nuestra variedad de servicios en TIC y electricidad diseñados para satisfacer las necesidades de tu negocio.",
+      "detailsLabel": "Saber más",
+      "moreLabel": "Ver más servicios"
+    },
+    "clientsSection": {
+      "title": "Nuestros Clientes",
+      "description": "Confiados por líderes de la industria para ofrecer excelencia en servicios de TIC y electricidad."
+    }
+  }
+  
