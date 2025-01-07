@@ -17,7 +17,7 @@ const Banner = () => {
     <div className="position-relative vh-100 vw-100">
       {/* Background Carousel */}
       <Carousel className="vh-100 vw-100 position-absolute top-0 start-0" fade indicators={false} controls={false}>
-        {content.backgroundImages.map((image, index) => (
+        {content.backgroundImage.map((image, index) => (
           <Carousel.Item key={index}>
             <div
               className="d-block w-100 vh-100"

@@ -4,8 +4,8 @@
       "description": "Banannyland.",
       "buttonText": "Ver productos",
       "buttonLink": "#catalog",
-      "backgroundImages": [
-        "/home/banner_background.jpg"
+      "backgroundImage": [
+        "/home/banner_background.png"
       ],
       "logo": "logo_basic.png"
     },
