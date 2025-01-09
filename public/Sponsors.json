@@ -1,0 +1,25 @@
+{
+    "data": [
+      {
+        "name": "Altair",
+        "page": "https://altair.com/altair-mexico",
+        "imagemain": "https://drive.google.com/file/d/1dk4dlKDU8MefZmQv54rsCys6C7wu_vpZ/view?usp=drive_link",
+        "imagesecond": "https://drive.google.com/file/d/1pcMe8xSuvtE__opyLjq2BDZr7ml0sUln/view?usp=sharing",
+        "description":"Altair, líder mundial en inteligencia computacional, nos proporciona herramientas para analizar y optimizar proyectos, además de recursos para aprender a usar sus softwares de simulación, HPC e IA. La empresa también ofrece soluciones para diversas industrias, como la automotriz, aeroespacial y la manufactura, ayudándoles a innovar, mejorar la eficiencia y reducir el impacto ambiental. Su objetivo es impulsar la innovación y decisiones inteligentes a través de la ciencia computacional, creando un futuro más conectado y sostenible."
+      },
+      {
+        "name": "ANSYS",
+        "page": "https://www.ansys.com/",
+        "imagemain": "https://drive.google.com/file/d/1rfGE2I5WcpsFvFYgkHQKxAo8s2h8AHy6/view?usp=drive_link",
+        "imagesecond": "https://drive.google.com/file/d/1pcMe8xSuvtE__opyLjq2BDZr7ml0sUln/view?usp=sharing",
+        "description":"Ansys, líder en software de simulación, nos equipa con herramientas para analizar y probar la resistencia de nuestros proyectos a diferentes condiciones, además de ofrecer recursos para aprender a usar sus softwares. Sus soluciones, que van desde el transporte sostenible hasta los dispositivos médicos, permiten a los innovadores de diversas industrias avanzar en la creación de los próximos grandes saltos en la evolución humana, impulsados por la potencia predictiva de la simulación."
+      },
+      {
+        "name": "CDA",
+        "page": "https://www.ipn.mx/cda/",
+        "imagemain": "https://drive.google.com/file/d/1IH_cg56bxeuaXEmPntT2ONHajZZpn_n1/view?usp=drive_link",
+        "imagesecond": "https://drive.google.com/file/d/1AZ98SEK8qC4Tczxg-K1Z69v4OWjkhkDH/view?usp=drive_link",
+        "description": "El Centro de Desarrollo Aeroespacial es la Unidad Académica que promueve, coordina y realiza acciones de investigación científica, desarrollo tecnológico e innovación en materia aeroespacial, fomentando la formación de capital humano altamente capacitado, el análisis de la regulación aplicable y la participación institucional en los ámbitos nacional e internacional con una perspectiva de beneficio social."
+      }
+    ]
+  }

@@ -1,0 +1,78 @@
+.new-products-section .card-wrap {
+    position: relative;
+    width: 240px;
+    height: 320px;
+    margin: 10px;
+    perspective: 800px;
+    transform-style: preserve-3d;
+    cursor: pointer;
+  }
+  
+  .new-products-section .card {
+    position: relative;
+    flex: 0 0 240px;
+    width: 240px;
+    height: 320px;
+    background-color: transparent;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.66) 0 30px 60px 0, inset #333 0 0 0 5px,
+      inset rgba(255, 255, 255, 0.5) 0 0 0 6px;
+    transition: .25s cubic-bezier(0.445, 0.35, 0.55, 0.65);
+    transform-style: preserve-3d;
+  }
+  
+  .new-products-section .card:hover {
+    box-shadow: rgba(255, 255, 255, 0.2) 0 0 40px 5px,
+      rgba(255, 255, 255, 1) 0 0 0 1px, rgba(0, 0, 0, 0.66) 0 30px 60px 0,
+      inset #333 0 0 0 5px, inset white 0 0 0 6px;
+  }
+  
+  .new-products-section .card-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transform: translateZ(0);
+    transition: .25s cubic-bezier(0.445, 0.35, 0.55, 0.65), opacity 1s;
+    opacity: 0.5;
+  }
+  
+  .new-products-section .card-wrap:hover .card-bg {
+    transform: translateZ(-20px) scale(1.1);
+    opacity: 0.8;
+  }
+  
+  .new-products-section .card-info {
+    padding: 20px;
+    position: absolute;
+    bottom: 0;
+    color: #3d3d3d;
+    transform: translateY(40%);
+    transition: .25s cubic-bezier(0.445, 0.35, 0.55, 0.65);
+    z-index: 1; /* Ensures it's on top of the background */
+  }
+  
+  .new-products-section .card-wrap:hover .card-info {
+    transform: translateY(0);
+  }
+  
+  .new-products-section .card-info h1 {
+    font-size: 24px;
+    font-weight: 700;
+    text-shadow: rgba(0, 0, 0, 0.5) 0 10px 10px;
+  }
+  
+  .new-products-section .card-info p {
+    opacity: 0;
+    /* text-shadow: rgba(0, 0, 0, 1) 0 2px 3px; */
+    transition: opacity 0.6s ease;
+  }
+  
+  .new-products-section .card-wrap:hover .card-info p {
+    opacity: 1;
+  }
+  
