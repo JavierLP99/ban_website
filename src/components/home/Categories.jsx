@@ -85,10 +85,10 @@ const Categories = () => {
   )
 
   return (
-    <section className='bg-body-secondary h-full py-5'>
+    <section className='h-full py-5'>
       <h2 className='fw-bold text-center text-primary mb-4'>Categorías</h2>
       <div className='row mx-0 justify-content-center align-items-center'>
-        <div className='text-center bg-body-secondary col-12 col-md-6 col-lg-10 my-5 my-lg-0 position-relative'>
+        <div className='text-center col-12 col-md-6 col-lg-10 my-5 my-lg-0 position-relative'>
           <div
             id='opinioncarousel'
             className='carousel carousel-dark justify-content-center'

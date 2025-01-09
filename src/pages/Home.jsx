@@ -31,19 +31,20 @@ const Home = () => {
 
   return (
     <div>
-            <div
+      <div
         className='background-image'
         style={{
           backgroundImage: `url(${updateUrl(
-            'https://lh3.googleusercontent.com/pw/AP1GczNdbjNtDgUzkuST6avjfehTy00N2xjRMcLCAga2Crkte2y2cM96WZKv_nLkbPQIq2KxsgbuhscHtjp1lZ1-b3M3G-1UFveLa0pHClB8-P157Ju7mCKccGJCPTm5hoZaZM4dsXNKf5aT4RcyhIzY_1QB=w1290-h917-s-no-gm?authuser=0'
+            'https://lh3.googleusercontent.com/pw/AP1GczMPVpG7b1li6wTGs1JO14t7ilu8qdZBVhJgNfsGOF26Q9Tv6l38YkuXx9gIkhny8PlQYAiSfvr74PhnReQDR7w3vovV8Xp5oQzPwdh0FopRPZQzS7Rr_r495VA6rCGmU3DYus7SkH1GN7K5SDM9iLnq=w1344-h938-s-no?authuser=0'
           )})`
           // backgroundImage: `url(${backgroundImage})`
         }}
-      />
-      <Banner/>
+      >
+      <Banner />
       <Categories />
-      <NewProducts /> 
-      <MostSold/>
+      <NewProducts />
+      <MostSold />
+      </div>
     </div>
   )
 }
