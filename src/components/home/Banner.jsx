@@ -14,10 +14,10 @@ const Banner = () => {
   if (!content) return <div>Loading...</div>
 
   return (
-    <div className='position-relative vh-100 vw-100'>
+    <div className='position-relative overflow-hidden' style={{ height: '500px' }}>
       {/* Background Carousel */}
       <Carousel
-        className='vh-100 vw-100 position-absolute top-0 start-0'
+        className='w-100 h-100 position-absolute top-0 start-0'
         fade
         indicators={false}
         controls={false}
