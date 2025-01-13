@@ -68,6 +68,7 @@ const NewProducts = () => {
           <div className="card-bg" style={{ ...cardBgTransform, ...cardBgImage }}></div>
           <div className="card-info">
             <h1>{name}</h1>
+
             <p>
               Explora las características únicas de nuestros productos.
             </p>
@@ -78,24 +79,29 @@ const NewProducts = () => {
   };
 
   return (
-    <section className="py-5 new-products-section">
-      <div className="container text-center">
-        <h2 className="fw-bold mb-3">Nuevos productos</h2>
-        <p className="text-muted mb-5">
-          Descubre nuestros últimos productos diseñados con pasión y calidad.
-        </p>
-        <div className="row justify-content-center">
-          {products.map((product) => (
-            <div key={product.id} className="col-12 col-md-6 col-lg-4 d-flex justify-content-center mb-4">
-              <Card image={product.image} name={product.name} url={product.url} />
-            </div>
-          ))}
+<section className="py-5 new-products-section">
+  <div className="container text-center d-flex flex-column align-items-center justify-content-center">
+    <h2 className="fw-bold mb-3">Nuevos productos</h2>
+    <div className="rainbow-divider mb-3"></div> {/* Rainbow divider below the header */}
+
+    <p className="text-muted mb-5">
+      Descubre nuestros últimos productos diseñados con pasión y calidad.
+    </p>
+    
+    <div className="row justify-content-center">
+      {products.map((product) => (
+        <div key={product.id} className="col-12 col-md-6 col-lg-4 d-flex justify-content-center mb-4">
+          <Card image={product.image} name={product.name} url={product.url} />
         </div>
-        <button className="btn btn-dark rounded-pill px-4 py-2">
-          ¡Lo quiero!
-        </button>
-      </div>
-    </section>
+      ))}
+    </div>
+    
+    <button className="btn btn-dark rounded-pill px-4 py-2 mt-4">
+      ¡Lo quiero!
+    </button>
+  </div>
+</section>
+
   );
 };
 
