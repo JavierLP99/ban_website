@@ -23,13 +23,14 @@ const Banner = () => {
         controls={false}
       >
         {content.backgroundImages.map((image, index) => (
-          <Carousel.Item key={index}>
+          <Carousel.Item key={index} style={{ height: '100vh' }}>
             <div
-              className='d-block w-100 vh-100'
+              className='d-block w-100'
               style={{
                 backgroundImage: `url(${image})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
+                objectFit: 'cover',
+                height: '100%',
+                backgroundPosition: 'top'
               }}
             ></div>
           </Carousel.Item>
@@ -38,7 +39,7 @@ const Banner = () => {
 
       {/* Overlay Content */}
       <div
-        className='d-flex flex-column justify-content-end text-white vh-100 vw-100 position-relative'
+        className='d-flex flex-column justify-content-end text-white h-100 position-relative'
         style={{ zIndex: 2 }}
       >
         <div className='position-absolute top-50 text-start w-100'>

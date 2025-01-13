@@ -51,8 +51,8 @@ const MostSold = () => {
       <div className='text-center'>
         <h2 className='fw-semibold mb-4 text-dark'>Los más vendidos</h2>
       </div>
-      <div className='row justify-content-center text-justify'>
-        <p className='col-5'>
+      <div className='row justify-content-center'>
+        <p className='text-justify col-5'>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           minim veniam, quis nostrud exercitation ullamco laboris nisi ut
