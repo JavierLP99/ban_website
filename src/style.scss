@@ -2,15 +2,10 @@
 @import '../node_modules/bootstrap/scss/functions';
 @import '../node_modules/bootstrap/scss/variables';
 
-.text-justify {
+  .text-justify {
     text-align: justify;
   }
 
-  .carousel-item img {
-    width: 100%;
-    height: 100vh; /* o una altura fija */
-    object-fit: cover;
-  }
   .rainbow-divider {
     width: 50%;
     height: 10px; /* Thicker line, adjust as needed */
