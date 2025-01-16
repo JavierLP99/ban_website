@@ -14,7 +14,10 @@ const Banner = () => {
   if (!content) return <div>Loading...</div>
 
   return (
-    <div className='position-relative overflow-hidden' style={{ height: '500px' }}>
+    <div
+      className='position-relative overflow-hidden'
+      style={{ height: '600px' }}
+    >
       {/* Background Carousel */}
       <Carousel
         className='w-100 h-100 position-absolute top-0 start-0'
@@ -23,16 +26,15 @@ const Banner = () => {
         controls={false}
       >
         {content.backgroundImages.map((image, index) => (
-          <Carousel.Item key={index} style={{ height: '100vh' }}>
-            <div
-              className='d-block w-100'
+          <Carousel.Item key={index} className='d-block w-100 h-100'>
+            <img
+              src={image}
+              alt=''
+              className='d-block w-100 h-100'
               style={{
-                backgroundImage: `url(${image})`,
-                objectFit: 'cover',
-                height: '100%',
-                backgroundPosition: 'top'
+                objectFit: 'cover'
               }}
-            ></div>
+            />
           </Carousel.Item>
         ))}
       </Carousel>
