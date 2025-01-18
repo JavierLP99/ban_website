@@ -8,7 +8,7 @@
 
   .rainbow-divider {
     width: 50%;
-    height: 10px; /* Thicker line, adjust as needed */
+    height: 20px; /* Thicker line, adjust as needed */
     background: linear-gradient(to right, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #8B00FF);
     background-size: 200% 100%; /* Ensures smooth gradient */
     animation: wave 4s linear infinite; /* Animation for smooth movement */
@@ -32,3 +32,19 @@
   
 
   @import '../node_modules/bootstrap/scss/bootstrap';
+
+  .carousel-control-next-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='red' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
+    
+}
+.carousel-control-next {
+  width: 40px;
+  padding: 0;
+}
+.carousel-control-prev-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='red' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
+}
+.carousel-control-prev {
+  width: 40px;
+  padding: 0;
+}

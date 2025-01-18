@@ -6,25 +6,6 @@ import viteLogo from '/vite.svg'
 import Header from './components/Header'
 
 function App() {
-  const [headerHeight, setHeaderHeight] = useState(0)
-  const headerRef = useRef(null)
-  const [count, setCount] = useState(0)
-
-  useEffect(() => {
-    // Update Header height automatically
-    if (headerRef.current) {
-      setHeaderHeight(headerRef.current.offsetHeight)
-    }
-    const handleResize = () => {
-      if (headerRef.current) {
-        setHeaderHeight(headerRef.current.offsetHeight)
-      }
-    }
-    window.addEventListener('resize', handleResize) // Changes on screen size
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
 
   const router = createBrowserRouter(
     [
@@ -32,8 +13,8 @@ function App() {
         path: '/*',
         element: (
           <>
-            <Header ref={headerRef} /> {/* Header now inside Router context */}
-            <div style={{ marginTop: headerHeight }}>
+            <Header  /> {/* Header now inside Router context */}
+            <div style={{ marginTop: '30px' }}>
               <RoutesIndex />
             </div>
           </>

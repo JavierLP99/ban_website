@@ -88,7 +88,7 @@ const NewProducts = () => {
       Descubre nuestros últimos productos diseñados con pasión y calidad.
     </p>
     
-    <div className="row justify-content-center">
+    <div className="row justify-content-center w-100">
       {products.map((product) => (
         <div key={product.id} className="col-12 col-md-6 col-lg-4 d-flex justify-content-center mb-4">
           <Card image={product.image} name={product.name} url={product.url} />

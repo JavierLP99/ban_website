@@ -1,143 +1,143 @@
-import { useEffect, useRef, useState } from 'react'
-import { Carousel } from 'bootstrap'
+import { useState, useEffect } from 'react'
+import { Carousel } from 'react-bootstrap'
 
 const Categories = () => {
-  const carouselRef1 = useRef(null)
+  const [groupSize, setGroupSize] = useState(getInitialGroupSize())
 
-  const [info, setInfo] = useState({ data: [] })
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [itemsToShow, setItemsToShow] = useState(1)
+  const movies = [
+    {
+      id: 1,
+      title: 'Categoría 1',
+      image: 'https://placehold.co/600x400/EEE/31343C'
+    },
+    {
+      id: 2,
+      title: 'Categoría 2',
+      image: 'https://placehold.co/600x400/EEE/31343C'
+    },
+    {
+      id: 3,
+      title: 'Categoría 3',
+      image: 'https://placehold.co/600x400/EEE/31343C'
+    },
+    {
+      id: 4,
+      title: 'Categoría 4',
+      image: 'https://placehold.co/600x400/EEE/31343C'
+    },
+    {
+      id: 5,
+      title: 'Categoría 5',
+      image: 'https://placehold.co/600x400/EEE/31343C'
+    },
+    {
+      id: 6,
+      title: 'Categoría 2',
+      image: 'https://placehold.co/600x400/EEE/31343C'
+    },
+    {
+      id: 7,
+      title: 'Categoría 3',
+      image: 'https://placehold.co/600x400/EEE/31343C'
+    },
+    {
+      id: 8,
+      title: 'Categoría 4',
+      image: 'https://placehold.co/600x400/EEE/31343C'
+    },
+    {
+      id: 9,
+      title: 'Categoría 5',
+      image: 'https://placehold.co/600x400/EEE/31343C'
+    },
+    {
+      id: 10,
+      title: 'Categoría 2',
+      image: 'https://placehold.co/600x400/EEE/31343C'
+    },
+    {
+      id: 11,
+      title: 'Categoría 3',
+      image: 'https://placehold.co/600x400/EEE/31343C'
+    },
+    {
+      id: 12,
+      title: 'Categoría 4',
+      image: 'https://placehold.co/600x400/EEE/31343C'
+    },
+    {
+      id: 13,
+      title: 'Categoría 5',
+      image: 'https://placehold.co/600x400/EEE/31343C'
+    }
+  ]
+
+  function getInitialGroupSize () {
+    if (window.innerWidth >= 1024) return 6
+    if (window.innerWidth >= 768) return 4
+    if (window.innerWidth >= 576) return 3
+    return 2
+  }
 
   useEffect(() => {
-    fetch('/Sponsors.json')
-      .then((response) => response.json())
-      .then((data) => setInfo(data))
-      .catch((error) => console.error('Error fetching JSON:', error))
-  }, [])
-
-  useEffect(() => {
-    if (carouselRef1.current) new Carousel(carouselRef1.current)
-
-    const updateItemsToShow = () => {
-      const width = window.innerWidth
-      if (width >= 992) setItemsToShow(3)
-      else if (width >= 768) setItemsToShow(2)
-      else setItemsToShow(1)
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) setGroupSize(6)
+      else if (window.innerWidth >= 768) setGroupSize(4)
+      else if (window.innerWidth >= 576) setGroupSize(3)
+      else setGroupSize(2)
     }
 
-    updateItemsToShow()
-    window.addEventListener('resize', updateItemsToShow)
-
-    return () => window.removeEventListener('resize', updateItemsToShow)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const handleNext = () => {
-    setCurrentIndex(
-      (prevIndex) => (prevIndex + itemsToShow) % info.data.length
-    )
+  const groupCards = (cards, groupSize) => {
+    const grouped = []
+    for (let i = 0; i < cards.length; i += groupSize-1) {
+      grouped.push(cards.slice(i, i + groupSize-1))
+    }
+    return grouped
   }
 
-  const handlePrev = () => {
-    setCurrentIndex(
-      (prevIndex) =>
-        (prevIndex - itemsToShow + info.data.length) % info.data.length
-    )
-  }
-
-  const ImportDrivePhoto = (driveUrl, height) => {
-    const defaultUrl =
-      'https://drive.google.com/file/d/1Q7By_xG9r3a8Zr47j6b1HG7yAm91GIHO/view?usp=drive_link'
-
-    const match = driveUrl.match(/\/d\/(.*)\//)
-    const fileId = match ? match[1] : defaultUrl.match(/\/d\/(.*)\//)[1]
-
-    return `https://lh3.googleusercontent.com/d/${fileId}=h${height}`
-  }
-
-  if (!info.data.length) return <div>Loading...</div>
-
-  const renderCard = (data, className) => (
-    <div className={`card bg-white rounded col-11 ${className}`}>
-      <div className='d-flex flex-column'>
-        <div className='ratio ratio-1x1'>
-          <img
-            src={ImportDrivePhoto(data.imagesecond, 600)}
-            className='object-fit-cover w-100 h-100 rounded-top'
-            alt={data.name}
-          />
-        </div>
-        <div className='card-body d-flex flex-column'>
-          <div className='d-flex flex-column'>
-            <div className='pt-3'>
-              <a
-                href=''
-                className='btn btn-outline-primary rounded mx-auto my-1'
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                <h4>Nombre del proyecto</h4>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+  const groupedCards = groupCards(movies, groupSize)
 
   return (
-    <section className='h-full py-5'>
-      <h2 className='fw-bold text-center text-primary mb-4'>Categorías</h2>
-      <div className='row mx-0 justify-content-center align-items-center'>
-        <div className='text-center col-12 col-md-6 col-lg-10 my-5 my-lg-0 position-relative'>
-          <div
-            id='opinioncarousel'
-            className='carousel carousel-dark justify-content-center'
-            ref={carouselRef1}
-          >
-            <div className='carousel-inner'>
-              <div className='carousel-item active'>
-                <div className='row justify-content-center'>
-                  {Array.from({ length: itemsToShow }).map((_, idx) => (
-                    <div
-                      key={idx}
-                      className={`d-flex justify-content-center align-items-center col-${12 / itemsToShow}`}
-                    >
-                      {renderCard(info.data[(currentIndex + idx) % info.data.length], '')}
-                    </div>
-                  ))}
+    <div className="container text-center d-flex flex-column align-items-center justify-content-center my-4">
+      <h2 className='fw-bold mb-3'>Categorías</h2>
+      <div className='rainbow-divider mb-3'></div>{' '}
+      {/* Rainbow divider below the header */}
+      <Carousel interval={null} indicators={false} className='w-100'>
+        {groupedCards.map((group, idx) => (
+          <Carousel.Item key={idx}>
+            <div className='d-flex justify-content-center'>
+              {group.map(item => (
+                <div
+                  key={item.id}
+                  className={`p-3 p-lg-4 col-${12 / groupSize}`}
+                >
+                  <div
+                    className='ratio ratio-1x1 rounded rounded-5'
+                    style={{ overflow: 'hidden' }}
+                  >
+                    <a href="#">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      style={{
+                        objectFit: 'cover', // Ensures the image fills the container properly
+                        width: '100%', // Ensures full width
+                        height: '100%' // Ensures full height
+                      }}
+                    /></a>
+                  </div>
+                  <p className='text-center mt-2'>{item.title}</p>
                 </div>
-              </div>
+              ))}
             </div>
-            <button
-              className='carousel-control-prev position-absolute start-0 translate-middle-y'
-              type='button'
-              data-bs-target='#opinioncarousel'
-              onClick={handlePrev}
-              style={{ left: '-50px' }}
-            >
-              <span
-                className='carousel-control-prev-icon'
-                aria-hidden='true'
-              />
-              <span className='visually-hidden'>Previous</span>
-            </button>
-            <button
-              className='carousel-control-next position-absolute end-0 translate-middle-y'
-              type='button'
-              data-bs-target='#opinioncarousel'
-              onClick={handleNext}
-              style={{ right: '-50px' }}
-            >
-              <span
-                className='carousel-control-next-icon'
-                aria-hidden='true'
-              />
-              <span className='visually-hidden'>Next</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
+          </Carousel.Item>
+        ))}
+      </Carousel>
+    </div>
   )
 }
 
