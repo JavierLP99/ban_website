@@ -14,9 +14,7 @@ function App() {
         element: (
           <>
             <Header  /> {/* Header now inside Router context */}
-            <div style={{ marginTop: '30px' }}>
               <RoutesIndex />
-            </div>
           </>
         )
       }

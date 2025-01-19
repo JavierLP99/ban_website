@@ -1,0 +1,125 @@
+{
+    "products": [
+      {
+        "id": 1,
+        "name": "Taza Personalizada",
+        "category": "Tazas",
+        "price": {
+          "1-10": 12.99,
+          "11-50": 11.99,
+          "51-100": 10.99
+        },
+        "description": "Taza de cerámica personalizada con texto o imagen a elección.",
+        "customizationOptions": [
+          "Texto",
+          "Imagen",
+          "Color"
+        ],
+        "stock": 100,
+        "images": [
+          "taza_personalizada_frente.jpg",
+          "taza_personalizada_reverso.jpg"
+        ],
+        "tags": ["taza", "taza personalizada", "personalizada"],
+        "availableColors": ["Blanco", "Negro", "Rojo"],
+        "sizeOptions": ["11oz", "15oz"],
+        "status": "Activo"
+      },
+      {
+        "id": 2,
+        "name": "Playera Personalizada",
+        "category": "Ropa",
+        "price": {
+          "1-10": 19.99,
+          "11-50": 17.99,
+          "51-100": 15.99
+        },
+        "description": "Playera de algodón personalizada con impresión de texto o imagen.",
+        "customizationOptions": [
+          "Texto",
+          "Imagen",
+          "Color",
+          "Talla"
+        ],
+        "stock": 50,
+        "images": [
+          "playera_personalizada_frente.jpg",
+          "playera_personalizada_reverso.jpg"
+        ],
+        "tags": ["playera", "ropa", "personalizada"],
+        "availableColors": ["Blanco", "Negro", "Azul", "Gris"],
+        "sizeOptions": ["S", "M", "L", "XL", "XXL"],
+        "status": "Activo"
+      },
+      {
+        "id": 3,
+        "name": "Copa de Vino Grabada",
+        "category": "Vasos",
+        "price": {
+          "1-10": 15.49,
+          "11-50": 14.49,
+          "51-100": 13.49
+        },
+        "description": "Elegante copa de vino grabada con diseño personalizado.",
+        "customizationOptions": [
+          "Texto",
+          "Diseño"
+        ],
+        "stock": 30,
+        "images": [
+          "copa_vino_grabada.jpg"
+        ],
+        "tags": ["copa", "copa de vino", "grabada"],
+        "availableColors": ["Transparente"],
+        "sizeOptions": [],
+        "status": "Activo"
+      },
+      {
+        "id": 4,
+        "name": "Cuaderno Personalizado",
+        "category": "Papelería",
+        "price": {
+          "1-10": 9.99,
+          "11-50": 8.99,
+          "51-100": 7.99
+        },
+        "description": "Cuaderno personalizado con diseño en la portada.",
+        "customizationOptions": [
+          "Texto",
+          "Imagen"
+        ],
+        "stock": 70,
+        "images": [
+          "cuaderno_personalizado_frente.jpg",
+          "cuaderno_personalizado_reverso.jpg"
+        ],
+        "tags": ["cuaderno", "papelería", "personalizado"],
+        "availableColors": ["Blanco", "Negro", "Marrón"],
+        "sizeOptions": ["A4", "A5", "A6"],
+        "status": "Activo"
+      },
+      {
+        "id": 5,
+        "name": "Llavero con Foto",
+        "category": "Accesorios",
+        "price": {
+          "1-10": 6.99,
+          "11-50": 6.49,
+          "51-100": 5.99
+        },
+        "description": "Llavero con tu foto favorita impresa.",
+        "customizationOptions": [
+          "Imagen"
+        ],
+        "stock": 150,
+        "images": [
+          "llavero_foto.jpg"
+        ],
+        "tags": ["llavero", "accesorios", "foto"],
+        "availableColors": ["Plateado", "Dorado"],
+        "sizeOptions": [],
+        "status": "Activo"
+      }
+    ]
+  }
+  

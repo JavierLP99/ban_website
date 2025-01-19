@@ -97,7 +97,7 @@ const NewProducts = () => {
     </div>
     
     <button className="btn btn-dark rounded-pill px-4 py-2 mt-4">
-      ¡Lo quiero!
+      Ver todos los productos
     </button>
   </div>
 </section>
