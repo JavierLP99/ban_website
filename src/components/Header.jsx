@@ -62,10 +62,10 @@ export default function Header() {
         </div>
 
         {/* Collapsible Content */}
-        <div className="collapse navbar-collapse mt-3 ms-5" id="navbarNav">
+        <div className="collapse navbar-collapse mt-1 ms-5" id="navbarNav">
           <div className="row w-100">
             {/* Navigation Links */}
-            <ul className="navbar-nav mx-auto d-flex justify-content-center mb-3">
+            <ul className="navbar-nav mx-auto d-flex justify-content-center">
               <li className="nav-item">
                 <a className="nav-link fw-bold text-primary" href="/">
                   Inicio
