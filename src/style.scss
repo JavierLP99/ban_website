@@ -9,6 +9,8 @@ $custome-theme-colors: (
 );
 $theme-colors: map-merge($theme-colors, $custome-theme-colors);
 
+
+
 .text-justify {
   text-align: justify;
 }
@@ -251,6 +253,8 @@ $theme-colors: map-merge($theme-colors, $custome-theme-colors);
 
 
 @import '../node_modules/bootstrap/scss/bootstrap';
+
+
 
 
 html {
