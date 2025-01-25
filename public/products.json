@@ -5,9 +5,9 @@
         "name": "Taza Personalizada",
         "category": "Tazas",
         "price": {
-          "1-10": 12.99,
-          "11-50": 11.99,
-          "51-100": 10.99
+          "1-10": 10,
+          "11-50": 9,
+          "51-100": 8
         },
         "description": "Taza de cerámica personalizada con texto o imagen a elección.",
         "customizationOptions": [
