@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import { Home, About } from '@/pages'
+import ProductDetail from '../pages/ProductDetail'
 
 
 const App = () => {
@@ -7,6 +8,7 @@ const App = () => {
     <Routes>
       <Route path='/' element={<Home />} />
       <Route path='/acercade' element={<About />} />
+      <Route path='/producto' element={<ProductDetail />} />
     </Routes>
   )
 }

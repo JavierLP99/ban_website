@@ -93,8 +93,8 @@ const Categories = () => {
 
   const groupCards = (cards, groupSize) => {
     const grouped = []
-    for (let i = 0; i < cards.length; i += groupSize-1) {
-      grouped.push(cards.slice(i, i + groupSize-1))
+    for (let i = 0; i < cards.length; i += groupSize - 1) {
+      grouped.push(cards.slice(i, i + groupSize - 1))
     }
     return grouped
   }
@@ -102,11 +102,11 @@ const Categories = () => {
   const groupedCards = groupCards(movies, groupSize)
 
   return (
-    <div className="container text-center d-flex flex-column align-items-center justify-content-center my-4">
+    <div className='container text-center d-flex flex-column align-items-center justify-content-center my-4'>
       <h2 className='fw-bold mb-3'>Categorías</h2>
       <div className='rainbow-divider mb-3'></div>{' '}
       {/* Rainbow divider below the header */}
-      <Carousel interval={null} indicators={false} className='w-100'>
+      <Carousel interval={null} indicators={false} className='w-100' prevIcon={<i className="bi bi-caret-left-fill text-primary h1 fw-bold"></i>} nextIcon={<i className="bi bi-caret-right-fill text-primary h1 fw-bold"></i>}>
         {groupedCards.map((group, idx) => (
           <Carousel.Item key={idx}>
             <div className='d-flex justify-content-center'>
@@ -119,16 +119,17 @@ const Categories = () => {
                     className='ratio ratio-1x1 rounded rounded-5'
                     style={{ overflow: 'hidden' }}
                   >
-                    <a href="#">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      style={{
-                        objectFit: 'cover', // Ensures the image fills the container properly
-                        width: '100%', // Ensures full width
-                        height: '100%' // Ensures full height
-                      }}
-                    /></a>
+                    <a href='#'>
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        style={{
+                          objectFit: 'cover', // Ensures the image fills the container properly
+                          width: '100%', // Ensures full width
+                          height: '100%' // Ensures full height
+                        }}
+                      />
+                    </a>
                   </div>
                   <p className='text-center mt-2'>{item.title}</p>
                 </div>
@@ -136,6 +137,7 @@ const Categories = () => {
             </div>
           </Carousel.Item>
         ))}
+
       </Carousel>
     </div>
   )
