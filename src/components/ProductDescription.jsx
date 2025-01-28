@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Reviews from './Reviews'
 
-const ProductDescription = () => {
+const ProductDescription = ({productName}) => {
+
   const [product, setProduct] = useState(null)
   const [mainImage, setMainImage] = useState('')
   const [quantity, setQuantity] = useState(1)
@@ -11,12 +12,12 @@ const ProductDescription = () => {
     fetch('/products.json') // Adjust the path as needed
       .then(response => response.json())
       .then(data => {
-        setProduct(data.products[0]) // Assuming we want the first product
-        setMainImage(data.products[0].images[0]) // Set initial main image
+        setProduct(data.products.find((item) => item.name === productName));
+        setMainImage(product.images[0]) // Set initial main image
         setPrice(product.price['1-10'])
       })
       .catch(error => console.error('Error loading content:', error))
-  }, [product])
+  }, [product, productName])
 
   const handleThumbnailClick = image => {
     setMainImage(image)

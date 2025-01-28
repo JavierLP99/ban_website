@@ -2,7 +2,7 @@
   "products": [
     {
       "id": 1,
-      "name": "Taza Personalizada",
+      "name": "Tazas decoradas",
       "category": "Tazas",
       "price": {
         "1-10": 10,
@@ -45,7 +45,7 @@
     },
     {
       "id": 2,
-      "name": "Playera Personalizada",
+      "name": "Playera",
       "category": "Ropa",
       "price": {
         "1-10": 19.99,

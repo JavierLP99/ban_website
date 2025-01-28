@@ -63,7 +63,7 @@ const NewProducts = () => {
     };
 
     return (
-      <a href={url} className="card-wrap" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} ref={cardRef}>
+      <a href={`/producto/${name}`} className="card-wrap" onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} ref={cardRef}>
         <div className="card" style={cardStyle}>
           <div className="card-bg" style={{ ...cardBgTransform, ...cardBgImage }}></div>
           <div className="card-info">
