@@ -1,130 +1,158 @@
 {
-    "products": [
-      {
-        "id": 1,
-        "name": "Taza Personalizada",
-        "category": "Tazas",
-        "price": {
-          "1-10": 10,
-          "11-50": 9,
-          "51-100": 8
-        },
-        "description": "Taza de cerámica personalizada con texto o imagen a elección.",
-        "customizationOptions": [
-          "Texto",
-          "Imagen",
-          "Color"
-        ],
-        "stock": 100,
-        "images": [
-          "https://scontent.fdxb2-1.fna.fbcdn.net/v/t39.30808-6/461226413_513853391500442_6497472962648180917_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=127cfc&_nc_ohc=XnloJ_S7hroQ7kNvgHGIVzn&_nc_zt=23&_nc_ht=scontent.fdxb2-1.fna&_nc_gid=A3w9cPBR3kUtwZGz4lsAgCV&oh=00_AYCFj3usrla7bxwgrMpTt9Z7FkODzSnM1AHZFHHf6IUwpw&oe=679A349D",
-          "https://scontent.fdxb2-1.fna.fbcdn.net/v/t39.30808-6/461416165_513853691500412_6810654798805670482_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_ohc=6o4Bn79nBGcQ7kNvgGsi9te&_nc_zt=23&_nc_ht=scontent.fdxb2-1.fna&_nc_gid=A4_IsGVocKO3KDl3y7it-S8&oh=00_AYBmm4cdUdZ2_mvMcb47gvzIoq1XSbKTxNCN3skl5yrmAg&oe=679A5426",
-          "https://scontent.fdxb2-1.fna.fbcdn.net/v/t39.30808-6/461327514_513852994833815_5408852162535024818_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=127cfc&_nc_ohc=OAe_ZqRGOkQQ7kNvgG5Gmiq&_nc_zt=23&_nc_ht=scontent.fdxb2-1.fna&_nc_gid=A53wlK4l6rg7STNp1myznjl&oh=00_AYAUccSG3m9zFppVbriQfyyh7Z-cGgpkfki3b8Qefml7cg&oe=679A30B3",
-          "https://scontent.fdxb2-1.fna.fbcdn.net/v/t39.30808-6/461418089_513853371500444_6424403061307379922_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_ohc=6u1OMzVVh-QQ7kNvgHYfYRz&_nc_zt=23&_nc_ht=scontent.fdxb2-1.fna&_nc_gid=ATQQXoMDUxJo766XprDOViK&oh=00_AYDK9v-mkuKbEOHlm5gMKOhdCtFByBOBBRjgfmOKe2X-9A&oe=679A2C99",
-          "https://scontent.fdxb2-1.fna.fbcdn.net/v/t39.30808-6/461791697_513852948167153_7593813517529114794_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=127cfc&_nc_ohc=AoVil8tbaM0Q7kNvgFd2yB4&_nc_zt=23&_nc_ht=scontent.fdxb2-1.fna&_nc_gid=AMXUHt6h9NsIeupiP5ymwXQ&oh=00_AYDyPG7KQpydAE3pEESJeFDQ7DUFUof5_zVD__KEP8S-3w&oe=679A4CF1",
-          "https://scontent.fdxb2-1.fna.fbcdn.net/v/t39.30808-6/461442917_513853674833747_5613586644676598822_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=127cfc&_nc_ohc=DvO5hM0Nfx0Q7kNvgFGYUF6&_nc_zt=23&_nc_ht=scontent.fdxb2-1.fna&_nc_gid=AjQr9voyKVcWlcI_ODoy25M&oh=00_AYA7rB5Z49lQBTAdjg4krhHAc74Mf_-zBLUx2HZ5B85qQQ&oe=679A5880",
-          "https://scontent.fdxb2-1.fna.fbcdn.net/v/t39.30808-6/461343669_513853024833812_3582742084412506728_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=127cfc&_nc_ohc=vXFFoljJFfgQ7kNvgHGlQaW&_nc_zt=23&_nc_ht=scontent.fdxb2-1.fna&_nc_gid=A2RynHrBRjWkjlV79e2sWFZ&oh=00_AYBmQoWZRvGG_YnsHjN9ob-7r33ezCHN06m0fLQXVA-cTw&oe=679A34FD"
-        ],
-        "tags": ["taza", "taza personalizada", "personalizada"],
-        "availableColors": ["Blanco", "Negro", "Rojo"],
-        "sizeOptions": ["11oz", "15oz"],
-        "status": "Activo"
+  "products": [
+    {
+      "id": 1,
+      "name": "Taza Personalizada",
+      "category": "Tazas",
+      "price": {
+        "1-10": 10,
+        "11-50": 9,
+        "51-100": 8
       },
-      {
-        "id": 2,
-        "name": "Playera Personalizada",
-        "category": "Ropa",
-        "price": {
-          "1-10": 19.99,
-          "11-50": 17.99,
-          "51-100": 15.99
+      "description": "Taza de cerámica personalizada con texto o imagen a elección.",
+      "customizationOptions": ["Texto", "Imagen", "Color"],
+      "stock": 100,
+      "images": [
+        "https://scontent.fdxb2-1.fna.fbcdn.net/v/t39.30808-6/461226413_513853391500442_6497472962648180917_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=127cfc&_nc_ohc=XnloJ_S7hroQ7kNvgHGIVzn&_nc_zt=23&_nc_ht=scontent.fdxb2-1.fna&_nc_gid=A3w9cPBR3kUtwZGz4lsAgCV&oh=00_AYCFj3usrla7bxwgrMpTt9Z7FkODzSnM1AHZFHHf6IUwpw&oe=679A349D",
+        "https://scontent.fdxb2-1.fna.fbcdn.net/v/t39.30808-6/461416165_513853691500412_6810654798805670482_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_ohc=6o4Bn79nBGcQ7kNvgGsi9te&_nc_zt=23&_nc_ht=scontent.fdxb2-1.fna&_nc_gid=A4_IsGVocKO3KDl3y7it-S8&oh=00_AYBmm4cdUdZ2_mvMcb47gvzIoq1XSbKTxNCN3skl5yrmAg&oe=679A5426",
+        "https://scontent.fdxb2-1.fna.fbcdn.net/v/t39.30808-6/461327514_513852994833815_5408852162535024818_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=127cfc&_nc_ohc=OAe_ZqRGOkQQ7kNvgG5Gmiq&_nc_zt=23&_nc_ht=scontent.fdxb2-1.fna&_nc_gid=A53wlK4l6rg7STNp1myznjl&oh=00_AYAUccSG3m9zFppVbriQfyyh7Z-cGgpkfki3b8Qefml7cg&oe=679A30B3",
+        "https://scontent.fdxb2-1.fna.fbcdn.net/v/t39.30808-6/461418089_513853371500444_6424403061307379922_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_ohc=6u1OMzVVh-QQ7kNvgHYfYRz&_nc_zt=23&_nc_ht=scontent.fdxb2-1.fna&_nc_gid=ATQQXoMDUxJo766XprDOViK&oh=00_AYDK9v-mkuKbEOHlm5gMKOhdCtFByBOBBRjgfmOKe2X-9A&oe=679A2C99",
+        "https://scontent.fdxb2-1.fna.fbcdn.net/v/t39.30808-6/461791697_513852948167153_7593813517529114794_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=127cfc&_nc_ohc=AoVil8tbaM0Q7kNvgFd2yB4&_nc_zt=23&_nc_ht=scontent.fdxb2-1.fna&_nc_gid=AMXUHt6h9NsIeupiP5ymwXQ&oh=00_AYDyPG7KQpydAE3pEESJeFDQ7DUFUof5_zVD__KEP8S-3w&oe=679A4CF1",
+        "https://scontent.fdxb2-1.fna.fbcdn.net/v/t39.30808-6/461442917_513853674833747_5613586644676598822_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=127cfc&_nc_ohc=DvO5hM0Nfx0Q7kNvgFGYUF6&_nc_zt=23&_nc_ht=scontent.fdxb2-1.fna&_nc_gid=AjQr9voyKVcWlcI_ODoy25M&oh=00_AYA7rB5Z49lQBTAdjg4krhHAc74Mf_-zBLUx2HZ5B85qQQ&oe=679A5880",
+        "https://scontent.fdxb2-1.fna.fbcdn.net/v/t39.30808-6/461343669_513853024833812_3582742084412506728_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=127cfc&_nc_ohc=vXFFoljJFfgQ7kNvgHGlQaW&_nc_zt=23&_nc_ht=scontent.fdxb2-1.fna&_nc_gid=A2RynHrBRjWkjlV79e2sWFZ&oh=00_AYBmQoWZRvGG_YnsHjN9ob-7r33ezCHN06m0fLQXVA-cTw&oe=679A34FD"
+      ],
+      "tags": ["taza", "taza personalizada", "personalizada"],
+      "availableColors": ["Blanco", "Negro", "Rojo"],
+      "sizeOptions": ["11oz", "15oz"],
+      "status": "Activo",
+      "reviews": [
+        {
+          "rating": 5,
+          "text": "Excelente calidad, superó mis expectativas.",
+          "author": "Carlos Pérez"
         },
-        "description": "Playera de algodón personalizada con impresión de texto o imagen.",
-        "customizationOptions": [
-          "Texto",
-          "Imagen",
-          "Color",
-          "Talla"
-        ],
-        "stock": 50,
-        "images": [
-          "playera_personalizada_frente.jpg",
-          "playera_personalizada_reverso.jpg"
-        ],
-        "tags": ["playera", "ropa", "personalizada"],
-        "availableColors": ["Blanco", "Negro", "Azul", "Gris"],
-        "sizeOptions": ["S", "M", "L", "XL", "XXL"],
-        "status": "Activo"
+        {
+          "rating": 4,
+          "text": "Muy buena, aunque el envío fue un poco lento.",
+          "author": "Ana Martínez"
+        },
+        {
+          "rating": 3,
+          "text": "El diseño es bonito, pero llegó con una pequeña imperfección.",
+          "author": "Luis Gómez"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Playera Personalizada",
+      "category": "Ropa",
+      "price": {
+        "1-10": 19.99,
+        "11-50": 17.99,
+        "51-100": 15.99
       },
-      {
-        "id": 3,
-        "name": "Copa de Vino Grabada",
-        "category": "Vasos",
-        "price": {
-          "1-10": 15.49,
-          "11-50": 14.49,
-          "51-100": 13.49
+      "description": "Playera de algodón personalizada con impresión de texto o imagen.",
+      "customizationOptions": ["Texto", "Imagen", "Color", "Talla"],
+      "stock": 50,
+      "images": [
+        "playera_personalizada_frente.jpg",
+        "playera_personalizada_reverso.jpg"
+      ],
+      "tags": ["playera", "ropa", "personalizada"],
+      "availableColors": ["Blanco", "Negro", "Azul", "Gris"],
+      "sizeOptions": ["S", "M", "L", "XL", "XXL"],
+      "status": "Activo",
+      "reviews": [
+        {
+          "rating": 5,
+          "text": "La impresión es perfecta y de muy buena calidad.",
+          "author": "Mónica López"
         },
-        "description": "Elegante copa de vino grabada con diseño personalizado.",
-        "customizationOptions": [
-          "Texto",
-          "Diseño"
-        ],
-        "stock": 30,
-        "images": [
-          "copa_vino_grabada.jpg"
-        ],
-        "tags": ["copa", "copa de vino", "grabada"],
-        "availableColors": ["Transparente"],
-        "sizeOptions": [],
-        "status": "Activo"
+        {
+          "rating": 4,
+          "text": "Muy cómoda, pero me gustaría más opciones de colores.",
+          "author": "Jorge Salazar"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Copa de Vino Grabada",
+      "category": "Vasos",
+      "price": {
+        "1-10": 15.49,
+        "11-50": 14.49,
+        "51-100": 13.49
       },
-      {
-        "id": 4,
-        "name": "Cuaderno Personalizado",
-        "category": "Papelería",
-        "price": {
-          "1-10": 9.99,
-          "11-50": 8.99,
-          "51-100": 7.99
-        },
-        "description": "Cuaderno personalizado con diseño en la portada.",
-        "customizationOptions": [
-          "Texto",
-          "Imagen"
-        ],
-        "stock": 70,
-        "images": [
-          "cuaderno_personalizado_frente.jpg",
-          "cuaderno_personalizado_reverso.jpg"
-        ],
-        "tags": ["cuaderno", "papelería", "personalizado"],
-        "availableColors": ["Blanco", "Negro", "Marrón"],
-        "sizeOptions": ["A4", "A5", "A6"],
-        "status": "Activo"
+      "description": "Elegante copa de vino grabada con diseño personalizado.",
+      "customizationOptions": ["Texto", "Diseño"],
+      "stock": 30,
+      "images": ["copa_vino_grabada.jpg"],
+      "tags": ["copa", "copa de vino", "grabada"],
+      "availableColors": ["Transparente"],
+      "sizeOptions": [],
+      "status": "Activo",
+      "reviews": [
+        {
+          "rating": 5,
+          "text": "Hermosa y elegante, ideal para regalar.",
+          "author": "Claudia Ruiz"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Cuaderno Personalizado",
+      "category": "Papelería",
+      "price": {
+        "1-10": 9.99,
+        "11-50": 8.99,
+        "51-100": 7.99
       },
-      {
-        "id": 5,
-        "name": "Llavero con Foto",
-        "category": "Accesorios",
-        "price": {
-          "1-10": 6.99,
-          "11-50": 6.49,
-          "51-100": 5.99
-        },
-        "description": "Llavero con tu foto favorita impresa.",
-        "customizationOptions": [
-          "Imagen"
-        ],
-        "stock": 150,
-        "images": [
-          "llavero_foto.jpg"
-        ],
-        "tags": ["llavero", "accesorios", "foto"],
-        "availableColors": ["Plateado", "Dorado"],
-        "sizeOptions": [],
-        "status": "Activo"
-      }
-    ]
-  }
-  
+      "description": "Cuaderno personalizado con diseño en la portada.",
+      "customizationOptions": ["Texto", "Imagen"],
+      "stock": 70,
+      "images": [
+        "cuaderno_personalizado_frente.jpg",
+        "cuaderno_personalizado_reverso.jpg"
+      ],
+      "tags": ["cuaderno", "papelería", "personalizado"],
+      "availableColors": ["Blanco", "Negro", "Marrón"],
+      "sizeOptions": ["A4", "A5", "A6"],
+      "status": "Activo",
+      "reviews": [
+        {
+          "rating": 5,
+          "text": "El diseño quedó perfecto, es justo lo que quería.",
+          "author": "Sofía Mendoza"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Llavero con Foto",
+      "category": "Accesorios",
+      "price": {
+        "1-10": 6.99,
+        "11-50": 6.49,
+        "51-100": 5.99
+      },
+      "description": "Llavero con tu foto favorita impresa.",
+      "customizationOptions": ["Imagen"],
+      "stock": 150,
+      "images": ["llavero_foto.jpg"],
+      "tags": ["llavero", "accesorios", "foto"],
+      "availableColors": ["Plateado", "Dorado"],
+      "sizeOptions": [],
+      "status": "Activo",
+      "reviews": [
+        {
+          "rating": 4,
+          "text": "Me encantó el diseño, pero me hubiera gustado que fuera más grande.",
+          "author": "Daniel Ortega"
+        }
+      ]
+    }
+  ]
+}
