@@ -48,8 +48,9 @@ const MostSold = () => {
 
   return (
     <div className='py-5'>
-      <div className='text-center'>
-        <h2 className='fw-semibold mb-4 text-dark'>Los más vendidos</h2>
+      <div className='container text-center d-flex flex-column align-items-center'>
+        <h2 className='fw-bold mb-3'>Los más vendidos</h2>
+        <div className="rainbow-divider mb-3"></div>
       </div>
       <div className='row justify-content-center'>
         <p className='text-justify col-5'>
@@ -67,7 +68,7 @@ const MostSold = () => {
           Ver todos los productos
         </a>
       </div>
-      <div className='row justify-content-center mt-4'>
+      <div className='row justify-content-center mx-0 mt-4'>
         {content.map((item, index) => card(item, index))}
       </div>
     </div>
