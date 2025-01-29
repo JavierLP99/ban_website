@@ -23,23 +23,21 @@ const MostSold = () => {
   }
 
   const card = (item, index) => (
-    <div key={index} className='col-2'>
-      <div className='card'>
-        <div className='ratio ratio-1x1'>
-          <div className='row justify-content-center mx-auto'>
-            <div className='h-100 w-auto border-bottom'>
-              <img
-                src={ImportDrivePhoto(item.image, 250)}
-                className='col-12'
-                alt='Imagen principal'
-              />
-            </div>
+    <div key={index} className='row justify-content-center mx-0 mb-4 col-3'>
+      <div className='d-flex justify-content-center px-0'>
+        <div className='card rounded-4 col-12'>
+          <div className='ratio ratio-1x1'>
+            <img
+              src={ImportDrivePhoto(item.image, 250)}
+              className='rounded-4 col-12'
+              alt='Imagen principal'
+            />
           </div>
-        </div>
-        <div className='ratio ratio-21x9'>
-          <div className='card-body d-flex flex-column py-2'>
-            <h5 className='card-title'>{item.article}</h5>
-            <h6 className='card-subtitle'>{item.price}</h6>
+          <div className='ratio ratio-21x9'>
+            <div className='card-body d-flex flex-column py-2'>
+              <h5 className='card-title'>{item.article}</h5>
+              <h6 className='card-subtitle'>{item.price}</h6>
+            </div>
           </div>
         </div>
       </div>
@@ -50,7 +48,7 @@ const MostSold = () => {
     <div className='py-5'>
       <div className='container text-center d-flex flex-column align-items-center'>
         <h2 className='fw-bold mb-3'>Los más vendidos</h2>
-        <div className="rainbow-divider mb-3"></div>
+        <div className='rainbow-divider mb-3'></div>
       </div>
       <div className='row justify-content-center'>
         <p className='text-justify col-5'>
@@ -68,7 +66,7 @@ const MostSold = () => {
           Ver todos los productos
         </a>
       </div>
-      <div className='row justify-content-center mx-0 mt-4'>
+      <div className='row justify-content-center mx-auto mt-4 col-8'>
         {content.map((item, index) => card(item, index))}
       </div>
     </div>
