@@ -1,9 +1,7 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import { useEffect, useState, useRef } from 'react'
 import RoutesIndex from './routes'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import Header from './components/Header'
+import Footer from './components/Footer'
 
 function App () {
   const updateUrl = url => {
@@ -68,6 +66,7 @@ function App () {
   return (
     <>
       <RouterProvider router={router} />
+      <Footer />
     </>
   )
 }

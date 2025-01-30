@@ -1,0 +1,55 @@
+{
+    "footer": {
+      "logo": "https://drive.google.com/file/d/1-9Zi565TpYZVXWqnZi_8sMSVBoZDM6p2/view?usp=drive_link"
+    },
+      "pages": [
+        { 
+          "name": "Inicio",
+          "link": "/" 
+        },
+        { "name": "Promociones",
+          "link": "/acercade" 
+        }
+      ],
+      "categories": [
+        { 
+          "name": "Cajas",
+          "link": "/servicios/energia" 
+        },
+        { "name": "Tazas",
+          "link": "/servicios/mantenimiento-industrial"
+        },
+        { "name": "Camisas",
+          "link": "/servicios/telecomunicaciones"
+        },
+        { "name": "Otros",
+          "link": "/servicios/seguridad-electronica"
+        }
+      ],
+      "seasons": [
+        { "name": "Navidad",
+          "link": "/servicios/energia"
+        },
+        { "name": "16 de septiembre",
+          "link": "/servicios/mantenimiento-industrial"
+        },
+        { "name": "Día de Muertos",
+          "link": "/servicios/telecomunicaciones"
+        }
+      ],
+    "contactInfo": {
+      "phone": "+52 55 1234 5678",
+      "email": "contacto@empresa.com",
+      "address": "Calle Ficticia 123, Ciudad de México, México",
+      "mapLink": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59134.27345672304!2d-96.1028651077125!3d19.190579577257065!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85c34130bfffffff%3A0x826f919328467917!2sETH%20Soluciones%20S.A.%20de%20C.V.!5e0!3m2!1sen!2sae!4v1732720950884!5m2!1sen!2sae"
+    },
+    "socialMedia": [
+      { "icon": "bi-facebook",
+        "link": "https://www.facebook.com/profile.php?id=100086273566786"
+      },
+      { "icon": "bi-instagram",
+        "link": "https://www.instagram.com/banannyland/"
+      }
+    ],
+    "copyright": "© 2025 Banannyland. Todos los derechos reservados."
+}

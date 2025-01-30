@@ -1,5 +1,5 @@
 import Banner from '@/components/home/Banner.jsx'
-import MostSold from '../components/home/mostsold'
+import MostSold from '../components/home/MostSold'
 import Contact from '../components/home/Contact'
 import Categories from '../components/home/Categories'
 import NewProducts from '../components/home/NewProducts'
