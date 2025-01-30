@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { Home, About } from '@/pages'
 import ProductDetail from '../pages/ProductDetail'
+import SearchPage from '../pages/SearchPage'
 import ErrorBoundary from './ErrorBoundary'
 
 const App = () => {
@@ -32,7 +33,9 @@ const App = () => {
             <h1>Something went wrong.</h1>
           </ErrorBoundary>
         }
-      />{' '}
+      />
+              <Route path="/search" element={<SearchPage />} />
+
     </Routes>
   )
 }

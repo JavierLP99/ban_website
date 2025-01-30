@@ -1,9 +1,21 @@
-import Dropdown from 'react-bootstrap/Dropdown'
-import DropdownButton from 'react-bootstrap/DropdownButton'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
-export default function Header () {
+export default function Header() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
   return (
     <header>
       <nav className='navbar navbar-expand-lg bg-light py-2 px-3 container-fluid d-flex flex-wrap'>
@@ -20,18 +32,19 @@ export default function Header () {
           </div>
 
           {/* Search Bar */}
-          <div
-            className='d-flex justify-content-center flex-grow-1 mx-3'
-            // style={{ maxWidth: '500px' }} // Added maximum width
-          >
-            <Form className='d-flex w-100'>
+          <div className='d-flex justify-content-center flex-grow-1 mx-3'>
+            <Form className='d-flex w-100' onSubmit={handleSearch}>
               <Form.Control
                 type='search'
                 placeholder='Buscar'
                 className='me-2'
                 aria-label='Search'
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <Button variant='outline-primary'>Buscar</Button>
+              <Button variant='outline-primary' type='submit'>
+                Buscar
+              </Button>
             </Form>
           </div>
 
@@ -109,7 +122,7 @@ export default function Header () {
               </li>
             </ul>
 
-            {/* Buttons: Shopping Cart and Login */}
+            {/* Buttons: Shopping Cart and Login (Mobile) */}
             <div className='d-flex justify-content-center gap-3 d-md-none'>
               <Button className='d-flex align-items-center btn btn-secondary'>
                 <i className='bi bi-cart3 me-1'></i>
@@ -124,5 +137,5 @@ export default function Header () {
         </div>
       </nav>
     </header>
-  )
+  );
 }
