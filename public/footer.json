@@ -8,38 +8,38 @@
           "link": "/" 
         },
         { "name": "Promociones",
-          "link": "/acercade" 
+          "link": "/" 
         }
       ],
       "categories": [
         { 
           "name": "Cajas",
-          "link": "/servicios/energia" 
+          "link": "/" 
         },
         { "name": "Tazas",
-          "link": "/servicios/mantenimiento-industrial"
+          "link": "/"
         },
         { "name": "Camisas",
-          "link": "/servicios/telecomunicaciones"
+          "link": "/"
         },
         { "name": "Otros",
-          "link": "/servicios/seguridad-electronica"
+          "link": "/"
         }
       ],
       "seasons": [
         { "name": "Navidad",
-          "link": "/servicios/energia"
+          "link": "/"
         },
         { "name": "16 de septiembre",
-          "link": "/servicios/mantenimiento-industrial"
+          "link": "/"
         },
         { "name": "Día de Muertos",
-          "link": "/servicios/telecomunicaciones"
+          "link": "/"
         }
       ],
     "contactInfo": {
-      "phone": "+52 55 1234 5678",
-      "email": "contacto@empresa.com",
+      "phone": "+52 55 5555 5555",
+      "email": "contacto@banannyland.com",
       "address": "Calle Ficticia 123, Ciudad de México, México",
       "mapLink": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d59134.27345672304!2d-96.1028651077125!3d19.190579577257065!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85c34130bfffffff%3A0x826f919328467917!2sETH%20Soluciones%20S.A.%20de%20C.V.!5e0!3m2!1sen!2sae!4v1732720950884!5m2!1sen!2sae"
     },

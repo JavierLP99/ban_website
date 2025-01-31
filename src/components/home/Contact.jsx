@@ -8,9 +8,6 @@ import * as yup from 'yup'
 const Contact = () => {
   const schema = yup
     .object({
-      firstName: yup.string().required('Es necesario ingresar tu nombre'),
-      lastName: yup.string().required('Es necesario ingresar tu apellido'),
-      organization: yup.string(),
       phone: yup.string(),
       email: yup.string().required('Ingesa un email para contactarte'),
       message: yup.string().required('Escribe tu mensaje')
@@ -42,7 +39,7 @@ const Contact = () => {
         }
       )
 
-    const result = { firstName: '', lastName: '', email: '', message: '' }
+    const result = { message: '' }
     reset(result)
     setShowModal(true)
   }
@@ -56,18 +53,6 @@ const Contact = () => {
       .catch(error => console.error('Error loading content:', error))
   }, [])
 
-  const ImportDrivePhoto = (driveUrl, height) => {
-    const defaultUrl =
-      'https://drive.google.com/file/d/1Q7By_xG9r3a8Zr47j6b1HG7yAm91GIHO/view?usp=drive_link'
-
-    const match = driveUrl.match(/\/d\/(.*)\//)
-    const fileId = match ? match[1] : defaultUrl.match(/\/d\/(.*)\//)[1]
-
-    const newUrl = `https://lh3.googleusercontent.com/d/${fileId}=h${height}`
-
-    return newUrl
-  }
-
   if (!content) return <div>Loading...</div>
 
   return (
@@ -80,69 +65,69 @@ const Contact = () => {
         <p className='text-justify text-center col-5'>{content.description}</p>
       </div>
       <div className='contact-container'>
-
-
         <div className='row mx-auto col-5'>
-        <form
-          onSubmit={handleSubmit(whenSubmit)}
-          ref={form}
-          className='d-block'
-          name='contact'
-        >
-          <div className='d-flex flex-column col-12'>
-            <label htmlFor='email'>Correo</label>
-            <input
-              type='text'
-              name='email'
-              placeholder='correo@mail.com'
-              id='email'
-              {...register('email')}
-              className='my-2 p-2 border border-2'
-            />
-            <p className='text-warning text-center'>{errors.email?.message}</p>
-          </div>
+          <form
+            onSubmit={handleSubmit(whenSubmit)}
+            ref={form}
+            className='d-block'
+            name='contact'
+          >
+            <div className='d-flex flex-column col-12'>
+              <label htmlFor='email'>Correo</label>
+              <input
+                type='text'
+                name='email'
+                placeholder='correo@mail.com'
+                id='email'
+                {...register('email')}
+                className='my-2 p-2 border border-2'
+              />
+              <p className='text-warning text-center'>
+                {errors.email?.message}
+              </p>
+            </div>
 
-          <div className='d-flex flex-column col-12'>
-            <label htmlFor='phone'>Teléfono (Opcional)</label>
-            <input
-              type='text'
-              name='phone'
-              placeholder='55 1234 5678'
-              id='phone'
-              {...register('phone')}
-              className='my-2 p-2 border border-2'
-            />
-            <p className='text-warning text-center'>{errors.phone?.message}</p>
-          </div>
+            <div className='d-flex flex-column col-12'>
+              <label htmlFor='phone'>Teléfono (Opcional)</label>
+              <input
+                type='text'
+                name='phone'
+                placeholder='55 1234 5678'
+                id='phone'
+                {...register('phone')}
+                className='my-2 p-2 border border-2'
+              />
+              <p className='text-warning text-center'>
+                {errors.phone?.message}
+              </p>
+            </div>
 
-          <div className='d-flex flex-column col-12'>
-            <label htmlFor='message'>Mensaje</label>
-            <textarea
-              name='message'
-              placeholder='Escribe tu mensaje'
-              id='message'
-              {...register('message')}
-              className='my-2 p-2 border border-2'
-              rows='3'
-            />
-            <p className='text-warning text-center'>
-              {errors.message?.message}
-            </p>
-          </div>
+            <div className='d-flex flex-column col-12'>
+              <label htmlFor='message'>Mensaje</label>
+              <textarea
+                name='message'
+                placeholder='Escribe tu mensaje'
+                id='message'
+                {...register('message')}
+                className='my-2 p-2 border border-2'
+                rows='3'
+              />
+              <p className='text-warning text-center'>
+                {errors.message?.message}
+              </p>
+            </div>
 
-          <div className='text-center'>
-            <button
-              type='submit'
-              className='btn btn-primary rounded-pill text-light my-3'
-            >
-              Enviar
-            </button>
-          </div>
-        </form>
+            <div className='text-center'>
+              <button
+                type='submit'
+                className='btn btn-primary rounded-pill text-light my-3'
+              >
+                Enviar
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-      </div>
-
-
 
       <Modal
         show={showModal}

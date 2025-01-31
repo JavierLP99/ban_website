@@ -3,12 +3,22 @@
 @import '../node_modules/bootstrap/scss/variables';
 
 $custome-theme-colors: (
-  'primary': #7401DB,
+  'primary': #7401db,
   'secondary': #fce215, 
   'dark': #511503
 );
 $theme-colors: map-merge($theme-colors, $custome-theme-colors);
 
+.footer-links a {
+  text-decoration: none; /* Removes underline by default */
+  color: rgb(116, 1, 219); /* Ensures links are visible on a dark background */
+  transition: color 0.3s, text-decoration 0.3s;
+}
+
+.footer-links a:hover {
+  text-decoration: underline; /* Adds underline on hover */
+  color: #fce215; /* Optional: Changes link color to Bootstrap primary color */
+}
 
 
 .text-justify {
