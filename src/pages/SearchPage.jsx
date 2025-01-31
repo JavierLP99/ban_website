@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'; 
-import { useSearchParams } from 'react-router-dom';
-import FilterBar from '../components/FilterBar';
+import { useSearchParams } from 'react-router-dom'; 
+import FilterBar from '../components/FilterBar'; 
 import ProductList from '../components/ProductList';
 
 export default function SearchPage() {
@@ -15,6 +15,22 @@ export default function SearchPage() {
     tags: [],
   };
   const [filters, setFilters] = useState(defaultFilters);
+
+  useEffect(() => {
+    // Get filters from URL parameters
+    const category = searchParams.get('category') || '';
+    const minPrice = searchParams.get('minPrice') ? parseFloat(searchParams.get('minPrice')) : 0;
+    const maxPrice = searchParams.get('maxPrice') ? parseFloat(searchParams.get('maxPrice')) : Infinity;
+    const tags = searchParams.get('tags') ? searchParams.get('tags').split(',').map(tag => tag.trim()) : [];
+
+    // Update filters state based on URL parameters
+    setFilters({
+      category,
+      minPrice,
+      maxPrice,
+      tags,
+    });
+  }, [searchParams]);
 
   useEffect(() => {
     fetch('/products.json')
@@ -41,11 +57,10 @@ export default function SearchPage() {
         const matchesCategory = 
           !filters.category || product.category.toLowerCase() === filters.category.toLowerCase();
 
-          const productPrice = Math.max(...Object.values(product.price));
+        const productPrice = Math.max(...Object.values(product.price));
 
-          const matchesPrice =
-            productPrice >= filters.minPrice && productPrice <= filters.maxPrice;
-          
+        const matchesPrice =
+          productPrice >= filters.minPrice && productPrice <= filters.maxPrice;
 
         const matchesTags =
           filters.tags.length === 0 ||
@@ -60,7 +75,7 @@ export default function SearchPage() {
 
   return (
     <div className="container mt-4">
-      <FilterBar setFilters={setFilters} />
+<FilterBar setFilters={setFilters} products={products} />
 
       {filteredProducts.length === 0 ? (
         <p>No se encontraron productos que coincidan con tu búsqueda.</p>

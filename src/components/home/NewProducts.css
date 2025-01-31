@@ -63,7 +63,7 @@
   .new-products-section .card-info h1 {
     font-size: 24px;
     font-weight: 700;
-    text-shadow: rgba(0, 0, 0, 0.5) 0 10px 10px;
+    text-shadow: rgba(255, 255, 255, 0.5) 0 10px 10px;
   }
   
   .new-products-section .card-info p {

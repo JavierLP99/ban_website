@@ -1,31 +1,73 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default function FilterBar({ setFilters }) {
+export default function FilterBar({ setFilters, products }) {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [selectedTags, setSelectedTags] = useState('');
+  const [categories, setCategories] = useState([]);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (products.length > 0) {
+      // Extract unique categories from the products data
+      const uniqueCategories = [
+        ...new Set(products.map(product => product.category)),
+      ];
+      setCategories(uniqueCategories);
+    }
+  }, [products]);
 
   const applyFilters = () => {
-    setFilters({
+    // Prepare the filters object
+    const filters = {
       category: selectedCategory,
       minPrice: minPrice ? parseFloat(minPrice) : 0,
       maxPrice: maxPrice ? parseFloat(maxPrice) : Infinity,
       tags: selectedTags ? selectedTags.split(',').map(tag => tag.trim()) : [],
-    });
+    };
+
+    // Set filters to parent component
+    setFilters(filters);
+
+    // Update the URL with the filter parameters
+    updateUrl(filters);
   };
 
   const clearFilters = () => {
+    // Reset the form fields
     setSelectedCategory('');
     setMinPrice('');
     setMaxPrice('');
     setSelectedTags('');
-    setFilters({
+
+    // Reset the filters
+    const filters = {
       category: '',
       minPrice: 0,
       maxPrice: Infinity,
       tags: [],
-    });
+    };
+
+    setFilters(filters);
+
+    // Update the URL to remove all filters
+    updateUrl(filters);
+  };
+
+  const updateUrl = (filters) => {
+    const urlParams = new URLSearchParams();
+
+    // Add the filters to the URL params
+    if (filters.category) urlParams.set('category', filters.category);
+    if (filters.minPrice) urlParams.set('minPrice', filters.minPrice);
+    if (filters.maxPrice) urlParams.set('maxPrice', filters.maxPrice);
+    if (filters.tags.length > 0) urlParams.set('tags', filters.tags.join(','));
+
+    // Navigate to the new URL with filters
+    navigate(`?${urlParams.toString()}`, { replace: true });
   };
 
   return (
@@ -37,9 +79,11 @@ export default function FilterBar({ setFilters }) {
         onChange={(e) => setSelectedCategory(e.target.value)}
       >
         <option value="">Todas las categorías</option>
-        <option value="Cajas">Cajas</option>
-        <option value="Tazas">Tazas</option>
-        <option value="Camisas">Camisas</option>
+        {categories.map((category) => (
+          <option key={category} value={category}>
+            {category}
+          </option>
+        ))}
       </select>
 
       {/* Price Range */}

@@ -1,0 +1,37 @@
+{
+    "categories": [
+      {
+        "category": "Decoración",
+        "image": "./imagenes/Globo_burbuja_1.jpg"
+      },
+      {
+        "category": "Regalos",
+        "image": "./imagenes/Paquetes_14_feb_1.jpg"
+      },
+      {
+        "category": "Ropa",
+        "image": "./imagenes/Playera_bautizo_1.jpg"
+      },
+      {
+        "category": "Juguetes",
+        "image": "./imagenes/Rompecabezas_personalizado_1.jpg"
+      },
+      {
+        "category": "Papelería",
+        "image": "./imagenes/Stickers_1.jpg"
+      },
+      {
+        "category": "Vasos y Tarros",
+        "image": "./imagenes/Tarro_cerveza_1.jpg"
+      },
+      {
+        "category": "Hogar",
+        "image": "./imagenes/Toallas_pareja_1.jpg"
+      },
+      {
+        "category": "Accesorios",
+        "image": "./imagenes/Termo_dia_maestro_1.jpg"
+      }
+    ]
+  }
+  

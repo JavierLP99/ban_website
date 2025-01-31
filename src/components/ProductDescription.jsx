@@ -1,30 +1,31 @@
 import React, { useState, useEffect } from 'react'
 import Reviews from './Reviews'
 
-const ProductDescription = ({productName}) => {
-
+const ProductDescription = ({ productName }) => {
   const [product, setProduct] = useState(null)
   const [mainImage, setMainImage] = useState('')
   const [quantity, setQuantity] = useState(1)
   const [price, setPrice] = useState(0)
+  const [showModal, setShowModal] = useState(false) // State to control modal visibility
 
   useEffect(() => {
     fetch('/products.json') // Adjust the path as needed
       .then(response => response.json())
       .then(data => {
-        setProduct(data.products.find((item) => item.name === productName));
-        setMainImage(product.images[0]) // Set initial main image
-        setPrice(product.price['1-10'])
+        setProduct(data.products.find(item => item.name === productName))
       })
       .catch(error => console.error('Error loading content:', error))
-  }, [product, productName])
+  }, [productName])
+
+  useEffect(() => {
+    if (product) {
+      setMainImage(product.images[0]) // Set initial main image
+      setPrice(product.price['1-10'])
+    }
+  }, [product])
 
   const handleThumbnailClick = image => {
     setMainImage(image)
-  }
-
-  if (!product) {
-    return <div>Loading...</div>
   }
 
   const handleQuantityChange = e => {
@@ -40,6 +41,20 @@ const ProductDescription = ({productName}) => {
     }
   }
 
+  // Function to toggle modal visibility
+  const handleImageClick = () => {
+    setShowModal(true)
+  }
+
+  // Close modal when clicked outside
+  const closeModal = () => {
+    setShowModal(false)
+  }
+
+  if (!product) {
+    return <div>Loading...</div>
+  }
+
   return (
     <div className='container my-4'>
       <div className='row justify-content-between'>
@@ -47,26 +62,29 @@ const ProductDescription = ({productName}) => {
         <div className='col-md-5 text-center'>
           <div className='w-100 ratio ratio-1x1'>
             <img
-              src={mainImage}
+              src={'../' + mainImage}
               alt='Main Product'
-              className='img-fluid'
-              style={{ width: '100%', objectFit: 'cover' }}
+              className='img-fluid rounded-3'
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }} // Use 'contain' to maintain aspect ratio without deformation
+              onClick={handleImageClick} // Trigger modal on click
             />
           </div>
           <div className='mt-3 d-flex justify-content-center flex-wrap'>
             {product.images.map((image, index) => (
               <div key={index} className='p-1 col-2'>
-                <img
-                  src={image}
-                  alt={`Thumbnail ${index + 1}`}
-                  className={`img-thumbnail mx-1 ${
-                    mainImage === image ? 'border border-primary border-2' : ''
-                  }`}
-                  style={{
-                    cursor: 'pointer'
-                  }}
-                  onClick={() => handleThumbnailClick(image)}
-                />
+                <div className='ratio ratio-1x1'>
+                  <img
+                    src={'../' + image}
+                    alt={`Thumbnail ${index + 1}`}
+                    className={`img-thumbnail mx-1 ${
+                      mainImage === image
+                        ? 'border border-primary border-2'
+                        : ''
+                    }`}
+                    style={{ cursor: 'pointer', objectFit: 'cover' }}
+                    onClick={() => handleThumbnailClick(image)}
+                  />
+                </div>
               </div>
             ))}
           </div>
@@ -78,26 +96,78 @@ const ProductDescription = ({productName}) => {
           <div className='mb-3'>
             <strong>Tags:</strong>{' '}
             {product.tags.map((tag, index) => (
-              <button key={index} className='btn btn-secondary  p-1 mx-2'>
+              <button key={index} className='btn btn-secondary p-1 mx-2'>
                 {tag}
               </button>
             ))}
           </div>
-          <div style={{ height: '40px' }}>
-            {product.price['1-10'] === price ? (
-              <span className=' h4 text-primary mb-3'>
-                ${product.price['1-10']}
-              </span>
-            ) : (
-              <p>
-                <span className='h4 text-body-tertiary mb-3'>
+          <div className='mb-3'>
+            <strong>Precios:</strong>
+            <div className='d-flex justify-content-between'>
+              <div className='text-center w-25'>
+                <span
+                  className={
+                    price === product.price['1-10']
+                      ? 'text-primary'
+                      : 'text-body-tertiary'
+                  }
+                >
+                  1-10
+                </span>
+                <br />
+                <span
+                  className={
+                    price === product.price['1-10']
+                      ? 'h4 text-primary'
+                      : 'h4 text-body-tertiary'
+                  }
+                >
                   ${product.price['1-10']}
                 </span>
-                <span className='h4 text-primary mb-3'>
-                  {' Ahora  $ ' + price}
+              </div>
+              <div className='text-center w-25'>
+                <span
+                  className={
+                    price === product.price['11-50']
+                      ? 'text-primary'
+                      : 'text-body-tertiary'
+                  }
+                >
+                  11-50
                 </span>
-              </p>
-            )}
+                <br />
+                <span
+                  className={
+                    price === product.price['11-50']
+                      ? 'h4 text-primary'
+                      : 'h4 text-body-tertiary'
+                  }
+                >
+                  ${product.price['11-50']}
+                </span>
+              </div>
+              <div className='text-center w-25'>
+                <span
+                  className={
+                    price === product.price['51-100']
+                      ? 'text-primary'
+                      : 'text-body-tertiary'
+                  }
+                >
+                  51-100
+                </span>
+                <br />
+                <span
+                  className={
+                    price === product.price['51-100']
+                      ? 'h4 text-primary'
+                      : 'h4 text-body-tertiary'
+                  }
+                >
+                  ${product.price['51-100']}
+                </span>
+              </div>
+            </div>
           </div>
 
           <p>{product.description}</p>
@@ -161,8 +231,40 @@ const ProductDescription = ({productName}) => {
           </button>
         </div>
       </div>
-      
-      <Reviews reviews={product.reviews}/>
+
+      {/* Modal for Full-Size Image */}
+      {showModal && (
+        <div
+          className='modal show'
+          style={{ display: 'block', zIndex: '1050' }}
+          tabIndex='-1'
+          aria-labelledby='exampleModalLabel'
+          aria-hidden='true'
+          onClick={closeModal}
+        >
+          <div className='modal-dialog'>
+            <div className='modal-content'>
+              <div className='modal-header'>
+                <button
+                  type='button'
+                  className='btn-close'
+                  aria-label='Close'
+                  onClick={closeModal}
+                ></button>
+              </div>
+              <div className='modal-body'>
+                <img
+                  src={'../' + mainImage}
+                  alt='Full-size Product'
+                  className='img-fluid'
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* <Reviews reviews={product.reviews}/> */}
     </div>
   )
 }

@@ -5,7 +5,7 @@
 $custome-theme-colors: (
   'primary': #7401db,
   'secondary': #fce215, 
-  'dark': #511503
+  'dark': #1a1716
 );
 $theme-colors: map-merge($theme-colors, $custome-theme-colors);
 

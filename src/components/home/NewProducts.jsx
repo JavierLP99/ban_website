@@ -2,29 +2,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import './NewProducts.css'; // Assuming external CSS file for styling
 
 const NewProducts = () => {
-  const products = [
-    {
-      id: 1,
-      name: 'Tazas decoradas',
-      image:
-        'https://scontent.fdxb5-1.fna.fbcdn.net/v/t39.30808-6/438088786_408837118668737_7030825104080284964_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=127cfc&_nc_ohc=i_zs_x0RILcQ7kNvgGkk_SO&_nc_zt=23&_nc_ht=scontent.fdxb5-1.fna&_nc_gid=A2JrgxVL2GLva-hr9NctGry&oh=00_AYD5tF_3_fr-BkZoaNGP6DEDT_vmXh6kuT-n3EXYfaofbA&oe=6784830E',
-      url: '/tazas-decoradas' // Example URL
-    },
-    {
-      id: 2,
-      name: 'Playeras estampadas',
-      image:
-        'https://scontent.fdxb5-1.fna.fbcdn.net/v/t39.30808-6/416672208_346190464933403_1266186964777694511_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=127cfc&_nc_ohc=RIWpgFjEfLMQ7kNvgF5kz7u&_nc_zt=23&_nc_ht=scontent.fdxb5-1.fna&_nc_gid=ATChLW7CchBkLN1PII7tIZp&oh=00_AYDkZMK0zC5_fnzZC-uvosgfK_3UOSbuMsy89UYd8ayaXw&oe=67849AC4',
-      url: '/playeras-estampadas' // Example URL
-    },
-    {
-      id: 3,
-      name: 'Esferas',
-      image:
-        'https://scontent.fdxb5-1.fna.fbcdn.net/v/t39.30808-6/403699011_319573657595084_7715977954447394606_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=127cfc&_nc_ohc=Aq62gKQ16-4Q7kNvgEGc_Kx&_nc_zt=23&_nc_ht=scontent.fdxb5-1.fna&_nc_gid=AWFk6JTjTcQzdJjMV-nGqEJ&oh=00_AYDZLVd4_0B0nD4IXtvmxIE2s_y0UOn3i87Jq3lanIGxFw&oe=67848331',
-      url: '/esferas' // Example URL
-    }
-  ];
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    // Fetch products data from the JSON file
+    fetch('/products.json')
+      .then(response => response.json())
+      .then(data => {
+        // Update the products state with the first 3 items from the data
+        setProducts(data.products.slice(0, 3));
+      })
+      .catch(error => console.error('Error fetching products:', error));
+  }, []);
 
   const Card = ({ image, name, url }) => {
     const [mouseX, setMouseX] = useState(0);
@@ -48,14 +37,12 @@ const NewProducts = () => {
     const mousePX = mouseX / cardRef.current?.offsetWidth;
     const mousePY = mouseY / cardRef.current?.offsetHeight;
 
-    // Increase the sensitivity for a quicker response
     const cardStyle = {
-      transform: `rotateY(${mousePX * 45}deg) rotateX(${mousePY * -45}deg)` // Increased the rotation degrees
+      transform: `rotateY(${mousePX * 45}deg) rotateX(${mousePY * -45}deg)`
     };
 
-    // Ensure the background scales without leaving white space
     const cardBgTransform = {
-      transform: `translateX(${mousePX * -60}px) translateY(${mousePY * -60}px) scale(1.1)` // Slight scale for background
+      transform: `translateX(${mousePX * -60}px) translateY(${mousePY * -60}px) scale(1.1)`
     };
 
     const cardBgImage = {
@@ -68,10 +55,7 @@ const NewProducts = () => {
           <div className="card-bg" style={{ ...cardBgTransform, ...cardBgImage }}></div>
           <div className="card-info">
             <h1>{name}</h1>
-
-            <p>
-              Explora las características únicas de nuestros productos.
-            </p>
+            <p>Explora las características únicas de nuestros productos.</p>
           </div>
         </div>
       </a>
@@ -79,29 +63,28 @@ const NewProducts = () => {
   };
 
   return (
-<section className="py-5 new-products-section">
-  <div className="container text-center d-flex flex-column align-items-center justify-content-center">
-    <h2 className="fw-bold mb-3">Nuevos productos</h2>
-    <div className="rainbow-divider mb-3"></div> {/* Rainbow divider below the header */}
+    <section className="py-5 new-products-section">
+      <div className="container text-center d-flex flex-column align-items-center justify-content-center">
+        <h2 className="fw-bold mb-3">Nuevos productos</h2>
+        <div className="rainbow-divider mb-3"></div> {/* Rainbow divider below the header */}
 
-    <p className="text-muted mb-5">
-      Descubre nuestros últimos productos diseñados con pasión y calidad.
-    </p>
-    
-    <div className="row justify-content-center w-100">
-      {products.map((product) => (
-        <div key={product.id} className="col-12 col-md-6 col-lg-4 d-flex justify-content-center mb-4">
-          <Card image={product.image} name={product.name} url={product.url} />
+        <p className="text-muted mb-5">
+          Descubre nuestros últimos productos diseñados con pasión y calidad.
+        </p>
+
+        <div className="row justify-content-center w-100">
+          {products.map((product) => (
+            <div key={product.id} className="col-12 col-md-6 col-lg-4 d-flex justify-content-center mb-4">
+              <Card image={product.images[0]} name={product.name} url={product.url} />
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
-    
-    <button className="btn btn-dark rounded-pill px-4 py-2 mt-4">
-      Ver todos los productos
-    </button>
-  </div>
-</section>
 
+        <button className="btn btn-dark rounded-pill px-4 py-2 mt-4">
+          Ver todos los productos
+        </button>
+      </div>
+    </section>
   );
 };
 
