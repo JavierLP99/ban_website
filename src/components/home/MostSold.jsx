@@ -27,16 +27,18 @@ const MostSold = () => {
       <div className='d-flex justify-content-center px-0'>
         <div className='card rounded-4 col-12'>
           <div className='ratio ratio-1x1'>
+            <div className='d-flex justify-content-center align-items-center'>
             <img
               src={ImportDrivePhoto(item.image, 250)}
-              className='rounded-4 col-12'
+              className='img-fluid'
               alt='Imagen principal'
             />
+            </div>
           </div>
           <div className='ratio ratio-21x9'>
             <div className='card-body d-flex flex-column py-2'>
-              <h5 className='card-title'>{item.article}</h5>
-              <h6 className='card-subtitle'>{item.price}</h6>
+              <h6 className='card-title'>{item.article}</h6>
+              <p className='card-subtitle'>{item.price}</p>
             </div>
           </div>
         </div>
