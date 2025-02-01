@@ -2,11 +2,19 @@ import { useState, useEffect } from 'react'
 
 const MostSold = () => {
   const [content, setContent] = useState([])
+  const [product, setProduct] = useState([])
 
   useEffect(() => {
     fetch('/home.json') // Adjust the path as needed
       .then(response => response.json())
       .then(data => setContent(data.mostSold))
+      .catch(error => console.error('Error loading content:', error))
+  }, [])
+
+  useEffect(() => {
+    fetch('/products.json') // Adjust the path as needed
+      .then(response => response.json())
+      .then(data => setProduct(data.products))
       .catch(error => console.error('Error loading content:', error))
   }, [])
 
@@ -30,7 +38,7 @@ const MostSold = () => {
             <div className='d-flex justify-content-center align-items-center'>
             <img
               src={ImportDrivePhoto(item.image, 250)}
-              className='img-fluid'
+              className='img-fluid rounded-top-4 h-100 object-fit-cover'
               alt='Imagen principal'
             />
             </div>
