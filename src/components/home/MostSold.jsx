@@ -2,19 +2,11 @@ import { useState, useEffect } from 'react'
 
 const MostSold = () => {
   const [content, setContent] = useState([])
-  const [product, setProduct] = useState([])
-
-  useEffect(() => {
-    fetch('/home.json') // Adjust the path as needed
-      .then(response => response.json())
-      .then(data => setContent(data.mostSold))
-      .catch(error => console.error('Error loading content:', error))
-  }, [])
 
   useEffect(() => {
     fetch('/products.json') // Adjust the path as needed
       .then(response => response.json())
-      .then(data => setProduct(data.products))
+      .then(data => setContent(data.products))
       .catch(error => console.error('Error loading content:', error))
   }, [])
 
@@ -31,24 +23,26 @@ const MostSold = () => {
   }
 
   const card = (item, index) => (
-    <div key={index} className='row justify-content-center mx-0 mb-4 col-3'>
+    <div key={index} className='row justify-content-center rounded-4 lights1 p-2 mx-0 mb-4 col-3'>
       <div className='d-flex justify-content-center px-0'>
         <div className='card rounded-4 col-12'>
-          <div className='ratio ratio-1x1'>
-            <div className='d-flex justify-content-center align-items-center'>
-            <img
-              src={ImportDrivePhoto(item.image, 250)}
-              className='img-fluid rounded-top-4 h-100 object-fit-cover'
-              alt='Imagen principal'
-            />
+          <a href={`/producto/${item.name}`}>
+            <div className='ratio ratio-1x1'>
+              <div className='d-flex justify-content-center align-items-center'>
+                <img
+                  src={item.images[0]}
+                  className='img-fluid rounded-top-4 h-100 w-100 object-fit-cover'
+                  alt='Imagen principal'
+                />
+              </div>
             </div>
-          </div>
-          <div className='ratio ratio-21x9'>
-            <div className='card-body d-flex flex-column py-2'>
-              <h6 className='card-title'>{item.article}</h6>
-              <p className='card-subtitle'>{item.price}</p>
+            <div className='ratio ratio-21x9'>
+              <div className='card-body d-flex flex-column py-2'>
+                <h6 className='card-title'>{item.name}</h6>
+                <p className='card-subtitle'>{item.price.stock}</p>
+              </div>
             </div>
-          </div>
+          </a>
         </div>
       </div>
     </div>
