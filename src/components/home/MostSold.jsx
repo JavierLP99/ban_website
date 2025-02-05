@@ -23,7 +23,7 @@ const MostSold = () => {
   }
 
   const card = (item, index) => (
-    <div key={index} className='row justify-content-center rounded-4 lights1 p-2 mx-0 mb-4 col-3'>
+    <div key={index} className='row justify-content-center rounded-4 lights p-2 mx-0 mb-4 col-3'>
       <div className='d-flex justify-content-center px-0'>
         <div className='card rounded-4 col-12'>
           <a href={`/producto/${item.name}`}>
@@ -71,7 +71,7 @@ const MostSold = () => {
         </a>
       </div>
       <div className='row justify-content-center mx-auto mt-4 col-8'>
-        {content.map((item, index) => card(item, index))}
+        {content.slice(0, 8).map((item, index) => card(item, index))}
       </div>
     </div>
   )
