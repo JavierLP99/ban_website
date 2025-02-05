@@ -14,13 +14,10 @@ const Banner = () => {
   if (!content) return <div>Loading...</div>
 
   return (
-    <div
-      className='position-relative overflow-hidden'
-      style={{ height: '600px' }}
-    >
-      {/* Background Carousel */}
+    <div className='position-relative overflow-hidden'>
       <Carousel
-        className='w-100 h-100 position-absolute top-0 start-0'
+        className='z-0 d-flex position-relative w-100 h-100 top-0 start-0'
+        style={{ gridColumn: '1 / 1', gridRow: '1 / 1' }}
         fade
         indicators={false}
         controls={false}
@@ -41,10 +38,10 @@ const Banner = () => {
 
       {/* Overlay Content */}
       <div
-        className='d-flex flex-column justify-content-end text-white h-100 position-relative'
-        style={{ zIndex: 2 }}
+        className='z-2 d-flex flex-column justify-content-end text-white h-100 position-absolute top-0 start-0 w-100'
+        style={{ gridColumn: '1 / 1', gridRow: '1 / 1' }}
       >
-        <div className='position-absolute top-50 text-start w-100'>
+        <div className=' top-50 text-start w-100'>
           <div className='container'>
             <h1 className='visually-hidden'>{content.title}</h1>
             <div className='text-start'>
@@ -53,7 +50,9 @@ const Banner = () => {
           </div>
         </div>
 
-        <div className='d-flex justify-content-center'>
+        <div
+          className='d-flex justify-content-center'
+        >
           <a
             href={content.buttonLink1}
             className='btn btn-light btn-outline-dark btn-lg mt-3 rounded-5 mb-4 mx-2'
@@ -71,13 +70,13 @@ const Banner = () => {
 
       {/* Gradient Overlay for Better Text Visibility */}
       <div
-        className='position-absolute top-0 start-0 w-100 h-100'
+        className='z-1 position-absolute top-0 start-0 w-100 h-100'
         style={{
           background:
             'linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5))',
           zIndex: 1
         }}
-      ></div>
+      />
     </div>
   )
 }
