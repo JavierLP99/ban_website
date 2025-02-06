@@ -42,7 +42,7 @@ const Banner = () => {
         style={{ gridColumn: '1 / 1', gridRow: '1 / 1' }}
       >
         <div className=' top-50 text-start w-100'>
-          <div className='container'>
+          <div className='container-lg'>
             <h1 className='visually-hidden'>{content.title}</h1>
             <div className='text-start'>
               <p className='lead display-3'>{content.description}</p>

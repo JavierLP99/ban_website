@@ -23,9 +23,9 @@ const MostSold = () => {
   }
 
   const card = (item, index) => (
-    <div key={index} className='row justify-content-center rounded-4 lights p-2 mx-0 mb-4 col-3'>
-      <div className='d-flex justify-content-center px-0'>
-        <div className='card rounded-4 col-12'>
+    <div key={index} className='row justify-content-center p-2 mx-0 mb-4 col-11 col-lg-3'>
+      <div className='d-flex justify-content-center rounded-4 p-2 lights col-8 col-lg-12 px-0'>
+        <div className='card rounded-4 col-10 col-lg-11'>
           <a href={`/producto/${item.name}`}>
             <div className='ratio ratio-1x1'>
               <div className='d-flex justify-content-center align-items-center'>
@@ -55,7 +55,7 @@ const MostSold = () => {
         <div className='rainbow-divider mb-3'></div>
       </div>
       <div className='row justify-content-center'>
-        <p className='text-justify col-5'>
+        <p className='text-justify col-10 col-5'>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           minim veniam, quis nostrud exercitation ullamco laboris nisi ut
@@ -70,7 +70,7 @@ const MostSold = () => {
           Ver todos los productos
         </a>
       </div>
-      <div className='row justify-content-center mx-auto mt-4 col-8'>
+      <div className='row justify-content-center mx-auto mt-4 col-12 col-lg-8'>
         {content.slice(0, 8).map((item, index) => card(item, index))}
       </div>
     </div>
