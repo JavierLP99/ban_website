@@ -1,20 +1,31 @@
 import React, { useState, useEffect, useRef } from 'react'
+import axios from 'axios'
 import './NewProducts.css' // Assuming external CSS file for styling
 
 const NewProducts = () => {
   const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Fetch products data from the JSON file
-    fetch(
-      'https://banannylandapp.onrender.com/products?page=1&limit=3&sortBy=updatedAt&order=desc'
-    )
-      .then(response => response.json())
-      .then(data => {
-        // Update the products state with the first 3 items from the data
-        setProducts(data.products)
+    axios
+      .get(
+        'https://banannylandapp.onrender.com/products?page=1&limit=3&sortBy=updatedAt&order=desc'
+      )
+      .then(response => {
+        setProducts(response.data.products)
       })
       .catch(error => console.error('Error fetching products:', error))
+      .finally(() => setLoading(false))
+    // Fetch products data from the JSON file
+    // fetch(
+    //   'https://banannylandapp.onrender.com/products?page=1&limit=3&sortBy=updatedAt&order=desc'
+    // )
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     // Update the products state with the first 3 items from the data
+    //     setProducts(data.products)
+    //   })
+    //   .catch(error => console.error('Error fetching products:', error))
   }, [])
 
   const Card = ({ image, name, url, description }) => {
@@ -75,6 +86,19 @@ const NewProducts = () => {
     )
   }
 
+  if (loading) {
+    return (
+      <div className='d-flex justify-content-center align-items-center'>
+        <div className='text-center'>
+          <div className='spinner-border text-primary' role='status'>
+            <span className='visually-hidden'>Cargando...</span>
+          </div>
+          <p className='mt-2 text-muted'>Por favor, espera...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <section className='py-5 new-products-section'>
       <div className='container text-center d-flex flex-column align-items-center justify-content-center'>
@@ -87,7 +111,7 @@ const NewProducts = () => {
         <div className='row justify-content-center w-100'>
           {products.map(product => (
             <div
-              key={product["_id"]}
+              key={product['_id']}
               className='col-12 col-md-6 col-lg-4 d-flex justify-content-center mb-4'
             >
               <Card
