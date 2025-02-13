@@ -300,9 +300,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .lights {
-  transform: translate(0%, 0%);
-  top: 50%;
-  left: 50%;
+  position: relative;
   box-shadow: 0 1.25em 2.18em rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
@@ -323,12 +321,13 @@ h1, h2, h3, h4, h5, h6 {
     #3363ff 15.75em,
     #fd004c 18.75em
   );
-  background-size: cover;
+  opacity: 0;  /* Ocultar el fondo de colores */
+  transition: opacity 0.5s ease-in-out, background-position 10s linear;
 }
 
 .lights:hover:before {
   background-position: -106.25em 0;
-  transition: 10s linear;
+  opacity: 1;
 }
 
 .lights1:hover {
