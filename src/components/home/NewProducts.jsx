@@ -9,8 +9,9 @@ const NewProducts = () => {
   useEffect(() => {
     axios
       .get(
-        'https://banannylandapp.onrender.com/products?page=1&limit=3&sortBy=updatedAt&order=desc'
+        'https://banannylandapp.onrender.com/products?page=1&limit=3&sortBy=updatedAt&order=asc'
       )
+      // TODO: change bacj to order descending
       .then(response => {
         setProducts(response.data.products)
       })
