@@ -38,33 +38,35 @@ const Banner = () => {
 
       {/* Overlay Content */}
       <div
-        className='z-2 d-flex flex-column justify-content-end text-white h-100 position-absolute top-0 start-0 w-100'
+        className='z-2 d-flex flex-column justify-content-end justify-content-sm-start text-white h-100 position-absolute top-0 start-0 w-100'
         style={{ gridColumn: '1 / 1', gridRow: '1 / 1' }}
       >
-        <div className=' top-50 text-start w-100'>
+        <div className='top-50 text-start w-100'>
           <div className='container-lg'>
             <h1 className='visually-hidden'>{content.title}</h1>
             <div className='text-start'>
-              <p className='lead display-3'>{content.description}</p>
+              <p className='d-none d-sm-block m-0 lead display-3'>{content.description}</p>
             </div>
           </div>
         </div>
 
-        <div
-          className='d-flex justify-content-center'
-        >
-          <a
-            href={content.buttonLink1}
-            className='btn btn-light btn-outline-dark btn-lg mt-3 rounded-5 mb-4 mx-2'
-          >
-            {content.buttonText1}
-          </a>
-          <a
-            href={content.buttonLink2}
-            className='btn btn-dark btn-outline-light btn-lg mt-3 rounded-5 mb-4 mx-2'
-          >
-            {content.buttonText2}
-          </a>
+        <div className='d-flex justify-content-center align-items-start'>
+          <div className='col-4'>
+            <a
+              href={content.buttonLink1}
+              className='btn btn-light btn-outline-dark btn-lg rounded-5 mb-5 mb-sm-0'
+            >
+              <p className='m-0 x-small small'>{content.buttonText1}</p>
+            </a>
+          </div>
+          <div className='d-flex justify-content-center col-4'>
+            <a
+              href={content.buttonLink2}
+              className='btn btn-dark btn-outline-light btn-lg  rounded-5  mb-sm-0'
+            >
+              <p className='m-0 x-small small'>{content.buttonText2}</p>
+            </a>
+          </div>
         </div>
       </div>
 

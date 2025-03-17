@@ -301,7 +301,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .lights {
   position: relative;
-  box-shadow: 0 1.25em 2.18em rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
 
@@ -314,14 +313,14 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   background: repeating-linear-gradient(
     to right,
-    #fd004c 2.62em,
-    #fe9000 5.25em,
-    #fff020 7.87em,
-    #3edf4b 10.5em,
-    #3363ff 15.75em,
-    #fd004c 18.75em
+    #fd004c 0%,
+    #fe9000 20%,
+    #fff020 40%,
+    #3edf4b 60%,
+    #3363ff 80%,
+    #fd004c 100%
   );
-  opacity: 0;  /* Ocultar el fondo de colores */
+  opacity: 0;
   transition: opacity 0.5s ease-in-out, background-position 10s linear;
 }
 
@@ -330,14 +329,10 @@ h1, h2, h3, h4, h5, h6 {
   opacity: 1;
 }
 
-.lights1:hover {
-  height: 100%;
-  background-image: linear-gradient(115deg,#4fcf70,#fad648,#a767e5,#12bcfe,#44ce7b);
-  animation: rotate 1s linear infinite;
-}
-
-@keyframes rotate {
-  100%{
-    filter: hue-rotate(360deg)
+@media (max-width: 576px) {
+  .x-small {
+    font-size: 0.5em;
   }
 }
+
+

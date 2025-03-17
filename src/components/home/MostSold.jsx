@@ -1,14 +1,39 @@
 import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const MostSold = () => {
   const [content, setContent] = useState([])
+  const [loading, setLoading] = useState(true)
 
+  useEffect(() => {
+    axios
+      .get(
+        'https://banannylandapp.onrender.com/products?page=1&limit=8&sortBy=updatedAt&order=desc'
+      )
+      .then(response => {
+        setContent(response.data.products)
+      })
+      .catch(error => console.error('Error fetching products:', error))
+      .finally(() => setLoading(false))
+    // Fetch products data from the JSON file
+    // fetch(
+    //   'https://banannylandapp.onrender.com/products?page=1&limit=3&sortBy=updatedAt&order=desc'
+    // )
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     // Update the products state with the first 3 items from the data
+    //     setProducts(data.products)
+    //   })
+    //   .catch(error => console.error('Error fetching products:', error))
+  }, [])
+/*
   useEffect(() => {
     fetch('/products.json') // Adjust the path as needed
       .then(response => response.json())
       .then(data => setContent(data.products))
       .catch(error => console.error('Error loading content:', error))
   }, [])
+*/
 
   const ImportDrivePhoto = (driveUrl, height) => {
     const defaultUrl =
@@ -22,10 +47,23 @@ const MostSold = () => {
     return newUrl
   }
 
-  const card = (item, index) => (
-    <div key={index} className='row justify-content-center lights2 p-2 mx-0 mb-4 col-11 col-lg-3'>
-      <div className='d-flex justify-content-center rounded-4 p-2 lights col-8 col-lg-12 px-0'>
-        <div className='card rounded-4 col-10 col-lg-11'>
+  if (loading) {
+    return (
+      <div className='d-flex justify-content-center align-items-center'>
+        <div className='text-center'>
+          <div className='spinner-border text-primary' role='status'>
+            <span className='visually-hidden'>Cargando...</span>
+          </div>
+          <p className='mt-2 text-muted'>Por favor, espera...</p>
+        </div>
+      </div>
+    )
+  }
+
+  const card = (item) => (
+    <div key={item.id} className='row justify-content-center p-2 mx-0 mb-4 col-11 col-lg-3'>
+      <div className='d-flex justify-content-center rounded-4 shadow-lg lights px-0 py-2 col-8 col-lg-12'>
+        <div className='card rounded-4 shadow-lg col-10 col-lg-11'>
           <a href={`/producto/${item.name}`}>
             <div className='ratio ratio-1x1'>
               <div className='d-flex justify-content-center align-items-center'>
@@ -38,8 +76,8 @@ const MostSold = () => {
             </div>
             <div className='ratio ratio-21x9'>
               <div className='card-body d-flex flex-column py-2'>
-                <h6 className='card-title'>{item.name}</h6>
-                <p className='card-subtitle'>{item.price.stock}</p>
+                <p className='card-title'>{item.name}</p>
+                <p className='card-subtitle'>{item.stock}</p>
               </div>
             </div>
           </a>
@@ -71,7 +109,8 @@ const MostSold = () => {
         </a>
       </div>
       <div className='row justify-content-center mx-auto mt-4 col-12 col-lg-8'>
-        {content.slice(0, 8).map((item, index) => card(item, index))}
+        {/*{content.map((item, index) => card(item, index))}*/}
+        {content.map((item) => card(item))}
       </div>
     </div>
   )
