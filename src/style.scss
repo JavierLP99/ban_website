@@ -341,3 +341,43 @@ h1, h2, h3, h4, h5, h6 {
     filter: hue-rotate(360deg)
   }
 }
+
+
+
+.floating-error-container {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.error-icon {
+  color: red;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 25px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(40%);
+}
+
+.error-tooltip {
+  background: rgba(255, 0, 0, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px; 
+  font-size: .8rem;
+  position: absolute;
+  top: .8rem;
+  right: 25px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.floating-error-container:hover .error-tooltip {
+  opacity: 1;
+}

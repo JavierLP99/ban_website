@@ -17,16 +17,6 @@ const NewProducts = () => {
       })
       .catch(error => console.error('Error fetching products:', error))
       .finally(() => setLoading(false))
-    // Fetch products data from the JSON file
-    // fetch(
-    //   'https://banannylandapp.onrender.com/products?page=1&limit=3&sortBy=updatedAt&order=desc'
-    // )
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     // Update the products state with the first 3 items from the data
-    //     setProducts(data.products)
-    //   })
-    //   .catch(error => console.error('Error fetching products:', error))
   }, [])
 
   const Card = ({ image, name, url, description }) => {

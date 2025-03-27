@@ -44,8 +44,7 @@ const App = () => {
           </ErrorBoundary>
         }
       />
-              <Route path="/search" element={<SearchPage />} />
-
+      <Route path='/search' element={<SearchPage />} />
     </Routes>
   )
 }
