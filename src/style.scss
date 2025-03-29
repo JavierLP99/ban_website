@@ -335,4 +335,12 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+.default-font-main {
+  font-family: sans-serif;
+}
 
+.deleteprod:hover {
+  background-color: transparent;
+  color: #7401db;
+  border: 1px solid #7401db;
+}

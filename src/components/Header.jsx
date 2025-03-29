@@ -120,6 +120,12 @@ export default function Header() {
                   Promociones
                 </a>
               </li>
+
+              <li className='nav-item'>
+                <a className='nav-link fw-bold text-primary' href='/listadeproductos'>
+                  Listado
+                </a>
+              </li>
             </ul>
 
             {/* Buttons: Shopping Cart and Login (Mobile) */}
