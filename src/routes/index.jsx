@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import { Home, About } from '@/pages'
+import { Home, About, ProductsData } from '@/pages'
 import ProductDetail from '../pages/ProductDetail'
 import SearchPage from '../pages/SearchPage'
 import ErrorBoundary from './ErrorBoundary'
@@ -55,6 +55,15 @@ const App = () => {
         }
       />
       <Route path='/search' element={<SearchPage />} />
+      <Route
+        path='/listadeproductos'
+        element={<ProductsData />}
+        errorElement={
+          <ErrorBoundary>
+            <h1>Something went wrong.</h1>
+          </ErrorBoundary>
+        }
+      />
     </Routes>
   )
 }
