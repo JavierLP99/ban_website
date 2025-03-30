@@ -6,7 +6,10 @@ import * as yup from 'yup'
 import { Modal, Button } from 'react-bootstrap'
 import slugify from 'slugify'
 import ProductCard from '../components/ProductCard'
-import CloudinaryAssetManager from "./CloudinaryAssetManager";
+import ImageUploader from './ImageUploader'
+import { useParams } from 'react-router-dom'
+
+import axios from 'axios'
 
 const schema = yup
   .object({
@@ -74,6 +77,8 @@ const schema = yup
 
 // eslint-disable-next-line no-unused-vars
 const ProductDescription = ({ productId }) => {
+  const { id } = useParams() // Get product ID from URL
+
   const {
     register,
     handleSubmit,
@@ -83,6 +88,50 @@ const ProductDescription = ({ productId }) => {
     formState: { errors }
     // reset
   } = useForm({ resolver: yupResolver(schema) })
+
+  useEffect(() => {
+    if (id) {
+      axios
+        .get(`https://banannylandapp.onrender.com/products/${id}`)
+        .then(response => {
+          const product = response.data.product
+          console.log(response)
+
+          setValue('name', product.name)
+          setValue('slug', product.slug)
+          setValue('description', product.description)
+          setValue('category', product.category)
+          setValue('tags', product.tags || [])
+          setSelectedImages(product.images || [])
+
+          // Format Prices Correctly
+          const formattedPrices = product.price.map((p, index) => ({
+            id: index,
+            price: p.price,
+            minQty: parseInt(p.quantity.split('-')[0], 10),
+            maxQty: parseInt(p.quantity.split('-')[1], 10)
+          }))
+          setPrices(formattedPrices)
+          setValue('prices', formattedPrices) // ✅ Ensure React Hook Form recognizes it
+
+          // Format Customizations Correctly
+          const formattedCustomizations = product.customizationOptions.map(
+            (custom, index) => ({
+              id: index,
+              name: custom.name,
+              type: custom.type,
+              description: custom.description,
+              options: Array.isArray(custom.options)
+                ? custom.options.join(', ')
+                : custom.options || '' // ✅ Convert array to string
+            })
+          )
+          setCustomizations(formattedCustomizations)
+          setValue('customizations', formattedCustomizations) // ✅ Ensure React Hook Form recognizes it
+        })
+        .catch(error => console.error('Error fetching product:', error))
+    }
+  }, [id, setValue])
 
   const [categories, setCategories] = useState(['Ropa', 'Tazas'])
   const [seasons, setSeasons] = useState(['Día de Muertos', '14 de Febrero'])
@@ -96,6 +145,17 @@ const ProductDescription = ({ productId }) => {
   const [customizations, setCustomizations] = useState([
     { id: Date.now(), name: '', type: '', description: '', options: '' }
   ])
+
+  //Gallery
+
+  const [showModal, setShowModal] = useState(false)
+  const [selectedImages, setSelectedImages] = useState([])
+
+  const handleImageSelect = images => {
+    setValue('images', images)
+    setSelectedImages(images)
+    setShowModal(false)
+  }
 
   useEffect(() => {
     setValue('slug', slugify(watch('name') || '', { lower: true }))
@@ -139,27 +199,61 @@ const ProductDescription = ({ productId }) => {
     setCustomizations(customizations.filter((_, i) => i !== index))
   }
 
-  const onSubmit = data => {
+  const [message, setMessage] = useState(null) // State for feedback message
+  const [messageType, setMessageType] = useState(null) // "success" or "error"
+
+  const onSubmit = async data => {
+    setMessage(null) // Clear previous messages
+    setMessage('Cargando.')
+    setMessageType('info')
+
     const formattedPrices = prices.map(price => ({
-      price: price.price,
-      minQty: price.minQty,
-      maxQty: price.maxQty
+      quantity: `${price.minQty}-${price.maxQty}`,
+      customizations: [],
+      price: Number(price.price)
     }))
 
     const formattedCustomizations = customizations.map(custom => ({
       name: custom.name,
       type: custom.type,
       description: custom.description,
-      options: custom.options
+      options: custom.options ? custom.options.split(',') : []  // Split string into array
     }))
 
     const fullData = {
       ...data,
-      prices: formattedPrices,
-      customizations: formattedCustomizations
+      price: formattedPrices,
+      customizationOptions: formattedCustomizations,
+      tags: [data.season],
+      images: selectedImages
     }
 
-    console.log(fullData)
+    delete fullData.season
+    delete fullData.customizations
+    delete fullData.prices
+
+    try {
+      if (id) {
+        await axios.put(
+          `https://banannylandapp.onrender.com/products/${id}`,
+          fullData
+        )
+        console.log(fullData)
+        setMessage('Producto actualizado exitosamente.')
+        setMessageType('success')
+      } else {
+        await axios.post(
+          'https://banannylandapp.onrender.com/products',
+          fullData
+        )
+        setMessage('Producto creado exitosamente.')
+        setMessageType('success')
+      }
+    } catch (error) {
+      setMessage('Hubo un error al guardar el producto. Inténtalo de nuevo.')
+      setMessageType('error')
+      console.error('Error saving product:', error)
+    }
   }
 
   // Function to handle type change and enable options field
@@ -172,16 +266,6 @@ const ProductDescription = ({ productId }) => {
     }
     setCustomizations(newCustomizations)
   }
-
-
-  const [selectedImages, setSelectedImages] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleSelect = (images) => {
-    setSelectedImages(images);
-    setIsOpen(false);
-  };
-
 
   return (
     <div className='container my-4'>
@@ -536,6 +620,56 @@ const ProductDescription = ({ productId }) => {
               +
             </button>
 
+            <div className='my-3'>
+              <h2 className='h5 py-2'>Imágenes</h2>
+              <button
+                className='btn btn-primary mb-3'
+                onClick={() => setShowModal(true)}
+                type='button'
+              >
+                Seleccionar imágenes
+              </button>
+
+              {/* Display Selected Images */}
+              <div className='row'>
+                {selectedImages.map((url, index) => (
+                  <div key={index} className='col-md-4 mb-3'>
+                    <div className='card'>
+                      <div className='ratio ratio-1x1'>
+                        <img
+                          src={url}
+                          className='card-img-top object-fit-cover'
+                          alt='Selected'
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* ImageUploader Modal */}
+              <ImageUploader
+                onImageSelect={handleImageSelect}
+                showModal={showModal}
+                onCloseModal={() => setShowModal(false)}
+                imageTag='gallery' // Change this to match your Cloudinary tag
+              />
+            </div>
+
+            {message && (
+              <div
+                className={`alert ${
+                  messageType === 'success'
+                    ? 'alert-success'
+                    : messageType === 'info'
+                    ? 'alert-info'
+                    : 'alert-danger'
+                }`}
+                role='alert'
+              >
+                {message}
+              </div>
+            )}
             <button type='submit' className='btn btn-success mt-3'>
               Guardar Producto
             </button>
@@ -600,30 +734,6 @@ const ProductDescription = ({ productId }) => {
               </Button>
             </Modal.Footer>
           </Modal>
-
-          <div className='p-4'>
-            <Button onClick={() => setIsOpen(true)}>Manage Images</Button>
-            {isOpen && (
-              <CloudinaryAssetManager
-                onClose={() => setIsOpen(false)}
-                onSelect={handleSelect}
-                multiple={true} // Allow multiple image selection
-              />
-            )}
-            <div className='mt-4'>
-              <h3>Selected Images:</h3>
-              <div className='grid grid-cols-3 gap-2'>
-                {selectedImages.map((url, index) => (
-                  <img
-                    key={index}
-                    src={url}
-                    alt={`Selected ${index}`}
-                    className='w-full h-auto rounded'
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
         </div>
         <div className='col-4'>
           <ProductCard
@@ -631,17 +741,10 @@ const ProductDescription = ({ productId }) => {
             product={{
               name: watch('name'),
               category: watch('category'),
+              slug: watch('slug'),
               referencePrice: watch('prices')?.[0]?.price ?? 0,
-              description:
-                'Set de toallas bordadas con nombres personalizados.',
-              customizationOptions: ['Texto', 'Color'],
-              stock: 25,
-              images: [
-                './imagenes/Toallas_pareja_1.jpg',
-                './imagenes/Toallas_pareja_2.jpg'
-              ],
-              tags: [watch('season')],
-              status: 'Activo'
+              images: selectedImages,
+              tags: [watch('season')]
             }}
           />
         </div>

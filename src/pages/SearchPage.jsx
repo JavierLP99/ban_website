@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'; 
-import { useSearchParams } from 'react-router-dom'; 
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
-import FilterBar from '../components/FilterBar'; 
+import FilterBar from '../components/FilterBar';
 import ProductList from '../components/ProductList';
 
 export default function SearchPage() {
@@ -10,6 +10,8 @@ export default function SearchPage() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [totalPages, setTotalPages] = useState(0); // State to hold total pages
+  const [currentPage, setCurrentPage] = useState(1); // State to hold current page
 
   const defaultFilters = {
     category: '',
@@ -35,7 +37,7 @@ export default function SearchPage() {
   useEffect(() => {
     setLoading(true);
     console.log('Fetching products with:', {
-      page: 1,
+      page: currentPage,
       limit: 10,
       sortBy: 'updatedAt',
       order: 'desc',
@@ -49,8 +51,8 @@ export default function SearchPage() {
     axios
       .get(`https://banannylandapp.onrender.com/products`, {
         params: {
-          page: 1,
-          limit: 10,
+          page: currentPage,
+          limit: 20,
           sortBy: 'updatedAt',
           order: 'desc',
           search: query,
@@ -63,20 +65,44 @@ export default function SearchPage() {
       .then(response => {
         console.log('API Response:', response.data);
         setProducts(response.data.products);
+        setTotalPages(response.data.totalPages); // Set total pages from API response
       })
       .catch(error => console.error('Error fetching products:', error))
       .finally(() => setLoading(false));
-  }, [query, filters]);
+  }, [query, filters, currentPage]); // Added currentPage as dependency
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page); // Update the current page
+  };
 
   return (
     <div className="container mt-4">
       <FilterBar setFilters={setFilters} products={products} />
       {loading ? (
-        <p>Cargando productos...</p>
+        <p className='text-center'>Cargando productos...</p>
       ) : products.length === 0 ? (
-        <p>No se encontraron productos que coincidan con tu búsqueda.</p>
+        <p className='text-center'>No se encontraron productos que coincidan con tu búsqueda.</p>
       ) : (
-        <ProductList products={products} />
+        <>
+          <ProductList products={products} />
+          <div className="pagination justify-content-center gap-4">
+            <button
+              className="btn btn-secondary"
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange(currentPage - 1)}
+            >
+              Anterior
+            </button>
+            <span>{currentPage} de {totalPages}</span>
+            <button
+              className="btn btn-secondary"
+              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(currentPage + 1)}
+            >
+              Siguiente
+            </button>
+          </div>
+        </>
       )}
     </div>
   );

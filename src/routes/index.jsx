@@ -36,7 +36,17 @@ const App = () => {
         }
       />
       <Route
-        path='/admin/nuevo-producto/:productName'
+        path='/admin/catalogo/:id'
+        element={<EditProduct />}
+        errorElement={
+          <ErrorBoundary>
+            <h1>Something went wrong.</h1>
+          </ErrorBoundary>
+        }
+      />
+      
+      <Route
+        path='/admin/catalogo/'
         element={<EditProduct />}
         errorElement={
           <ErrorBoundary>

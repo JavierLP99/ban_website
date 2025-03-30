@@ -7,7 +7,7 @@ export default function ProductCard({ product, className }) {
   return (
     <div className={`mb-4 ${className}`}>
       <div className="card rounded-4 h-100">
-        <Link to={`/producto/${product.name}`} className="text-decoration-none">
+        <Link to={`/producto/${product.slug}`} className="text-decoration-none">
         <div className='ratio ratio-1x1'>
 
           <img
@@ -21,7 +21,7 @@ export default function ProductCard({ product, className }) {
         </Link>
         <div className="card-body d-flex flex-column">
           <Link
-            to={`/producto/${product.name}`}
+            to={`/producto/${product.slug}`}
             className="card-title text-decoration-none text-reset"
           >
             <p className="card-title fs-4">{product.name}</p>
