@@ -16,19 +16,31 @@ const ProductsData = () => {
   const [totalPages, setTotalPages] = useState(1)
   const navigate = useNavigate()
   const location = useLocation()
+  const [selectedCategory, setSelectedCategory] = useState('')
+  const [categories, setCategories] = useState([])
 
   useEffect(() => {
     const params = new URLSearchParams(location.search)
     const query = params.get('q') || ''
+    const page = parseInt(params.get('page')) || 1
+    const category = params.get('category') || '' // Obtener la categoría de la URL
+
     setSearchQuery(query)
+    setCurrentPage(page)
+
+    let results = content
+
     if (query) {
-      const results = content.filter(item =>
+      results = results.filter(item =>
         item.name.toLowerCase().includes(query.toLowerCase())
       )
-      setFilteredProducts(results)
-    } else {
-      setFilteredProducts(content)
     }
+
+    if (category) {
+      results = results.filter(item => item.category === category)
+    }
+
+    setFilteredProducts(results)
   }, [location.search, content])
 
   const handleSearch = e => {
@@ -39,6 +51,12 @@ const ProductsData = () => {
       setFilteredProducts(content)
       navigate('/listadeproductos')
     }
+  }
+
+  const handleCategorySelect = selectedCategory => {
+    navigate(
+      `/listadeproductos?category=${encodeURIComponent(selectedCategory)}`
+    )
   }
 
   const handleCheckboxChange = e => {
@@ -58,29 +76,16 @@ const ProductsData = () => {
       })
       .catch(error => console.error('Error fetching products:', error))
       .finally(() => setLoading(false))
-    // Fetch products data from the JSON file
-    // fetch(
-    //   'https://banannylandapp.onrender.com/products?page=1&limit=3&sortBy=updatedAt&order=desc'
-    // )
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     // Update the products state with the first 3 items from the data
-    //     setProducts(data.products)
-    //   })
-    //   .catch(error => console.error('Error fetching products:', error))
   }, [currentPage])
 
-  const ImportDrivePhoto = (driveUrl, height) => {
-    const defaultUrl =
-      'https://drive.google.com/file/d/1Q7By_xG9r3a8Zr47j6b1HG7yAm91GIHO/view?usp=drive_link'
-
-    const match = driveUrl.match(/\/d\/(.*)\//)
-    const fileId = match ? match[1] : defaultUrl.match(/\/d\/(.*)\//)[1]
-
-    const newUrl = `https://lh3.googleusercontent.com/d/${fileId}=h${height}`
-
-    return newUrl
-  }
+  useEffect(() => {
+    axios
+      .get(`https://banannylandapp.onrender.com/categories`)
+      .then(response => {
+        setCategories(response.data.categories)
+      })
+      .catch(error => console.error('Error fetching categories:', error))
+  }, [])
 
   if (loading) {
     return (
@@ -126,7 +131,7 @@ const ProductsData = () => {
         </a>
       </td>
       <td>Activo</td>
-      <td>Ropa</td>
+      <td>{item.category}</td>
       <td>$ 120</td>
       <td>30 de abril del 2025</td>
       <td>
@@ -193,12 +198,17 @@ const ProductsData = () => {
         <DropdownButton
           id='dropdown-button-light'
           variant='light border border-2'
-          title='Categoría'
+          title={selectedCategory || 'Categoría'}
           className='mx-2'
         >
-          <Dropdown.Item href='#/action-2'>Categoría 1</Dropdown.Item>
-          <Dropdown.Item href='#/action-3'>Categoría 2</Dropdown.Item>
-          <Dropdown.Item href='#/action-4'>Categoría 3</Dropdown.Item>
+          {[...new Set(categories.map(item => item.name))].map(category => (
+            <Dropdown.Item
+              key={category}
+              onClick={() => handleCategorySelect(category)}
+            >
+              {category}
+            </Dropdown.Item>
+          ))}
         </DropdownButton>
         <DropdownButton
           id='dropdown-button-light'
@@ -277,9 +287,23 @@ const ProductsData = () => {
             </a>
           </li>
           {[...Array(totalPages)].map((_, index) => (
-              <li className='page-item' key={index}>
-                <a href='/listadeproductos' className={`page-link page-item ${currentPage === index ? 'active' : ''}`}>{index + 1}</a>
-              </li>
+            <li
+              className={`page-item ${
+                currentPage === index + 1 ? 'active' : ''
+              }`}
+              key={index}
+            >
+              <a
+                className='page-link'
+                href={`/listadeproductos?page=${index + 1}`} // Cambia la URL
+                onClick={e => {
+                  e.preventDefault() // Evita el recargo de la página
+                  navigate(`/listadeproductos?page=${index + 1}`)
+                }}
+              >
+                {index + 1}
+              </a>
+            </li>
           ))}
           <li className='page-item'>
             <a
