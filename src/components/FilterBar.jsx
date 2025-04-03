@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function FilterBar({ setFilters, products }) {
+export default function FilterBar({ products }) {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
@@ -29,8 +29,6 @@ export default function FilterBar({ setFilters, products }) {
       tags: selectedTags ? selectedTags.split(',').map(tag => tag.trim()) : [],
     };
 
-    // Set filters to parent component
-    setFilters(filters);
 
     // Update the URL with the filter parameters
     updateUrl(filters);
@@ -50,9 +48,6 @@ export default function FilterBar({ setFilters, products }) {
       maxPrice: Infinity,
       tags: [],
     };
-
-    setFilters(filters);
-
     // Update the URL to remove all filters
     updateUrl(filters);
   };
