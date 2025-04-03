@@ -89,7 +89,50 @@ const ProductDescription = ({ productId }) => {
     // reset
   } = useForm({ resolver: yupResolver(schema) })
 
+  const [categories, setCategories] = useState(['Ropa', 'Tazas'])
+  const [seasons, setSeasons] = useState(['Día de Muertos', '14 de Febrero'])
+  const [showCategoryModal, setShowCategoryModal] = useState(false)
+  const [showSeasonModal, setShowSeasonModal] = useState(false)
+  const [newCategory, setNewCategory] = useState('')
+  const [newSeason, setNewSeason] = useState('')
+  const [prices, setPrices] = useState([
+    { id: Date.now(), price: '', minQty: '', maxQty: '' }
+  ])
+  const [customizations, setCustomizations] = useState([
+    { id: Date.now(), name: '', type: '', description: '', options: '' }
+  ])
+
+  const fetchCategories = async () => {
+      axios
+        .get(`https://banannylandapp.onrender.com/categories`, {
+          params: {
+            limit: 100
+          }
+        })
+        .then(response => {
+          console.log('API Response:', response.data)
+          setCategories(response.data.categories.map(category => category.name))
+
+        })
+        .catch(error => console.error('Error fetching products:', error))
+        axios
+        .get(`https://banannylandapp.onrender.com/tags`, {
+          params: {
+            limit: 100
+          }
+        })
+        .then(response => {
+          console.log('API Response:', response.data)
+          setSeasons(response.data.tags.map(tag => tag.name))
+
+        })
+        .catch(error => console.error('Error fetching products:', error))
+    }
+
+    
+
   useEffect(() => {
+    fetchCategories()
     if (id) {
       axios
         .get(`https://banannylandapp.onrender.com/products/${id}`)
@@ -133,18 +176,7 @@ const ProductDescription = ({ productId }) => {
     }
   }, [id, setValue])
 
-  const [categories, setCategories] = useState(['Ropa', 'Tazas'])
-  const [seasons, setSeasons] = useState(['Día de Muertos', '14 de Febrero'])
-  const [showCategoryModal, setShowCategoryModal] = useState(false)
-  const [showSeasonModal, setShowSeasonModal] = useState(false)
-  const [newCategory, setNewCategory] = useState('')
-  const [newSeason, setNewSeason] = useState('')
-  const [prices, setPrices] = useState([
-    { id: Date.now(), price: '', minQty: '', maxQty: '' }
-  ])
-  const [customizations, setCustomizations] = useState([
-    { id: Date.now(), name: '', type: '', description: '', options: '' }
-  ])
+  
 
   //Gallery
 

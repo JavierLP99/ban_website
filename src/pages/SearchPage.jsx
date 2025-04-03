@@ -8,21 +8,16 @@ export default function SearchPage() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q')?.toLowerCase() || '';
   const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(0); // State to hold total pages
   const [currentPage, setCurrentPage] = useState(1); // State to hold current page
 
-  const defaultFilters = {
-    category: '',
-    minPrice: 0,
-    maxPrice: Infinity,
-    tags: [],
-  };
-  const [filters, setFilters] = useState(defaultFilters);
+
 
   useEffect(() => {
-    // Get filters from URL parameters
+    setLoading(true);
+
+
     const category = searchParams.get('category') || '';
     const minPrice = searchParams.get('minPrice') ? parseFloat(searchParams.get('minPrice')) : 0;
     const maxPrice = searchParams.get('maxPrice') ? parseFloat(searchParams.get('maxPrice')) : Infinity;
@@ -30,36 +25,31 @@ export default function SearchPage() {
 
     console.log('Filters from URL:', { category, minPrice, maxPrice, tags });
 
-    // Update filters state based on URL parameters
-    setFilters({ category, minPrice, maxPrice, tags });
-  }, [searchParams]);
 
-  useEffect(() => {
-    setLoading(true);
     console.log('Fetching products with:', {
       page: currentPage,
       limit: 10,
       sortBy: 'updatedAt',
       order: 'desc',
       search: query,
-      category: filters.category,
-      minPrice: filters.minPrice,
-      maxPrice: filters.maxPrice,
-      tags: filters.tags.length > 0 ? filters.tags.join(',') : undefined,
+      category: category,
+      minPrice: minPrice,
+      maxPrice: maxPrice,
+      tags: tags.length > 0 ? tags.join(',') : undefined,
     });
 
     axios
       .get(`https://banannylandapp.onrender.com/products`, {
         params: {
           page: currentPage,
-          limit: 20,
+          limit: 5,
           sortBy: 'updatedAt',
           order: 'desc',
           search: query,
-          category: filters.category,
-          minPrice: filters.minPrice,
-          maxPrice: filters.maxPrice,
-          tags: filters.tags.length > 0 ? filters.tags.join(',') : undefined,
+          category: category,
+          minPrice: minPrice,
+          maxPrice: maxPrice,
+          tags: tags.length > 0 ? tags.join(',') : undefined,
         },
       })
       .then(response => {
@@ -69,7 +59,7 @@ export default function SearchPage() {
       })
       .catch(error => console.error('Error fetching products:', error))
       .finally(() => setLoading(false));
-  }, [query, filters, currentPage]); // Added currentPage as dependency
+  }, [query,  currentPage, searchParams]); // Added currentPage as dependency
 
   const handlePageChange = (page) => {
     setCurrentPage(page); // Update the current page
@@ -77,7 +67,7 @@ export default function SearchPage() {
 
   return (
     <div className="container mt-4">
-      <FilterBar setFilters={setFilters} products={products} />
+      <FilterBar products={products} />
       {loading ? (
         <p className='text-center'>Cargando productos...</p>
       ) : products.length === 0 ? (
