@@ -14,7 +14,8 @@
     "stock": 30,
     "images": ["./imagenes/Globo_burbuja_1.jpg", "./imagenes/Globo_burbuja_2.jpg"],
     "tags": ["globo", "decoración", "personalizado"],
-    "status": "Activo"
+    "status": "Activo",
+    "date": "30 de abril del 2025"
   },
   {
     "id": 2,
