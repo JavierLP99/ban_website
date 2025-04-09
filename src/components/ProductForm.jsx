@@ -101,44 +101,46 @@ const ProductDescription = ({ productId }) => {
   const [customizations, setCustomizations] = useState([
     { id: Date.now(), name: '', type: '', description: '', options: '' }
   ])
+  const [galleryName, setGalleryName] = useState('')
+  const [procedure, setProcedure] = useState('')
 
   const fetchCategories = async () => {
-      axios
-        .get(`https://banannylandapp.onrender.com/categories`, {
-          params: {
-            limit: 100
-          }
-        })
-        .then(response => {
-          console.log('API Response:', response.data)
-          setCategories(response.data.categories.map(category => category.name))
-
-        })
-        .catch(error => console.error('Error fetching products:', error))
-        axios
-        .get(`https://banannylandapp.onrender.com/tags`, {
-          params: {
-            limit: 100
-          }
-        })
-        .then(response => {
-          console.log('API Response:', response.data)
-          setSeasons(response.data.tags.map(tag => tag.name))
-
-        })
-        .catch(error => console.error('Error fetching products:', error))
-    }
-
-    
-
+    axios
+      .get(`https://banannylandapp.onrender.com/categories`, {
+        params: {
+          limit: 100
+        }
+      })
+      .then(response => {
+        console.log('API Response:', response.data)
+        setCategories(response.data.categories.map(category => category.name))
+      })
+      .catch(error => console.error('Error fetching products:', error))
+    axios
+      .get(`https://banannylandapp.onrender.com/tags`, {
+        params: {
+          limit: 100
+        }
+      })
+      .then(response => {
+        console.log('API Response:', response.data)
+        setSeasons(response.data.tags.map(tag => tag.name))
+      })
+      .catch(error => console.error('Error fetching products:', error))
+  }
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const cloneId = urlParams.get('id')
+
     fetchCategories()
+
     if (id) {
+      // Normal edit mode
+      setProcedure('Edit')
       axios
         .get(`https://banannylandapp.onrender.com/products/${id}`)
         .then(response => {
           const product = response.data.product
-          console.log(response)
 
           setValue('name', product.name)
           setValue('slug', product.slug)
@@ -147,7 +149,6 @@ const ProductDescription = ({ productId }) => {
           setValue('tags', product.tags || [])
           setSelectedImages(product.images || [])
 
-          // Format Prices Correctly
           const formattedPrices = product.price.map((p, index) => ({
             id: index,
             price: p.price,
@@ -155,9 +156,8 @@ const ProductDescription = ({ productId }) => {
             maxQty: parseInt(p.quantity.split('-')[1], 10)
           }))
           setPrices(formattedPrices)
-          setValue('prices', formattedPrices) // ✅ Ensure React Hook Form recognizes it
+          setValue('prices', formattedPrices)
 
-          // Format Customizations Correctly
           const formattedCustomizations = product.customizationOptions.map(
             (custom, index) => ({
               id: index,
@@ -166,17 +166,72 @@ const ProductDescription = ({ productId }) => {
               description: custom.description,
               options: Array.isArray(custom.options)
                 ? custom.options.join(', ')
-                : custom.options || '' // ✅ Convert array to string
+                : custom.options || ''
             })
           )
           setCustomizations(formattedCustomizations)
-          setValue('customizations', formattedCustomizations) // ✅ Ensure React Hook Form recognizes it
+          setValue('customizations', formattedCustomizations)
+          setGalleryName(product._id)
         })
         .catch(error => console.error('Error fetching product:', error))
+    } else if (cloneId) {
+      // Clone mode
+      setProcedure('Clone')
+      axios
+        .get(`https://banannylandapp.onrender.com/products/${cloneId}`)
+        .then(response => {
+          const original = response.data.product
+          return axios
+            .post(`https://banannylandapp.onrender.com/products/provision`)
+            .then(res => {
+              const provisioned = res.data
+
+              // Append (1) to name/slug
+              setValue('name', `${original.name} (1)`)
+              setValue('slug', `${original.slug}-1`)
+              setValue('description', original.description)
+              setValue('category', original.category)
+              setValue('tags', original.tags || [])
+
+              const formattedPrices = original.price.map((p, index) => ({
+                id: index,
+                price: p.price,
+                minQty: parseInt(p.quantity.split('-')[0], 10),
+                maxQty: parseInt(p.quantity.split('-')[1], 10)
+              }))
+              setPrices(formattedPrices)
+              setValue('prices', formattedPrices)
+
+              const formattedCustomizations = original.customizationOptions.map(
+                (custom, index) => ({
+                  id: index,
+                  name: custom.name,
+                  type: custom.type,
+                  description: custom.description,
+                  options: Array.isArray(custom.options)
+                    ? custom.options.join(', ')
+                    : custom.options || ''
+                })
+              )
+              setCustomizations(formattedCustomizations)
+              setValue('customizations', formattedCustomizations)
+
+              setGalleryName(provisioned._id)
+            })
+        })
+        .catch(error => console.error('Error cloning product:', error))
+    } else {
+      // Create mode
+      setProcedure('Create')
+      axios
+        .post(`https://banannylandapp.onrender.com/products/provision`)
+        .then(response => {
+          const product = response.data
+          setGalleryName(product._id)
+        })
+        .catch(error => console.error('Error provisioning product:', error))
     }
   }, [id, setValue])
-
-  
 
   //Gallery
 
@@ -249,7 +304,7 @@ const ProductDescription = ({ productId }) => {
       name: custom.name,
       type: custom.type,
       description: custom.description,
-      options: custom.options ? custom.options.split(',') : []  // Split string into array
+      options: custom.options ? custom.options.split(',') : [] // Split string into array
     }))
 
     const fullData = {
@@ -257,7 +312,8 @@ const ProductDescription = ({ productId }) => {
       price: formattedPrices,
       customizationOptions: formattedCustomizations,
       tags: [data.season],
-      images: selectedImages
+      images: selectedImages,
+      status: "Disponible"
     }
 
     delete fullData.season
@@ -265,20 +321,27 @@ const ProductDescription = ({ productId }) => {
     delete fullData.prices
 
     try {
-      if (id) {
+      if (procedure === 'Edit') {
         await axios.put(
-          `https://banannylandapp.onrender.com/products/${id}`,
+          `https://banannylandapp.onrender.com/products/${galleryName}`,
           fullData
         )
         console.log(fullData)
         setMessage('Producto actualizado exitosamente.')
         setMessageType('success')
-      } else {
-        await axios.post(
-          'https://banannylandapp.onrender.com/products',
+      } else if (procedure === 'Create') {
+        await axios.put(
+          `https://banannylandapp.onrender.com/products/${galleryName}`,
           fullData
         )
         setMessage('Producto creado exitosamente.')
+        setMessageType('success')
+      }else if (procedure === 'Clone') {
+        await axios.put(
+          `https://banannylandapp.onrender.com/products/${galleryName}`,
+          fullData
+        )
+        setMessage('Producto clonado exitosamente.')
         setMessageType('success')
       }
     } catch (error) {
@@ -301,7 +364,11 @@ const ProductDescription = ({ productId }) => {
 
   return (
     <div className='container my-4'>
-      <h1>Editar producto</h1>
+      <h1>
+        {procedure === 'Edit' && 'Editar producto'}
+        {procedure === 'Create' && 'Crear producto'}
+        {procedure === 'Clone' && 'Clonar producto'}
+      </h1>{' '}
       <div className='row d-flex'>
         <div className='col-12 col-lg-8 px-3'>
           <form
@@ -684,7 +751,7 @@ const ProductDescription = ({ productId }) => {
                 onImageSelect={handleImageSelect}
                 showModal={showModal}
                 onCloseModal={() => setShowModal(false)}
-                imageTag='gallery' // Change this to match your Cloudinary tag
+                imageTag={galleryName} // Change this to match your Cloudinary tag
               />
             </div>
 

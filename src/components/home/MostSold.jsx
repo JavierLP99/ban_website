@@ -77,7 +77,7 @@ const MostSold = () => {
             <div className='ratio ratio-21x9'>
               <div className='card-body d-flex flex-column py-2'>
                 <p className='card-title'>{item.name}</p>
-                <p className='card-subtitle'>{item.stock}</p>
+                <p className='card-subtitle'>{item.referencePrice}</p>
               </div>
             </div>
           </a>

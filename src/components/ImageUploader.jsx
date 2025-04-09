@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Cloudinary } from "@cloudinary/url-gen";
 import { AdvancedImage } from '@cloudinary/react';
+import axios from "axios";
+
 
 const ImageUploader = ({ onImageSelect, showModal, onCloseModal, imageTag = 'gallery' }) => {
   const [images, setImages] = useState([]);
@@ -8,7 +10,7 @@ const ImageUploader = ({ onImageSelect, showModal, onCloseModal, imageTag = 'gal
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const imagesPerPage = 9;
+  const imagesPerPage = 10;
 
   const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
   const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
@@ -16,30 +18,36 @@ const ImageUploader = ({ onImageSelect, showModal, onCloseModal, imageTag = 'gal
   const cld = new Cloudinary({ cloud: { cloudName } });
 
   useEffect(() => {
-    fetchImages();
-  }, []);
-
-  const fetchImages = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(
-        `https://res.cloudinary.com/${cloudName}/image/list/${imageTag}.json`
-      );
-      if (!response.ok) throw new Error("Failed to fetch images");
-
-      const data = await response.json();
-      if (data.resources) {
-        setImages(data.resources.map((img) => ({
-          url: `https://res.cloudinary.com/${cloudName}/image/upload/${img.public_id}`,
-          public_id: img.public_id,
-        })));
+    const fetchImages = async () => {
+      setLoading(true);
+      if (imageTag !== '') {
+        try {
+          console.log(`We try with "${imageTag}"`);
+          const response = await axios.get(
+            `https://res.cloudinary.com/${cloudName}/image/list/${imageTag}.json`
+          );
+  
+          const data = response.data;
+          if (data.resources) {
+            setImages(data.resources.map((img) => ({
+              url: `https://res.cloudinary.com/${cloudName}/image/upload/${img.public_id}`,
+              public_id: img.public_id,
+            })));
+          }
+        } catch (err) {
+          if (err.response?.status !== 404) {
+            setError("No se pudieron cargar las imágenes.");
+          }
+        } finally {
+          setLoading(false);
+        }
       }
-    } catch (err) {
-      setError("Could not load images.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+  
+    fetchImages();
+  }, [cloudName, imageTag]);
+  
+  
 
   const uploadImages = async (files) => {
     setLoading(true);
@@ -63,7 +71,7 @@ const ImageUploader = ({ onImageSelect, showModal, onCloseModal, imageTag = 'gal
 
       setImages((prevImages) => [...uploadedImages, ...prevImages]);
     } catch (err) {
-      setError("Error uploading images.");
+      setError("Error cargando imágenes.");
     } finally {
       setLoading(false);
     }
@@ -94,7 +102,7 @@ const ImageUploader = ({ onImageSelect, showModal, onCloseModal, imageTag = 'gal
       <div className="modal-dialog modal-lg">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Manage Images</h5>
+            <h5 className="modal-title">Administrar imágenes</h5>
             <button type="button" className="btn-close" onClick={onCloseModal}></button>
           </div>
           <div className="modal-body">
@@ -108,7 +116,7 @@ const ImageUploader = ({ onImageSelect, showModal, onCloseModal, imageTag = 'gal
                 disabled={loading}
               />
             </div>
-            {loading && <div className="alert alert-info text-center">Loading...</div>}
+            {loading && <div className="alert alert-info text-center">Cargando...</div>}
             {error && <div className="alert alert-danger">{error}</div>}
 
             {/* Image Grid with Pagination */}
@@ -116,7 +124,7 @@ const ImageUploader = ({ onImageSelect, showModal, onCloseModal, imageTag = 'gal
               {currentImages.map((image) => {
                 const selectedIndex = selectedImages.findIndex(img => img.public_id === image.public_id);
                 return (
-                  <div key={image.public_id} className="col-4 mb-3 position-relative">
+                  <div key={image.public_id} className="col-6 col-md-4 col-xl-3 mb-3 position-relative">
                     <div className={`card shadow-sm ${selectedIndex !== -1 ? 'border border-primary border-3' : ''}`}>
                       <AdvancedImage
                         cldImg={cld.image(image.public_id)}
@@ -144,25 +152,27 @@ const ImageUploader = ({ onImageSelect, showModal, onCloseModal, imageTag = 'gal
             {/* Pagination Controls */}
             <div className="d-flex justify-content-center mt-3">
               <button
+                type='button'
                 className="btn btn-outline-secondary me-2"
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
               >
-                Prev
+                Previa
               </button>
-              <span className="align-self-center">Page {currentPage} of {totalPages}</span>
+              <span className="align-self-center">Página {currentPage} de {totalPages}</span>
               <button
+              type='button'
                 className="btn btn-outline-secondary ms-2"
                 onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
               >
-                Next
+                Siguiente
               </button>
             </div>
           </div>
           <div className="modal-footer">
-            <button className="btn btn-primary" onClick={confirmSelection} type='button'>Select Images</button>
-            <button className="btn btn-secondary" onClick={onCloseModal} type='button'>Close</button>
+            <button className="btn btn-primary" onClick={confirmSelection} type='button'>Selecciona imágenes</button>
+            <button className="btn btn-secondary" onClick={onCloseModal} type='button'>Cerrar</button>
           </div>
         </div>
       </div>
