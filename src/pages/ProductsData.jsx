@@ -133,13 +133,13 @@ const ProductsData = () => {
         />
       </th>
       <td>
-        <a href={`/producto/${item.name}`} className='navbar-brand'>
+        <a href={`/producto/${item.slug}`} className='navbar-brand'>
           {item._id}
         </a>
       </td>
       <td className='col-1'>
         <div className='ratio ratio-1x1'>
-          <a href={`/producto/${item.name}`} className='navbar-brand'>
+          <a href={`/producto/${item.slug}`} className='navbar-brand'>
             <img
               src={item.images[0]}
               alt='Main Product'
