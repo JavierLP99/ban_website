@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
+import { Modal } from 'react-bootstrap'
 
 const ProductsData = () => {
   const [content, setContent] = useState([])
@@ -19,19 +20,12 @@ const ProductsData = () => {
   const [selectedStatus, setSelectedStatus] = useState('')
   const [categories, setCategories] = useState([])
   const status = ['Todos', 'Disponible', 'Agotado', 'Descontinuado']
-  const [sortBy, setSortBy] = useState('name')
-  const [order, setOrder] = useState('asc')
   const [selectedProducts, setSelectedProducts] = useState([])
-
-  const handleSearch = e => {
-    e.preventDefault()
-    if (searchQuery.trim()) {
-      navigate(`/listadeproductos?q=${encodeURIComponent(searchQuery)}`)
-    } else {
-      setFilteredProducts(content)
-      navigate('/listadeproductos')
-    }
-  }
+  const [showModal, setShowModal] = useState(false)
+  const handleCloseModal = () => setShowModal(false)
+  const handleCloseConfirmModal = () => setShowConfirmModal(false)
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [productToHardDelete, setProductToHardDelete] = useState(null)
 
   const handleCategorySelect = selectedCategory => {
     navigate(
@@ -45,30 +39,71 @@ const ProductsData = () => {
 
   const handleSortChange = (sortField, sortOrder) => {
     navigate(
-      `/listadeproductos?sortBy=${encodeURIComponent(sortField)}&order=${encodeURIComponent(sortOrder)}`
+      `/listadeproductos?sortBy=${encodeURIComponent(
+        sortField
+      )}&order=${encodeURIComponent(sortOrder)}`
     )
   }
 
   const handleCheckboxChange = (e, item) => {
     if (e.target.checked) {
-      setSelectedProducts(prev => [...prev, item.slug])
+      setSelectedProducts(prev => [...prev, item._id])
     } else {
-      setSelectedProducts(prev => prev.filter(slug => slug !== item.slug))
+      setSelectedProducts(prev => prev.filter(id => id !== item._id))
     }
   }
 
-  const handleDelete = async (_id) => {
+  const handleDelete = async (_id, status) => {
     if (!_id) return
-  
+
+    if (status === 'Descontinuado') {
+      setProductToHardDelete(_id)
+      setShowConfirmModal(true)
+      return
+    }
+
     try {
       await axios.delete(`https://banannylandapp.onrender.com/products/${_id}`)
-      console.log(`Producto con ID ${_id} eliminado correctamente`)
+      setShowModal(true)
+      fetchProducts()
+      setTimeout(() => setShowModal(false), 2500)
     } catch (error) {
       console.error('Error al eliminar el producto:', error)
     }
   }
 
-  useEffect(() => {
+  const confirmHardDelete = async () => {
+    try {
+      await axios.delete(
+        `https://banannylandapp.onrender.com/products/${productToHardDelete}/hardDelete`
+      )
+      setShowConfirmModal(false)
+      setShowModal(true)
+      fetchProducts()
+      setTimeout(() => setShowModal(false), 2500)
+    } catch (error) {
+      console.error('Error al hacer hardDelete:', error)
+    }
+  }
+
+  const handleDeleteMassive = async () => {
+    if (selectedProducts.length === 0) return
+    try {
+      await Promise.all(
+        selectedProducts.map(_id =>
+          axios.delete(`https://banannylandapp.onrender.com/products/${_id}`)
+        )
+      )
+      setSelectedProducts([])
+      setShowModal(true)
+      fetchProducts()
+      setTimeout(() => setShowModal(false), 2500)
+    } catch (error) {
+      console.error('Error al eliminar productos:', error)
+    }
+  }
+
+  const fetchProducts = () => {
     const params = new URLSearchParams(location.search)
     const query = params.get('q') || ''
     const page = parseInt(params.get('page')) || 1
@@ -76,28 +111,38 @@ const ProductsData = () => {
     const sortBy = params.get('sortBy') || 'name'
     const order = params.get('order') || 'asc'
     const status = params.get('status') || ''
-  
-    setSelectedCategory(category)
-    setSearchQuery(query)
+
     setCurrentPage(page)
-  
+    setLoading(true)
+
+    const axiosParams = {
+      sortBy,
+      order,
+      category,
+      status,
+      search: query
+    }
+
+    if (!query) {
+      axiosParams.page = page
+      axiosParams.limit = 8
+    }
+
     axios
-      .get(`https://banannylandapp.onrender.com/products`, {
-        params: { page, limit: 8, sortBy, order, category, status }
+      .get(`https://banannylandapp.onrender.com/products/all`, {
+        params: axiosParams
       })
       .then(response => {
         setContent(response.data.products)
-        setTotalPages(response.data.totalPages)
-        let results = response.data.products
-        if (query) {
-          results = results.filter(item =>
-            item.name.toLowerCase().includes(query.toLowerCase())
-          )
-        }
-        setFilteredProducts(results)
+        setFilteredProducts(response.data.products)
+        setTotalPages(response.data.totalPages || 1)
       })
       .catch(error => console.error('Error fetching products:', error))
       .finally(() => setLoading(false))
+  }
+
+  useEffect(() => {
+    fetchProducts()
   }, [location.search])
 
   useEffect(() => {
@@ -129,14 +174,9 @@ const ProductsData = () => {
           type='checkbox'
           className='form-check-input border-dark'
           onChange={e => handleCheckboxChange(e, item)}
-          checked={selectedProducts.includes(item.slug)}
+          checked={selectedProducts.includes(item._id)}
         />
       </th>
-      <td>
-        <a href={`/producto/${item.slug}`} className='navbar-brand'>
-          {item._id}
-        </a>
-      </td>
       <td className='col-1'>
         <div className='ratio ratio-1x1'>
           <a href={`/producto/${item.slug}`} className='navbar-brand'>
@@ -149,7 +189,7 @@ const ProductsData = () => {
         </div>
       </td>
       <td>
-        <a href='/' className='navbar-brand'>
+        <a href={`/producto/${item.slug}`} className='navbar-brand'>
           {item.name}
         </a>
       </td>
@@ -185,7 +225,7 @@ const ProductsData = () => {
             <li>
               <a
                 className='dropdown-item'
-                href={`/admin/catalogo/${item.slug}`}
+                href={`/admin/catalogo/?${item._id}=${item._id}`}
               >
                 Duplicar
               </a>
@@ -193,7 +233,7 @@ const ProductsData = () => {
             <li>
               <button
                 className='dropdown-item'
-                onClick={() => handleDelete(item._id)}
+                onClick={() => handleDelete(item._id, item.status)}
               >
                 Eliminar
               </button>
@@ -209,7 +249,13 @@ const ProductsData = () => {
       <h3>Lista de Productos</h3>
       <div className='row mt-5'>
         <div className='d-flex justify-content-center col-6'>
-          <Form className='d-flex w-100 input-group' onSubmit={handleSearch}>
+          <Form
+            className='d-flex w-100 input-group'
+            onSubmit={e => {
+              e.preventDefault()
+              navigate(`/listadeproductos?q=${encodeURIComponent(searchQuery)}`)
+            }}
+          >
             <Form.Control
               type='search'
               className='me-2'
@@ -302,6 +348,7 @@ const ProductsData = () => {
         <Button
           className='btn-primary rounded-pill deleteprod'
           type='submit'
+          onClick={handleDeleteMassive}
           disabled={selectedProducts.length === 0}
         >
           Eliminar
@@ -312,9 +359,6 @@ const ProductsData = () => {
           <thead>
             <tr>
               <th scope='col' style={{ width: '40px' }}></th>
-              <th scope='col' className='col-1'>
-                ID
-              </th>
               <th scope='col' className='col-1'>
                 Imagen
               </th>
@@ -334,6 +378,7 @@ const ProductsData = () => {
           <tbody>{filteredProducts.map(item => product(item))}</tbody>
         </table>
       </div>
+
       <nav aria-label='Page navigation'>
         <ul className='pagination justify-content-end'>
           <li className='page-item'>
@@ -375,6 +420,51 @@ const ProductsData = () => {
           </li>
         </ul>
       </nav>
+      <Modal
+        show={showModal}
+        onHide={handleCloseModal}
+        className='align-self-center'
+        centered
+      >
+        <Modal.Body className='rounded'>
+          <h2 className='text-center text-success'>Producto eliminado</h2>
+          <p className='text-center'>
+            El producto fue eliminado correctamente.
+          </p>
+
+          <div className='text-center mt-4'>
+            <Button variant='success' onClick={handleCloseModal}>
+              Cerrar
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
+      <Modal
+        show={showConfirmModal}
+        onHide={handleCloseConfirmModal}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>¿Estás seguro?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Este producto está marcado como <strong>Descontinuado</strong>.
+          <br />
+          Esta acción <strong>no se puede deshacer</strong>. ¿Deseas eliminarlo
+          permanentemente?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant='secondary'
+            onClick={handleCloseConfirmModal}
+          >
+            Cancelar
+          </Button>
+          <Button variant='danger' onClick={confirmHardDelete}>
+            Sí, eliminar permanentemente
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   )
 }
