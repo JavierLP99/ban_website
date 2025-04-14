@@ -56,7 +56,7 @@ const ProductsData = () => {
   const handleDelete = async (_id, status) => {
     if (!_id) return
 
-    if (status === 'Descontinuado') {
+    if (status === 'Descontinuado' || status === 'Borrador') {
       setProductToHardDelete(_id)
       setShowConfirmModal(true)
       return
@@ -66,7 +66,7 @@ const ProductsData = () => {
       await axios.delete(`https://banannylandapp.onrender.com/products/${_id}`)
       setShowModal(true)
       fetchProducts()
-      setTimeout(() => setShowModal(false), 2500)
+      setTimeout(() => setShowModal(false), 5000)
     } catch (error) {
       console.error('Error al eliminar el producto:', error)
     }
@@ -169,7 +169,7 @@ const ProductsData = () => {
 
   const product = item => (
     <tr key={item.id}>
-      <th scope='row'>
+      <th scope='row' className='d-none d-md-table-cell'>
         <input
           type='checkbox'
           className='form-check-input border-dark'
@@ -177,7 +177,7 @@ const ProductsData = () => {
           checked={selectedProducts.includes(item._id)}
         />
       </th>
-      <td className='col-1'>
+      <td>
         <div className='ratio ratio-1x1'>
           <a href={`/producto/${item.slug}`} className='navbar-brand'>
             <img
@@ -189,19 +189,21 @@ const ProductsData = () => {
         </div>
       </td>
       <td>
-        <a href={`/producto/${item.slug}`} className='navbar-brand'>
+        <a href={`/producto/${item.slug}`} className='navbar-brand text-wrap'>
           {item.name}
         </a>
       </td>
-      <td>
-        <a href='/' className='navbar-brand'>
+      <td className='d-none d-lg-table-cell'>
+        <a href='/' className='navbar-brand text-wrap'>
           {item.tags}
         </a>
       </td>
       <td>{item.status}</td>
-      <td>{item.category}</td>
-      <td>$ 120</td>
-      <td>{new Date(item.updatedAt).toLocaleDateString()}</td>
+      <td className='d-none d-md-table-cell'>{item.category}</td>
+      <td className='d-none d-md-table-cell'>$ 120</td>
+      <td className='d-none d-sm-table-cell'>
+        {new Date(item.updatedAt).toLocaleDateString()}
+      </td>
       <td>
         {' '}
         <div className='dropdown'>
@@ -225,7 +227,7 @@ const ProductsData = () => {
             <li>
               <a
                 className='dropdown-item'
-                href={`/admin/catalogo/?${item._id}=${item._id}`}
+                href={`/admin/catalogo/?id=${item._id}`}
               >
                 Duplicar
               </a>
@@ -245,10 +247,10 @@ const ProductsData = () => {
   )
 
   return (
-    <div className='container'>
-      <h3>Lista de Productos</h3>
-      <div className='row mt-5'>
-        <div className='d-flex justify-content-center col-6'>
+    <div className='container my-4'>
+      <h1>Lista de Productos</h1>
+      <div className='d-flex flex-column flex-md-row justify-content-between mt-5'>
+        <div className='col-12 col-md-6'>
           <Form
             className='d-flex w-100 input-group'
             onSubmit={e => {
@@ -271,7 +273,7 @@ const ProductsData = () => {
             </Button>
           </Form>
         </div>
-        <div className='d-flex justify-content-end col-5'>
+        <div className='justify-content-md-end mt-3 mt-md-0'>
           <Button
             href='/admin/catalogo'
             variant='outline-primary'
@@ -281,12 +283,84 @@ const ProductsData = () => {
           </Button>
         </div>
       </div>
-      <div className='d-flex justify-content-between mt-3'>
+
+      <button
+        className='btn btn-primary d-md-none mt-3'
+        type='button'
+        data-bs-toggle='offcanvas'
+        data-bs-target='#offcanvasFilters'
+        aria-controls='offcanvasFilters'
+      >
+        Aplicar Filtros
+      </button>
+
+      <div
+        className='offcanvas offcanvas-start'
+        tabIndex='-1'
+        id='offcanvasFilters'
+        aria-labelledby='offcanvasFiltersLabel'
+      >
+        <div className='offcanvas-header'>
+          <h5 className='offcanvas-title' id='offcanvasFiltersLabel'>
+            Filtros
+          </h5>
+          <button
+            type='button'
+            className='btn-close'
+            data-bs-dismiss='offcanvas'
+            aria-label='Cerrar'
+          ></button>
+        </div>
+        <div className='offcanvas-body'>
+          <div className='mb-3'>
+            <label className='form-label'>Categoría</label>
+            <select
+              className='form-select'
+              onChange={e => handleCategorySelect(e.target.value)}
+            >
+              <option value=''>Selecciona una categoría</option>
+              {[...new Set(categories.map(item => item.name))].map(category => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+            <label className='form-label'>Estatus</label>
+            <select
+              className='form-select'
+              onChange={e => handleStatusSelect(e.target.value)}
+            >
+              <option value=''>Selecciona una categoría</option>
+              {status.map((item, index) => (
+                <option key={index}>{item}</option>
+              ))}
+            </select>
+            <label className='form-label'>Fecha</label>
+            <select
+              className='form-select'
+              onChange={e => {
+                const value = e.target.value
+                if (value === 'recent') {
+                  handleSortChange('updatedAt', 'desc')
+                } else if (value === 'oldest') {
+                  handleSortChange('updatedAt', 'asc')
+                }
+              }}
+            >
+              <option value=''>Selecciona una categoría</option>
+              <option value='recent'>Más reciente</option>
+              <option value='oldest'>Más antiguo</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div className='d-none d-md-flex justify-content-md-between mt-3'>
         <DropdownButton
           id='dropdown-button-light'
           variant='light border border-2'
           title={selectedCategory || 'Categoría'}
-          className='mx-2'
+          className='d-none d-md-block'
         >
           {[...new Set(categories.map(item => item.name))].map(category => (
             <Dropdown.Item
@@ -301,7 +375,7 @@ const ProductsData = () => {
           id='dropdown-button-light'
           variant='light border border-2'
           title={selectedStatus || 'Estatus'}
-          className='mx-2'
+          className='d-none d-md-block'
         >
           {status.map((item, index) => (
             <Dropdown.Item key={index} onClick={() => handleStatusSelect(item)}>
@@ -313,7 +387,7 @@ const ProductsData = () => {
           id='dropdown-button-light'
           variant='light border border-2'
           title='Temporada'
-          className='mx-2'
+          className='d-none d-md-block'
         >
           <Dropdown.Item href='#/action-2'>Temporada 1</Dropdown.Item>
           <Dropdown.Item href='#/action-3'>Temporada 2</Dropdown.Item>
@@ -322,8 +396,8 @@ const ProductsData = () => {
         <DropdownButton
           id='dropdown-button-light'
           variant='light border border-2'
-          title='Ordenar por fecha'
-          className='mx-2'
+          title='Fecha'
+          className='d-none d-md-block'
         >
           <Dropdown.Item onClick={() => handleSortChange('updatedAt', 'desc')}>
             Más reciente
@@ -354,33 +428,47 @@ const ProductsData = () => {
           Eliminar
         </Button>
       </div>
-      <div className='table-responsive'>
-        <table className='table align-middle mt-4'>
+      <div>
+        <table
+          className='table align-middle mt-4'
+          style={{ tableLayout: 'fixed', width: '100%' }}
+        >
           <thead>
             <tr>
-              <th scope='col' style={{ width: '40px' }}></th>
-              <th scope='col' className='col-1'>
+              <th scope='col' className='d-none d-md-table-cell col-1'></th>
+              <th scope='col' className='col-2'>
                 Imagen
               </th>
-              <th scope='col' className='col-2'>
+              <th scope='col' className='col-4 col-sm-3'>
                 Nombre
               </th>
-              <th scope='col' className='col-2'>
+              <th scope='col' className='d-none d-lg-table-cell col-3'>
                 Temporada
               </th>
-              <th scope='col'>Estatus</th>
-              <th scope='col'>Categoría</th>
-              <th scope='col'>Costo unitario</th>
-              <th scope='col'>Fecha de actualización</th>
-              <th scope='col'></th>
+              <th scope='col' className='col-4 col-sm-3'>
+                Estatus
+              </th>
+              <th scope='col' className='d-none d-md-table-cell col-3'>
+                Categoría
+              </th>
+              <th scope='col' className='d-none d-md-table-cell col-2'>
+                Costo unitario
+              </th>
+              <th scope='col' className='d-none d-sm-table-cell col-3'>
+                Última actualización
+              </th>
+              <th scope='col' className='col-2'></th>
             </tr>
           </thead>
           <tbody>{filteredProducts.map(item => product(item))}</tbody>
         </table>
       </div>
 
-      <nav aria-label='Page navigation'>
-        <ul className='pagination justify-content-end'>
+      <nav
+        aria-label='Page navigation'
+        className='d-flex justify-content-center justify-content-md-end'
+      >
+        <ul className='pagination'>
           <li className='page-item'>
             <a
               className='page-link'
@@ -439,11 +527,7 @@ const ProductsData = () => {
           </div>
         </Modal.Body>
       </Modal>
-      <Modal
-        show={showConfirmModal}
-        onHide={handleCloseConfirmModal}
-        centered
-      >
+      <Modal show={showConfirmModal} onHide={handleCloseConfirmModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>¿Estás seguro?</Modal.Title>
         </Modal.Header>
@@ -454,10 +538,7 @@ const ProductsData = () => {
           permanentemente?
         </Modal.Body>
         <Modal.Footer>
-          <Button
-            variant='secondary'
-            onClick={handleCloseConfirmModal}
-          >
+          <Button variant='secondary' onClick={handleCloseConfirmModal}>
             Cancelar
           </Button>
           <Button variant='danger' onClick={confirmHardDelete}>

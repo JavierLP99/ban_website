@@ -126,6 +126,12 @@ export default function Header() {
                   Listado
                 </a>
               </li>
+
+              <li className='nav-item'>
+                <a className='nav-link fw-bold text-primary' href='/banners'>
+                  Banners
+                </a>
+              </li>
             </ul>
 
             {/* Buttons: Shopping Cart and Login (Mobile) */}
