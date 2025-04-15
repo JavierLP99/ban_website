@@ -311,46 +311,74 @@ const ProductsData = () => {
             aria-label='Cerrar'
           ></button>
         </div>
+
         <div className='offcanvas-body'>
-          <div className='mb-3'>
-            <label className='form-label'>Categoría</label>
-            <select
-              className='form-select'
-              onChange={e => handleCategorySelect(e.target.value)}
+          <div className='d-flex flex-column mb-3'>
+            <button
+              className='btn btn-outline-primary rounded-0 d-md-none'
+              type='button'
+              data-bs-toggle='collapse'
+              data-bs-target='.multi-collapse1'
+              aria-expanded='false'
+              aria-controls='CollapseCategory'
             >
-              <option value=''>Selecciona una categoría</option>
-              {[...new Set(categories.map(item => item.name))].map(category => (
-                <option key={category} value={category}>
+              Categoría
+            </button>
+            {[...new Set(categories.map(item => item.name))].map(category => (
+              <div
+                key={category}
+                className='collapse multi-collapse1'
+                id='CollapseCategory'
+                onClick={() => handleCategorySelect(category)}
+              >
+                <a className='btn' data-bs-dismiss='offcanvas'>
                   {category}
-                </option>
-              ))}
-            </select>
-            <label className='form-label'>Estatus</label>
-            <select
-              className='form-select'
-              onChange={e => handleStatusSelect(e.target.value)}
+                </a>
+              </div>
+            ))}
+            <button
+              className='btn btn-outline-primary rounded-0 d-md-none'
+              type='button'
+              data-bs-toggle='collapse'
+              data-bs-target='.multi-collapse2'
+              aria-expanded='false'
+              aria-controls='CollapseStatus'
             >
-              <option value=''>Selecciona una categoría</option>
-              {status.map((item, index) => (
-                <option key={index}>{item}</option>
-              ))}
-            </select>
-            <label className='form-label'>Fecha</label>
-            <select
-              className='form-select'
-              onChange={e => {
-                const value = e.target.value
-                if (value === 'recent') {
-                  handleSortChange('updatedAt', 'desc')
-                } else if (value === 'oldest') {
-                  handleSortChange('updatedAt', 'asc')
-                }
-              }}
+              Estatus
+            </button>
+            {status.map((item, index) => (
+              <div
+                key={index}
+                className='collapse multi-collapse2'
+                id='CollapseStatus'
+                onClick={() => handleStatusSelect(item)}
+              >
+                <a className='btn' data-bs-dismiss='offcanvas'>
+                  {item}
+                </a>
+              </div>
+            ))}
+                        <button
+              className='btn btn-outline-primary rounded-0 d-md-none'
+              type='button'
+              data-bs-toggle='collapse'
+              data-bs-target='.multi-collapse3'
+              aria-expanded='false'
+              aria-controls='CollapseDate'
             >
-              <option value=''>Selecciona una categoría</option>
-              <option value='recent'>Más reciente</option>
-              <option value='oldest'>Más antiguo</option>
-            </select>
+              Fecha
+            </button>
+            <div
+                className='row collapse multi-collapse3'
+                id='CollapseDate'
+              >
+                <a className='btn text-start' data-bs-dismiss='offcanvas' onClick={() => handleSortChange('updatedAt', 'desc')}>
+                Más reciente
+                </a>
+                <a className='btn text-start' data-bs-dismiss='offcanvas' onClick={() => handleSortChange('updatedAt', 'asc')}>
+                Más antiguo
+                </a>
+              </div>
           </div>
         </div>
       </div>
