@@ -358,7 +358,7 @@ const ProductsData = () => {
                 </a>
               </div>
             ))}
-                        <button
+            <button
               className='btn btn-outline-primary rounded-0 d-md-none'
               type='button'
               data-bs-toggle='collapse'
@@ -368,17 +368,22 @@ const ProductsData = () => {
             >
               Fecha
             </button>
-            <div
-                className='row collapse multi-collapse3'
-                id='CollapseDate'
+            <div className='row collapse multi-collapse3' id='CollapseDate'>
+              <a
+                className='btn text-start'
+                data-bs-dismiss='offcanvas'
+                onClick={() => handleSortChange('updatedAt', 'desc')}
               >
-                <a className='btn text-start' data-bs-dismiss='offcanvas' onClick={() => handleSortChange('updatedAt', 'desc')}>
                 Más reciente
-                </a>
-                <a className='btn text-start' data-bs-dismiss='offcanvas' onClick={() => handleSortChange('updatedAt', 'asc')}>
+              </a>
+              <a
+                className='btn text-start'
+                data-bs-dismiss='offcanvas'
+                onClick={() => handleSortChange('updatedAt', 'asc')}
+              >
                 Más antiguo
-                </a>
-              </div>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -500,36 +505,80 @@ const ProductsData = () => {
           <li className='page-item'>
             <a
               className='page-link'
-              href='/listadeproductos'
+              href={`/listadeproductos?page=${Math.max(currentPage - 1, 1)}`}
               aria-label='Previous'
             >
               <span aria-hidden='true'>&laquo;</span>
             </a>
           </li>
-          {[...Array(totalPages)].map((_, index) => (
-            <li
-              className={`page-item ${
-                currentPage === index + 1 ? 'active' : ''
-              }`}
-              key={index}
+
+          <li className={`page-item ${currentPage === 1 ? 'active' : ''}`}>
+            <a
+              className='page-link'
+              href='/listadeproductos?page=1'
+              onClick={e => {
+                e.preventDefault()
+                navigate('/listadeproductos?page=1')
+              }}
             >
-              <a
-                className='page-link'
-                href={`/listadeproductos?page=${index + 1}`}
-                onClick={e => {
-                  e.preventDefault()
-                  navigate(`/listadeproductos?page=${index + 1}`)
-                }}
-              >
-                {index + 1}
-              </a>
-            </li>
-          ))}
+              1
+            </a>
+          </li>
+    {currentPage > 4 && (
+      <li className='page-item disabled'>
+        <span className='page-link'>...</span>
+      </li>
+    )}
+{Array.from({ length: 3 }, (_, i) => currentPage - 1 + i).map(page => {
+      if (page > 1 && page < totalPages) {
+        return (
+          <li
+            className={`page-item ${currentPage === page ? 'active' : ''}`}
+            key={page}
+          >
+            <a
+              className='page-link'
+              href={`/listadeproductos?page=${page}`}
+              onClick={e => {
+                e.preventDefault()
+                navigate(`/listadeproductos?page=${page}`)
+              }}
+            >
+              {page}
+            </a>
+          </li>
+        )
+      }
+      return null
+    })}
+        {currentPage < totalPages - 2 && (
+      <li className='page-item disabled'>
+        <span className='page-link'>...</span>
+      </li>
+    )}
+        {totalPages > 1 && (
+      <li className={`page-item ${currentPage === totalPages ? 'active' : ''}`}>
+        <a
+          className='page-link'
+          href={`/listadeproductos?page=${totalPages}`}
+          onClick={e => {
+            e.preventDefault()
+            navigate(`/listadeproductos?page=${totalPages}`)
+          }}
+        >
+          {totalPages}
+        </a>
+      </li>
+    )}
+
           <li className='page-item'>
             <a
               className='page-link'
-              href='/listadeproductos'
-              aria-label='Previous'
+              href={`/listadeproductos?page=${Math.min(
+                currentPage + 1,
+                totalPages
+              )}`}
+              aria-label='Next'
             >
               <span aria-hidden='true'>&raquo;</span>
             </a>
