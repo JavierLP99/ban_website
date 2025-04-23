@@ -3,11 +3,18 @@ import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { Modal, Button } from 'react-bootstrap'
+import { Modal, Button, Dropdown } from 'react-bootstrap'
 import slugify from 'slugify'
 import ProductCard from '../components/ProductCard'
 import ImageUploader from './ImageUploader'
 import { useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+
+import {
+  getThumbnailUrl,
+  getSquarePreviewUrl,
+  getOptimizedImageUrl
+} from '../utils/tools.jsx'
 
 import axios from 'axios'
 
@@ -16,7 +23,9 @@ const schema = yup
     name: yup.string().required('Nombre del producto es obligatorio'),
     slug: yup.string().required('El slug es obligatorio'),
     description: yup.string().required('Descripción requerida'),
+    tags: yup.array().of(yup.string()),
     category: yup.string().required('Selecciona una categoría'),
+    status: yup.string().required('Selecciona un estatus'),
     season: yup.string().required('Selecciona una temporada'),
     prices: yup.array().of(
       yup.object({
@@ -87,8 +96,14 @@ const ProductDescription = ({ productId }) => {
     setValue,
     formState: { errors }
     // reset
-  } = useForm({ resolver: yupResolver(schema) })
+  } = useForm({
+    defaultValues: {
+      tags: []
+    },
+    resolver: yupResolver(schema)
+  })
 
+  const statusList = ['Disponible', 'Agotado', 'Descontinuado', 'Borrador']
   const [categories, setCategories] = useState(['Ropa', 'Tazas'])
   const [seasons, setSeasons] = useState(['Día de Muertos', '14 de Febrero'])
   const [showCategoryModal, setShowCategoryModal] = useState(false)
@@ -104,6 +119,17 @@ const ProductDescription = ({ productId }) => {
   const [galleryName, setGalleryName] = useState('')
   const [procedure, setProcedure] = useState('')
 
+  const [showModal, setShowModal] = useState(false)
+  const [selectedImages, setSelectedImages] = useState([])
+
+  const [message, setMessage] = useState(null) // State for feedback message
+  const [messageType, setMessageType] = useState(null) // "success" or "error"
+
+  const [customizationImageMap, setCustomizationImageMap] = useState([])
+
+  const [tagInput, setTagInput] = useState('')
+  const [tags, setTags] = useState([])
+
   const fetchCategories = async () => {
     axios
       .get(`https://banannylandapp.onrender.com/categories`, {
@@ -115,18 +141,18 @@ const ProductDescription = ({ productId }) => {
         console.log('API Response:', response.data)
         setCategories(response.data.categories.map(category => category.name))
       })
-      .catch(error => console.error('Error fetching products:', error))
+      .catch(error => console.error('Error fetching categories:', error))
     axios
-      .get(`https://banannylandapp.onrender.com/tags`, {
+      .get(`https://banannylandapp.onrender.com/seasons`, {
         params: {
           limit: 100
         }
       })
       .then(response => {
         console.log('API Response:', response.data)
-        setSeasons(response.data.tags.map(tag => tag.name))
+        setSeasons(response.data.seasons.map(season => season.name))
       })
-      .catch(error => console.error('Error fetching products:', error))
+      .catch(error => console.error('Error fetching seasons:', error))
   }
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search)
@@ -145,8 +171,10 @@ const ProductDescription = ({ productId }) => {
           setValue('name', product.name)
           setValue('slug', product.slug)
           setValue('description', product.description)
+          setTags(product.tags || [])
           setValue('category', product.category)
-          setValue('tags', product.tags || [])
+          setValue('status', product.status)
+          setValue('seasons', product.seasons || [])
           setSelectedImages(product.images || [])
 
           const formattedPrices = product.price.map((p, index) => ({
@@ -172,6 +200,16 @@ const ProductDescription = ({ productId }) => {
           setCustomizations(formattedCustomizations)
           setValue('customizations', formattedCustomizations)
           setGalleryName(product._id)
+
+          // Load customizationImageMap only on edit
+          if (Array.isArray(product.customizationImageMap)) {
+            setCustomizationImageMap(
+              product.customizationImageMap.map(entry => ({
+                combination: entry.combination || {},
+                imageUrls: entry.imageUrls || []
+              }))
+            )
+          }
         })
         .catch(error => console.error('Error fetching product:', error))
     } else if (cloneId) {
@@ -186,12 +224,13 @@ const ProductDescription = ({ productId }) => {
             .then(res => {
               const provisioned = res.data
 
-              // Append (1) to name/slug
               setValue('name', `${original.name} (1)`)
               setValue('slug', `${original.slug}-1`)
+              setTags(original.tags || [])
               setValue('description', original.description)
               setValue('category', original.category)
-              setValue('tags', original.tags || [])
+              setValue('seasons', original.seasons || [])
+              setValue('status', original.status)
 
               const formattedPrices = original.price.map((p, index) => ({
                 id: index,
@@ -216,6 +255,7 @@ const ProductDescription = ({ productId }) => {
               setCustomizations(formattedCustomizations)
               setValue('customizations', formattedCustomizations)
 
+              // Do not set customizationImageMap in clone mode
               setGalleryName(provisioned._id)
             })
         })
@@ -234,9 +274,6 @@ const ProductDescription = ({ productId }) => {
   }, [id, setValue])
 
   //Gallery
-
-  const [showModal, setShowModal] = useState(false)
-  const [selectedImages, setSelectedImages] = useState([])
 
   const handleImageSelect = images => {
     setValue('images', images)
@@ -286,9 +323,6 @@ const ProductDescription = ({ productId }) => {
     setCustomizations(customizations.filter((_, i) => i !== index))
   }
 
-  const [message, setMessage] = useState(null) // State for feedback message
-  const [messageType, setMessageType] = useState(null) // "success" or "error"
-
   const onSubmit = async data => {
     setMessage(null) // Clear previous messages
     setMessage('Cargando.')
@@ -307,14 +341,20 @@ const ProductDescription = ({ productId }) => {
       options: custom.options ? custom.options.split(',') : [] // Split string into array
     }))
 
+    console.log('Hear me')
+    console.log(customizationImageMap)
+
     const fullData = {
       ...data,
       price: formattedPrices,
       customizationOptions: formattedCustomizations,
-      tags: [data.season],
+      seasons: [data.season],
       images: selectedImages,
-      status: "Disponible"
+      customizationImageMap: customizationImageMap,
+      tags: tags
     }
+
+    console.log(fullData)
 
     delete fullData.season
     delete fullData.customizations
@@ -336,7 +376,7 @@ const ProductDescription = ({ productId }) => {
         )
         setMessage('Producto creado exitosamente.')
         setMessageType('success')
-      }else if (procedure === 'Clone') {
+      } else if (procedure === 'Clone') {
         await axios.put(
           `https://banannylandapp.onrender.com/products/${galleryName}`,
           fullData
@@ -361,6 +401,27 @@ const ProductDescription = ({ productId }) => {
     }
     setCustomizations(newCustomizations)
   }
+
+  const handleTagInput = e => {
+    const key = e.key
+    if ((key === 'Enter' || key === ',') && tagInput.trim()) {
+      e.preventDefault()
+      if (!tags.includes(tagInput.trim())) {
+        const newTags = [...tags, tagInput.trim()]
+        setTags(newTags)
+        setValue('tags', newTags)
+      }
+      setTagInput('')
+    }
+  }
+
+  const removeTag = tagToRemove => {
+    const newTags = tags.filter(t => t !== tagToRemove)
+    setTags(newTags)
+    setValue('tags', newTags)
+  }
+
+  const navigate = useNavigate()
 
   return (
     <div className='container my-4'>
@@ -395,6 +456,35 @@ const ProductDescription = ({ productId }) => {
               rows='3'
             ></textarea>
             <p className='text-danger'>{errors.description?.message}</p>
+
+            <label>Etiquetas</label>
+            <div
+              className='form-control mb-2 d-flex flex-wrap gap-2 p-2'
+              style={{ minHeight: '48px' }}
+            >
+              {tags.map(tag => (
+                <span
+                  className='badge bg-primary d-flex align-items-center'
+                  style={{ fontWeight: 'normal' }}
+                  key={tag}
+                >
+                  {tag}
+                  <button
+                    type='button'
+                    className='btn-close btn-close-white ms-2'
+                    onClick={() => removeTag(tag)}
+                  />
+                </span>
+              ))}
+              <input
+                className='border-0 flex-grow-1'
+                value={tagInput}
+                onChange={e => setTagInput(e.target.value)}
+                onKeyDown={handleTagInput}
+                placeholder='Agrega una etiqueta y presiona Enter'
+              />
+            </div>
+            <p className='text-danger'>{errors.tags?.message}</p>
 
             <div className='d-flex row'>
               <div className='col-6'>
@@ -736,7 +826,7 @@ const ProductDescription = ({ productId }) => {
                     <div className='card'>
                       <div className='ratio ratio-1x1'>
                         <img
-                          src={url}
+                          src={getThumbnailUrl(url)}
                           className='card-img-top object-fit-cover'
                           alt='Selected'
                         />
@@ -755,6 +845,104 @@ const ProductDescription = ({ productId }) => {
               />
             </div>
 
+            <h5 className='mt-4'>Asignar imágenes a combinaciones</h5>
+
+            {customizationImageMap.map((mapEntry, mapIndex) => (
+              <div key={mapIndex} className='border p-3 mb-3 rounded'>
+                <h6>Combinación #{mapIndex + 1}</h6>
+
+                {/* Select customization values */}
+                {customizations
+                  .filter(custom => custom.type === 'enum')
+                  .map(custom => (
+                    <div key={custom.name} className='mb-2'>
+                      <label>{custom.name}</label>
+                      <select
+                        className='form-select'
+                        value={mapEntry.combination?.[custom.name] || ''}
+                        onChange={e => {
+                          const updatedMap = [...customizationImageMap]
+                          const currentCombination =
+                            updatedMap[mapIndex].combination || {}
+                          currentCombination[custom.name] = e.target.value
+                          updatedMap[mapIndex].combination = currentCombination
+                          setCustomizationImageMap(updatedMap)
+                        }}
+                      >
+                        <option value=''>Selecciona una opción</option>
+                        {(custom.options
+                          ? custom.options.split(',').map(opt => opt.trim())
+                          : []
+                        ).map(opt => (
+                          <option key={opt} value={opt}>
+                            {opt}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  ))}
+
+                {/* Select images */}
+                <div className='d-flex flex-wrap gap-2'>
+                  {selectedImages.map((url, i) => {
+                    const isSelected = mapEntry.imageUrls.includes(url)
+                    return (
+                      <div
+                        key={i}
+                        onClick={() => {
+                          const updatedMap = [...customizationImageMap]
+                          const imgs = updatedMap[mapIndex].imageUrls || []
+                          updatedMap[mapIndex].imageUrls = isSelected
+                            ? imgs.filter(img => img !== url)
+                            : [...imgs, url]
+                          setCustomizationImageMap(updatedMap)
+                        }}
+                        style={{ cursor: 'pointer' }}
+                        className={`card shadow-sm ${
+                          isSelected ? 'border border-primary border-3' : ''
+                        }`}
+                      >
+                        <img
+                          src={getThumbnailUrl(url)}
+                          alt='img'
+                          width={80}
+                          height={80}
+                          className='object-fit-cover'
+                        />
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
+
+            {/* Button to add new mapping */}
+            <button
+              className='btn btn-outline-success my-2'
+              type='button'
+              onClick={() =>
+                setCustomizationImageMap(prev => [
+                  ...prev,
+                  { customizationPairs: [], imageUrls: [] }
+                ])
+              }
+            >
+              Agregar nueva combinación
+            </button>
+
+            <div className='d-flex row mb-3'>
+              <div className='col-12'>
+              <h5 className='mt-4'>Estatus</h5>
+              <select {...register('status')} className='form-control'>
+                  {statusList.map((state, index) => (
+                    <option key={index} value={state}>
+                      {state}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
             {message && (
               <div
                 className={`alert ${
@@ -771,6 +959,13 @@ const ProductDescription = ({ productId }) => {
             )}
             <button type='submit' className='btn btn-success mt-3'>
               Guardar Producto
+            </button>
+            <button
+              type='button'
+              className='btn btn-secondary mt-3'
+              onClick={() => navigate('/listadeproductos')}
+            >
+              Cancelar
             </button>
           </form>
 

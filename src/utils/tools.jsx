@@ -20,7 +20,7 @@ export function getResizedCloudinaryUrl(originalUrl, transformation) {
    * Usage: Small preview in product list
    */
   export function getThumbnailUrl(originalUrl) {
-    return getResizedCloudinaryUrl(originalUrl, 'w_150');
+    return getResizedCloudinaryUrl(originalUrl, 't_Small');
   }
   
   /**
@@ -30,7 +30,7 @@ export function getResizedCloudinaryUrl(originalUrl, transformation) {
   export function getSquarePreviewUrl(originalUrl) {
     return getResizedCloudinaryUrl(originalUrl, 'w_100,h_100,c_fill');
   }
-  
+  //https://res.cloudinary.com/drnge8otv/image/upload/c_thumb,w_200,g_face/v1743696071/banner2_vorefs.png
   /**
    * Get a web-optimized image: 600px wide, auto quality and format
    * Usage: Product detail view
