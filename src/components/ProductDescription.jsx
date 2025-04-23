@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import {
   getThumbnailUrl,
   getSquarePreviewUrl,
-  getOptimizedImageUrl
+  getOptimizedImageUrl,
+  handleImageError
 } from '../utils/tools.jsx'
 import axios from 'axios'
 // import Reviews from './Reviews';
@@ -13,6 +14,7 @@ const ProductDescription = ({ productName }) => {
   const [quantity, setQuantity] = useState(1)
   const [price, setPrice] = useState(0)
   const [showModal, setShowModal] = useState(false) // State to control modal visibility
+  const [limits, setLimits] = useState([1, 1000])
 
   useEffect(() => {
     // Fetch product from API based on productName
@@ -30,6 +32,14 @@ const ProductDescription = ({ productName }) => {
     if (product) {
       setMainImage(product.images[0]) // Set initial main image
       setPrice(product.price[0].price) // Set initial price based on quantity
+      const limits = product.price.reduce(
+        ([minSoFar, maxSoFar], p) => {
+          const [min, max] = p.quantity.split('-').map(Number)
+          return [Math.min(minSoFar, min), Math.max(maxSoFar, max)]
+        },
+        [Infinity, -Infinity]
+      )
+      setLimits(limits)
     }
   }, [product])
 
@@ -73,6 +83,7 @@ const ProductDescription = ({ productName }) => {
               src={getOptimizedImageUrl(mainImage)}
               alt='Main Product'
               className='img-fluid rounded-3'
+              onError={handleImageError}
               style={{ width: '100%', height: '100%', objectFit: 'contain' }} // Use 'contain' to maintain aspect ratio without deformation
               onClick={handleImageClick} // Trigger modal on click
             />
@@ -82,8 +93,9 @@ const ProductDescription = ({ productName }) => {
               <div key={index} className='p-1 col-2'>
                 <div className='ratio ratio-1x1'>
                   <img
-                    src={getSquarePreviewUrl(image)}
+                    src={getThumbnailUrl(image)}
                     alt={`Thumbnail ${index + 1}`}
+                    onError={handleImageError}
                     className={`img-thumbnail mx-1 ${
                       mainImage === image
                         ? 'border border-primary border-2'
@@ -109,6 +121,19 @@ const ProductDescription = ({ productName }) => {
               </button>
             ))}
           </div>
+          <div className='mb-3'>
+            <strong>Temporada:</strong>
+            {product.seasons.map((season, index) => (
+              <button key={index} className='btn btn-primary p-1 mx-2'>
+                {season}
+              </button>
+            ))}
+            <strong>Categoría:</strong>
+            <button className='btn btn-primary p-1 mx-2'>
+              {product.category}
+            </button>
+          </div>
+
           <div className='mb-3'>
             <strong>Precios:</strong>
             <div className='d-flex justify-content-between'>
@@ -153,7 +178,8 @@ const ProductDescription = ({ productName }) => {
                 className='form-control w-25'
                 value={quantity}
                 onChange={handleQuantityChange}
-                min='1'
+                min={limits[0]}
+                max={limits[1]}
               />
               <span className='ms-3'>
                 <strong>Total:</strong> $
@@ -215,6 +241,7 @@ const ProductDescription = ({ productName }) => {
               <div className='modal-body'>
                 <img
                   src={mainImage}
+                  onError={handleImageError}
                   alt='Full-size Product'
                   className='img-fluid'
                 />

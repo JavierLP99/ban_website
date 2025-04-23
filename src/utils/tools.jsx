@@ -36,6 +36,10 @@ export function getResizedCloudinaryUrl(originalUrl, transformation) {
    * Usage: Product detail view
    */
   export function getOptimizedImageUrl(originalUrl) {
-    return getResizedCloudinaryUrl(originalUrl, 'h_600,q_auto,f_auto');
+    return getResizedCloudinaryUrl(originalUrl, 't_MidSize');
   }
   
+
+  export function handleImageError(event) {
+    event.target.src = 'https://res.cloudinary.com/drnge8otv/image/upload/t_MidSize/v1745423218/Default_tjxbsn.png'
+  }

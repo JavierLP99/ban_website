@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import { Modal, Button, Dropdown } from 'react-bootstrap'
+import { Modal, Button } from 'react-bootstrap'
 import slugify from 'slugify'
 import ProductCard from '../components/ProductCard'
 import ImageUploader from './ImageUploader'
@@ -13,7 +13,8 @@ import { useNavigate } from 'react-router-dom'
 import {
   getThumbnailUrl,
   getSquarePreviewUrl,
-  getOptimizedImageUrl
+  getOptimizedImageUrl,
+  handleImageError
 } from '../utils/tools.jsx'
 
 import axios from 'axios'
@@ -129,6 +130,7 @@ const ProductDescription = ({ productId }) => {
 
   const [tagInput, setTagInput] = useState('')
   const [tags, setTags] = useState([])
+  const [loading, setLoading] = useState(true)
 
   const fetchCategories = async () => {
     axios
@@ -200,6 +202,7 @@ const ProductDescription = ({ productId }) => {
           setCustomizations(formattedCustomizations)
           setValue('customizations', formattedCustomizations)
           setGalleryName(product._id)
+          setLoading(false)
 
           // Load customizationImageMap only on edit
           if (Array.isArray(product.customizationImageMap)) {
@@ -257,6 +260,7 @@ const ProductDescription = ({ productId }) => {
 
               // Do not set customizationImageMap in clone mode
               setGalleryName(provisioned._id)
+              setLoading(false)
             })
         })
         .catch(error => console.error('Error cloning product:', error))
@@ -268,6 +272,7 @@ const ProductDescription = ({ productId }) => {
         .then(response => {
           const product = response.data
           setGalleryName(product._id)
+          setLoading(false)
         })
         .catch(error => console.error('Error provisioning product:', error))
     }
@@ -422,6 +427,19 @@ const ProductDescription = ({ productId }) => {
   }
 
   const navigate = useNavigate()
+
+  if (loading) {
+    return (
+      <div className='d-flex justify-content-center align-items-center'>
+        <div className='text-center'>
+          <div className='spinner-border text-primary' role='status'>
+            <span className='visually-hidden'>Cargando...</span>
+          </div>
+          <p className='mt-2 text-muted'>Por favor, espera...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className='container my-4'>
@@ -828,6 +846,7 @@ const ProductDescription = ({ productId }) => {
                         <img
                           src={getThumbnailUrl(url)}
                           className='card-img-top object-fit-cover'
+                          onError={handleImageError}
                           alt='Selected'
                         />
                       </div>
@@ -908,6 +927,7 @@ const ProductDescription = ({ productId }) => {
                           width={80}
                           height={80}
                           className='object-fit-cover'
+                          onError={handleImageError}
                         />
                       </div>
                     )
@@ -932,8 +952,8 @@ const ProductDescription = ({ productId }) => {
 
             <div className='d-flex row mb-3'>
               <div className='col-12'>
-              <h5 className='mt-4'>Estatus</h5>
-              <select {...register('status')} className='form-control'>
+                <h5 className='mt-4'>Estatus</h5>
+                <select {...register('status')} className='form-control'>
                   {statusList.map((state, index) => (
                     <option key={index} value={state}>
                       {state}
