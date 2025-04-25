@@ -20,6 +20,7 @@ const ProductsData = () => {
   const [selectedStatus, setSelectedStatus] = useState('')
   const [categories, setCategories] = useState([])
   const status = ['Todos', 'Disponible', 'Agotado', 'Descontinuado']
+  const seasons = ['']
   const [selectedProducts, setSelectedProducts] = useState([])
   const [showModal, setShowModal] = useState(false)
   const handleCloseModal = () => setShowModal(false)
@@ -111,6 +112,7 @@ const ProductsData = () => {
     const sortBy = params.get('sortBy') || 'name'
     const order = params.get('order') || 'asc'
     const status = params.get('status') || ''
+    const seasons = params.get('seasons') || ''
 
     setCurrentPage(page)
     setLoading(true)
@@ -120,12 +122,13 @@ const ProductsData = () => {
       order,
       category,
       status,
+      seasons,
       search: query
     }
 
     if (!query) {
       axiosParams.page = page
-      axiosParams.limit = 8
+      axiosParams.limit = 15
     }
 
     axios
@@ -194,8 +197,8 @@ const ProductsData = () => {
         </a>
       </td>
       <td className='d-none d-lg-table-cell'>
-        <a href='/' className='navbar-brand text-wrap'>
-          {item.tags}
+        <a href={`/producto/${item.seasons}`}  className='navbar-brand text-wrap'>
+          {item.seasons}
         </a>
       </td>
       <td>{item.status}</td>
@@ -422,9 +425,11 @@ const ProductsData = () => {
           title='Temporada'
           className='d-none d-md-block'
         >
-          <Dropdown.Item href='#/action-2'>Temporada 1</Dropdown.Item>
-          <Dropdown.Item href='#/action-3'>Temporada 2</Dropdown.Item>
-          <Dropdown.Item href='#/action-4'>Temporada 3</Dropdown.Item>
+          {seasons.map((item, index) => (
+            <Dropdown.Item key={index} onClick={() => handleStatusSelect(item)}>
+              {item}
+            </Dropdown.Item>
+          ))}
         </DropdownButton>
         <DropdownButton
           id='dropdown-button-light'
@@ -524,52 +529,59 @@ const ProductsData = () => {
               1
             </a>
           </li>
-    {currentPage > 4 && (
-      <li className='page-item disabled'>
-        <span className='page-link'>...</span>
-      </li>
-    )}
-{Array.from({ length: 3 }, (_, i) => currentPage - 1 + i).map(page => {
-      if (page > 1 && page < totalPages) {
-        return (
-          <li
-            className={`page-item ${currentPage === page ? 'active' : ''}`}
-            key={page}
-          >
-            <a
-              className='page-link'
-              href={`/listadeproductos?page=${page}`}
-              onClick={e => {
-                e.preventDefault()
-                navigate(`/listadeproductos?page=${page}`)
-              }}
+          {currentPage > 3 && (
+            <li className='page-item disabled'>
+              <span className='page-link'>...</span>
+            </li>
+          )}
+          {Array.from({ length: 3 }, (_, i) => currentPage - 1 + i).map(
+            page => {
+              if (page > 1 && page < totalPages) {
+                return (
+                  <li
+                    className={`page-item ${
+                      currentPage === page ? 'active' : ''
+                    }`}
+                    key={page}
+                  >
+                    <a
+                      className='page-link'
+                      href={`/listadeproductos?page=${page}`}
+                      onClick={e => {
+                        e.preventDefault()
+                        navigate(`/listadeproductos?page=${page}`)
+                      }}
+                    >
+                      {page}
+                    </a>
+                  </li>
+                )
+              }
+            }
+          )}
+          {currentPage < totalPages - 2 && (
+            <li className='page-item disabled'>
+              <span className='page-link'>...</span>
+            </li>
+          )}
+          {totalPages > 1 && (
+            <li
+              className={`page-item ${
+                currentPage === totalPages ? 'active' : ''
+              }`}
             >
-              {page}
-            </a>
-          </li>
-        )
-      }
-      return null
-    })}
-        {currentPage < totalPages - 2 && (
-      <li className='page-item disabled'>
-        <span className='page-link'>...</span>
-      </li>
-    )}
-        {totalPages > 1 && (
-      <li className={`page-item ${currentPage === totalPages ? 'active' : ''}`}>
-        <a
-          className='page-link'
-          href={`/listadeproductos?page=${totalPages}`}
-          onClick={e => {
-            e.preventDefault()
-            navigate(`/listadeproductos?page=${totalPages}`)
-          }}
-        >
-          {totalPages}
-        </a>
-      </li>
-    )}
+              <a
+                className='page-link'
+                href={`/listadeproductos?page=${totalPages}`}
+                onClick={e => {
+                  e.preventDefault()
+                  navigate(`/listadeproductos?page=${totalPages}`)
+                }}
+              >
+                {totalPages}
+              </a>
+            </li>
+          )}
 
           <li className='page-item'>
             <a

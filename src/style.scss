@@ -383,3 +383,15 @@ h1, h2, h3, h4, h5, h6 {
   color: #7401db;
   border: 1px solid #7401db;
 }
+
+.dragging {
+  opacity: 0.5;
+  transform: scale(1.03);
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.drag-over {
+  border: 2px dashed #007bff;
+  background-color: #f0f8ff;
+}
