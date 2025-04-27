@@ -2,6 +2,8 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import RoutesIndex from './routes'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import { AuthProvider } from './AuthContext'
+
 
 function App () {
   const updateUrl = url => {
@@ -34,7 +36,8 @@ function App () {
       {
         path: '/*',
         element: (
-          <>
+          <AuthProvider>
+
             <div
               className='background-image'
               style={{
@@ -47,7 +50,7 @@ function App () {
             <Header /> {/* Header now inside Router context */}
             <RoutesIndex />
             </div>
-          </>
+          </AuthProvider>
         )
       }
     ],

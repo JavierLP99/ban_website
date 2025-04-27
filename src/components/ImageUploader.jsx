@@ -51,8 +51,10 @@ const ImageUploader = ({ onImageSelect, showModal, onCloseModal, imageTag = 'gal
 
   const uploadImages = async (files) => {
     setLoading(true);
+    console.log(files)
     try {
       const uploadedImages = await Promise.all(
+        
         [...files].map(async (file) => {
           const formData = new FormData();
           formData.append('file', file);

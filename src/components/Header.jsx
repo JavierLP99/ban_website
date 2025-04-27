@@ -1,20 +1,23 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
+import { useAuth } from '../AuthContext'
 
-export default function Header() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const navigate = useNavigate();
+export default function Header () {
+  const [searchQuery, setSearchQuery] = useState('')
+  const navigate = useNavigate()
 
-  const handleSearch = (e) => {
-    e.preventDefault();
+  const handleSearch = e => {
+    e.preventDefault()
     if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`)
     }
-  };
+  }
+
+  const { user, logout } = useAuth()
 
   return (
     <header>
@@ -40,7 +43,7 @@ export default function Header() {
                 className='me-2'
                 aria-label='Search'
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={e => setSearchQuery(e.target.value)}
               />
               <Button variant='outline-primary' type='submit'>
                 Buscar
@@ -67,7 +70,10 @@ export default function Header() {
               <i className='bi bi-cart3 me-1'></i>
               Carrito
             </Button>
-            <Button className='d-flex align-items-center btn btn-secondary'>
+            <Button
+              className='d-flex align-items-center btn btn-secondary'
+              onClick={() => navigate('/login')} // Directly calling navigate inside onClick
+            >
               <i className='bi bi-person me-1'></i>
               Iniciar sesión
             </Button>
@@ -120,23 +126,34 @@ export default function Header() {
                   Promociones
                 </a>
               </li>
-
-              <li className='nav-item'>
-                <a className='nav-link fw-bold text-primary' href='/listadeproductos'>
-                  Listado
-                </a>
-              </li>
-
-              <li className='nav-item'>
-                <a className='nav-link fw-bold text-primary' href='/banners'>
-                  Banners
-                </a>
-              </li>
-              <li className='nav-item'>
-                <a className='nav-link fw-bold text-primary' href='/bannersPagina'>
-                  Banners2
-                </a>
-              </li>
+              {user ? (
+                <>
+                  <li className='nav-item'>
+                    <a
+                      className='nav-link fw-bold text-primary'
+                      href='/listadeproductos'
+                    >
+                      Listado
+                    </a>
+                  </li>
+                  <li className='nav-item'>
+                    <a
+                      className='nav-link fw-bold text-primary'
+                      href='/banners'
+                    >
+                      Banners
+                    </a>
+                  </li>
+                  <li className='nav-item'>
+                    <a
+                      className='nav-link fw-bold text-primary'
+                      href='/bannersPagina'
+                    >
+                      Banners2
+                    </a>
+                  </li>
+                </>
+              ) : null}
             </ul>
 
             {/* Buttons: Shopping Cart and Login (Mobile) */}
@@ -154,5 +171,5 @@ export default function Header() {
         </div>
       </nav>
     </header>
-  );
+  )
 }

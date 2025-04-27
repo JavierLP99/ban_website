@@ -4,85 +4,95 @@ import ProductDetail from '../pages/ProductDetail'
 import SearchPage from '../pages/SearchPage'
 import ErrorBoundary from './ErrorBoundary'
 import EditProduct from '../pages/editProduct'
+import Login from '../pages/Login'
 
 const App = () => {
   return (
-    <Routes>
-      <Route
-        path='/'
-        element={<Home />}
-        errorElement={
-          <ErrorBoundary>
-            <h1>Something went wrong.</h1>
-          </ErrorBoundary>
-        }
-      />
-      <Route
-        path='/acercade'
-        element={<About />}
-        errorElement={
-          <ErrorBoundary>
-            <h1>Something went wrong.</h1>
-          </ErrorBoundary>
-        }
-      />
-      <Route
-        path='/producto/:productName'
-        element={<ProductDetail />}
-        errorElement={
-          <ErrorBoundary>
-            <h1>Something went wrong.</h1>
-          </ErrorBoundary>
-        }
-      />
-      <Route
-        path='/admin/catalogo/:id'
-        element={<EditProduct />}
-        errorElement={
-          <ErrorBoundary>
-            <h1>Something went wrong.</h1>
-          </ErrorBoundary>
-        }
-      />
+      <Routes>
+        <Route
+          path='/'
+          element={<Home />}
+          errorElement={
+            <ErrorBoundary>
+              <h1>Something went wrong.</h1>
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path='/acercade'
+          element={<About />}
+          errorElement={
+            <ErrorBoundary>
+              <h1>Something went wrong.</h1>
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path='/producto/:productName'
+          element={<ProductDetail />}
+          errorElement={
+            <ErrorBoundary>
+              <h1>Something went wrong.</h1>
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path='/admin/catalogo/:id'
+          element={<EditProduct />}
+          errorElement={
+            <ErrorBoundary>
+              <h1>Something went wrong.</h1>
+            </ErrorBoundary>
+          }
+        />
 
-      <Route
-        path='/admin/catalogo/'
-        element={<EditProduct />}
-        errorElement={
-          <ErrorBoundary>
-            <h1>Something went wrong.</h1>
-          </ErrorBoundary>
-        }
-      />
-      <Route path='/search' element={<SearchPage />} />
-      <Route
-        path='/listadeproductos'
-        element={<ProductsData />}
-        errorElement={
-          <ErrorBoundary>
-            <h1>Something went wrong.</h1>
-          </ErrorBoundary>
-        }
-      />
-      <Route
-        path='/banners'
-        element={<Banners />}
-        errorElement={
-          <ErrorBoundary>
-            <h1>Something went wrong.</h1>
-          </ErrorBoundary>
-        }
-      />
-      <Route
-        path='/bannersPagina'
-        element={<BannersPage />}
-        errorElement={
-          <ErrorBoundary>
-            <h1>Something went wrong.</h1>
-          </ErrorBoundary>
-        }
-      />
-    </Routes>
+        <Route
+          path='/admin/catalogo/'
+          element={<EditProduct />}
+          errorElement={
+            <ErrorBoundary>
+              <h1>Something went wrong.</h1>
+            </ErrorBoundary>
+          }
+        />
+        <Route path='/search' element={<SearchPage />} />
+        <Route
+          path='/listadeproductos'
+          element={<ProductsData />}
+          errorElement={
+            <ErrorBoundary>
+              <h1>Something went wrong.</h1>
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path='/banners'
+          element={<Banners />}
+          errorElement={
+            <ErrorBoundary>
+              <h1>Something went wrong.</h1>
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path='/bannersPagina'
+          element={<BannersPage />}
+          errorElement={
+            <ErrorBoundary>
+              <h1>Something went wrong.</h1>
+            </ErrorBoundary>
+          }
+        />
+        <Route
+          path='/login'
+          element={<Login />}
+          errorElement={
+            <ErrorBoundary>
+              <h1>Something went wrong.</h1>
+            </ErrorBoundary>
+          }
+        />
+      </Routes>
   )
 }
 
