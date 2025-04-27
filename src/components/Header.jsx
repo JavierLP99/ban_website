@@ -4,7 +4,7 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import { useAuth } from '../AuthContext'
+import { useAuth } from "react-oidc-context";
 
 export default function Header () {
   const [searchQuery, setSearchQuery] = useState('')
@@ -16,8 +16,37 @@ export default function Header () {
       navigate(`/search?q=${encodeURIComponent(searchQuery)}`)
     }
   }
+   // Cognito code starte
+  const auth = useAuth();
 
-  const { user, logout } = useAuth()
+  const signOutRedirect = () => {
+    const clientId = "4rcpqjuut9mjh2b6lbl4hg3b7h";
+    const logoutUri = "<logout uri>";
+    const cognitoDomain = "https://<user pool domain>";
+    window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;
+  };
+
+  // if (auth.isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // if (auth.error) {
+  //   return <div>Encountering error... {auth.error.message}</div>;
+  // }
+
+  // if (auth.isAuthenticated) {
+  //   return (
+  //     <div>
+  //       <pre> Hello: {auth.user?.profile.email} </pre>
+  //       <pre> ID Token: {auth.user?.id_token} </pre>
+  //       <pre> Access Token: {auth.user?.access_token} </pre>
+  //       <pre> Refresh Token: {auth.user?.refresh_token} </pre>
+
+  //       <button onClick={() => auth.removeUser()}>Sign out</button>
+  //     </div>
+  //   );
+  // }
+  // Cognito code ends
 
   return (
     <header>
@@ -72,10 +101,16 @@ export default function Header () {
             </Button>
             <Button
               className='d-flex align-items-center btn btn-secondary'
-              onClick={() => navigate('/login')} // Directly calling navigate inside onClick
+              onClick={() => auth.signinRedirect()} // Directly calling navigate inside onClick
             >
               <i className='bi bi-person me-1'></i>
               Iniciar sesión
+            </Button>
+            <Button
+              className='d-flex align-items-center btn btn-secondary'
+              onClick={() => auth.removeUser()}            >
+              <i className='bi bi-person me-1'></i>
+              Cerrar sesión
             </Button>
           </div>
         </div>
@@ -126,8 +161,9 @@ export default function Header () {
                   Promociones
                 </a>
               </li>
-              {user ? (
-                <>
+              {
+                auth.isAuthenticated ?
+                  <>
                   <li className='nav-item'>
                     <a
                       className='nav-link fw-bold text-primary'
@@ -152,8 +188,10 @@ export default function Header () {
                       Banners2
                     </a>
                   </li>
-                </>
-              ) : null}
+                  </>: null
+              }
+                  
+  
             </ul>
 
             {/* Buttons: Shopping Cart and Login (Mobile) */}
