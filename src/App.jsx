@@ -2,6 +2,15 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import RoutesIndex from './routes'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import { AuthProvider } from "react-oidc-context";
+
+const cognitoAuthConfig = {
+  authority: "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_ubIUQavtu",
+  client_id: "4rcpqjuut9mjh2b6lbl4hg3b7h",
+  redirect_uri: "http://localhost:5160/",
+  response_type: "code",
+  scope: "phone openid email",
+};
 
 function App () {
   const updateUrl = url => {
@@ -34,7 +43,8 @@ function App () {
       {
         path: '/*',
         element: (
-          <>
+          <AuthProvider {...cognitoAuthConfig}>
+
             <div
               className='background-image'
               style={{
@@ -47,7 +57,7 @@ function App () {
             <Header /> {/* Header now inside Router context */}
             <RoutesIndex />
             </div>
-          </>
+          </AuthProvider>
         )
       }
     ],
