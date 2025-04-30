@@ -2,97 +2,48 @@ import { Routes, Route } from 'react-router-dom'
 import { Home, About, ProductsData, Banners, BannersPage } from '@/pages'
 import ProductDetail from '../pages/ProductDetail'
 import SearchPage from '../pages/SearchPage'
-import ErrorBoundary from './ErrorBoundary'
 import EditProduct from '../pages/editProduct'
 import Login from '../pages/Login'
+import ErrorBoundary from './ErrorBoundary'
+import RequireAuth from './RequireAuth' // Auth guard wrapper
 
 const App = () => {
   return (
+    <ErrorBoundary>
       <Routes>
-        <Route
-          path='/'
-          element={<Home />}
-          errorElement={
-            <ErrorBoundary>
-              <h1>Something went wrong.</h1>
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path='/acercade'
-          element={<About />}
-          errorElement={
-            <ErrorBoundary>
-              <h1>Something went wrong.</h1>
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path='/producto/:productName'
-          element={<ProductDetail />}
-          errorElement={
-            <ErrorBoundary>
-              <h1>Something went wrong.</h1>
-            </ErrorBoundary>
-          }
-        />
-        <Route
-          path='/admin/catalogo/:id'
-          element={<EditProduct />}
-          errorElement={
-            <ErrorBoundary>
-              <h1>Something went wrong.</h1>
-            </ErrorBoundary>
-          }
-        />
-
-        <Route
-          path='/admin/catalogo/'
-          element={<EditProduct />}
-          errorElement={
-            <ErrorBoundary>
-              <h1>Something went wrong.</h1>
-            </ErrorBoundary>
-          }
-        />
+        <Route path='/' element={<Home />} />
+        <Route path='/acercade' element={<About />} />
+        <Route path='/producto/:productName' element={<ProductDetail />} />
+        <Route path='/admin/catalogo/:id' element={<EditProduct />} />
+        <Route path='/admin/catalogo/' element={<EditProduct />} />
         <Route path='/search' element={<SearchPage />} />
         <Route
           path='/listadeproductos'
-          element={<ProductsData />}
-          errorElement={
-            <ErrorBoundary>
-              <h1>Something went wrong.</h1>
-            </ErrorBoundary>
+          element={
+            <RequireAuth>
+              <ProductsData />
+            </RequireAuth>
           }
         />
         <Route
           path='/banners'
-          element={<Banners />}
-          errorElement={
-            <ErrorBoundary>
-              <h1>Something went wrong.</h1>
-            </ErrorBoundary>
+          element={
+            <RequireAuth>
+              <Banners />
+            </RequireAuth>
           }
         />
         <Route
           path='/bannersPagina'
-          element={<BannersPage />}
-          errorElement={
-            <ErrorBoundary>
-              <h1>Something went wrong.</h1>
-            </ErrorBoundary>
+          element={
+            <RequireAuth>
+              <BannersPage />
+            </RequireAuth>
           }
         />
-        <Route
-          path='/login'
-          element={<Login />}
-          errorElement={
-            <ErrorBoundary>
-              <h1>Something went wrong.</h1>
-            </ErrorBoundary>
-          }
-        />
+        <Route path='/login' element={<Login />} />
       </Routes>
+    </ErrorBoundary>
   )
 }
 
