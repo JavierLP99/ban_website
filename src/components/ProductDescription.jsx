@@ -17,6 +17,8 @@ const ProductDescription = ({ productName }) => {
   const [limits, setLimits] = useState([1, 1000])
   const [selectedCustomizations, setSelectedCustomizations] = useState({})
 
+  const [message, setMessage] = useState(null) // State for feedback message
+  const [messageType, setMessageType] = useState(null) // "success" or "error"
   useEffect(() => {
     // Fetch product from API based on productName
     axios
@@ -25,6 +27,15 @@ const ProductDescription = ({ productName }) => {
         console.log(response)
         const fetchedProduct = response.data.product // Assuming the API returns an array
         setProduct(fetchedProduct)
+
+        const initialSelections = {};
+
+        product.customizationOptions.forEach(option => {
+          if (option.options.length > 0) {
+            initialSelections[option.name] = option.options[0].trim();
+          }
+        });
+        setSelectedCustomizations(initialSelections);
       })
       .catch(error => console.error('Error loading product:', error))
   }, [productName])
@@ -44,21 +55,21 @@ const ProductDescription = ({ productName }) => {
     }
   }, [product])
 
+
   useEffect(() => {
     if (!product || !product.images.length) return
     console.log(selectedCustomizations)
 
     const matchedImageEntry = product.customizationImageMap.find(entry => {
-      const combination = entry.combination;
+      const combination = entry.combination
       return Object.entries(combination).every(
         ([key, value]) => selectedCustomizations[key]?.trim() === value.trim()
-      );
-    });
-    
-    if (matchedImageEntry && matchedImageEntry.imageUrls.length > 0) {
-      setMainImage(matchedImageEntry.imageUrls[0]);
-    }
+      )
+    })
 
+    if (matchedImageEntry && matchedImageEntry.imageUrls.length > 0) {
+      setMainImage(matchedImageEntry.imageUrls[0])
+    }
   }, [selectedCustomizations, product])
 
   const handleThumbnailClick = image => {
@@ -239,7 +250,31 @@ const ProductDescription = ({ productName }) => {
             ))}
           </div>
 
-          <button className='btn btn-primary btn-lg w-100'>
+          {message && (
+            <div
+              className={`alert ${
+                messageType === 'success'
+                  ? 'alert-success'
+                  : messageType === 'info'
+                  ? 'alert-info'
+                  : 'alert-danger'
+              }`}
+              role='alert'
+            >
+              {message}
+            </div>
+          )}
+          <button
+            className='btn btn-primary btn-lg w-100'
+            onClick={() => {
+              let carrito = JSON.parse(localStorage.getItem('carrito')) || []
+              carrito.push({ product: product._id, quantity, selectedCustomizations})
+              localStorage.setItem('carrito', JSON.stringify(carrito))
+
+              setMessage('Producto agregado al carrito.')
+              setMessageType('success')
+            }}
+          >
             Añadir al Carrito
           </button>
         </div>
