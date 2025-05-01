@@ -15,6 +15,7 @@ const ProductDescription = ({ productName }) => {
   const [price, setPrice] = useState(0)
   const [showModal, setShowModal] = useState(false) // State to control modal visibility
   const [limits, setLimits] = useState([1, 1000])
+  const [selectedCustomizations, setSelectedCustomizations] = useState({})
 
   useEffect(() => {
     // Fetch product from API based on productName
@@ -42,6 +43,23 @@ const ProductDescription = ({ productName }) => {
       setLimits(limits)
     }
   }, [product])
+
+  useEffect(() => {
+    if (!product || !product.images.length) return
+    console.log(selectedCustomizations)
+
+    const matchedImageEntry = product.customizationImageMap.find(entry => {
+      const combination = entry.combination;
+      return Object.entries(combination).every(
+        ([key, value]) => selectedCustomizations[key]?.trim() === value.trim()
+      );
+    });
+    
+    if (matchedImageEntry && matchedImageEntry.imageUrls.length > 0) {
+      setMainImage(matchedImageEntry.imageUrls[0]);
+    }
+
+  }, [selectedCustomizations, product])
 
   const handleThumbnailClick = image => {
     setMainImage(image)
@@ -194,10 +212,19 @@ const ProductDescription = ({ productName }) => {
             {product.customizationOptions.map((option, index) => (
               <div key={index} className='mb-2'>
                 {option.type === 'enum' ? (
-                  <select className='form-select'>
+                  <select
+                    className='form-select'
+                    onChange={e => {
+                      const newSelections = {
+                        ...selectedCustomizations,
+                        [option.name]: e.target.value.trim()
+                      }
+                      setSelectedCustomizations(newSelections)
+                    }}
+                  >
                     {option.options.map((opt, idx) => (
-                      <option key={idx} value={opt}>
-                        {opt}
+                      <option key={idx} value={opt.trim()}>
+                        {opt.trim()}
                       </option>
                     ))}
                   </select>
