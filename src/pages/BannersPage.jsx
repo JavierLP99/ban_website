@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Button from 'react-bootstrap/Button'
 import { Modal } from 'react-bootstrap'
+import { getResizedCloudinaryUrl } from '../utils/tools'
 
-const BannersPage = () => {
+const BannersPage = (imageTag = 'gallery') => {
   const [banners, setBanners] = useState([])
   const [showModal, setShowModal] = useState(false)
   const handleCloseModal = () => setShowModal(false)
@@ -11,10 +12,17 @@ const BannersPage = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [draggedBanner, setDraggedBanner] = useState(null)
   const [dragOverIndex, setDragOverIndex] = useState(null)
+  const [images, setImages] = useState([])
+  const [selectedImages, setSelectedImages] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [bannerToDelete, setBannerToDelete] = useState(null)
+  const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+  const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
 
   useEffect(() => {
     axios
-      .get('https://banannylandapp.onrender.com/banners')
+      .get('https://banannylandapp.onrender.com/banners/all')
       .then(response => setBanners(response.data.banners))
       .catch(error => console.error('Error al obtener los banners:', error))
   }, [])
@@ -23,14 +31,16 @@ const BannersPage = () => {
     if (!_id) return
 
     if (status === 'Valida') {
+      setBannerToDelete(_id)
       setShowConfirmModal(true)
       return
     }
   }
 
-  const confirmDelete = async _id => {
+  const confirmDelete = async (_id)  => {
+    console.log(bannerToDelete)
     try {
-      await axios.delete(`https://banannylandapp.onrender.com/products/${_id}`)
+      await axios.delete(`https://banannylandapp.onrender.com/banners/${bannerToDelete}`)
       setShowConfirmModal(false)
       setShowModal(true)
       setBanners(banners.filter(banner => banner._id !== _id))
@@ -49,79 +59,154 @@ const BannersPage = () => {
     bannersCopy.splice(draggedBanner, 1)
     bannersCopy.splice(index, 0, draggedItem)
 
-    const reordered = bannersCopy.map((banner, i) => ({
-      ...banner,
-      order: i + 1
-    }))
-
-    setBanners(reordered)
+    setBanners(bannersCopy)
     setDraggedBanner(null)
+  }
+
+  const saveReorder = async () => {
+    const bannersID = banners.map(banner => banner._id)
 
     try {
-      await Promise.all(
-        reordered.map(banner =>
-          axios.put(
-            `https://banannylandapp.onrender.com/products/${banner._id}/order`,
-            { order: banner.order }
-          )
-        )
-      )
+      await axios.put('https://banannylandapp.onrender.com/banners/reorder', {
+        ids: bannersID
+      })
+      console.log('Orden guardado exitosamente')
     } catch (error) {
-      console.error('Error al actualizar orden en el backend:', error)
+      console.error('Error al guardar el orden:', error)
+    }
+  }
+
+  const uploadImages = async files => {
+    setLoading(true)
+    try {
+      const uploadedImages = await Promise.all(
+        [...files].map(async file => {
+          const formData = new FormData()
+          formData.append('file', file)
+          formData.append('upload_preset', uploadPreset)
+          formData.append('tags', imageTag)
+
+          const res = await fetch(
+            `https://banannylandapp.onrender.com/banners/upload`,
+            { method: 'POST', body: formData }
+          )
+
+          const data = await res.json()
+          return { url: data.secure_url, public_id: data.public_id }
+        })
+      )
+
+      setImages(prevImages => [...uploadedImages, ...prevImages])
+    } catch {
+      setError('Error cargando imagen.')
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
     <div className='container py-4'>
       <h2>Administrar Banners</h2>
+      <h5 className='text-center my-4'>Banners activos</h5>
       <div className='d-flex flex-column'>
-        {banners.map((banner, index) => (
-          <div
-            key={banner._id}
-            className={`card mx-auto col-6 ${
-              index === draggedBanner ? 'dragging' : ''
-            } ${index === dragOverIndex ? 'drag-over' : ''}`}
-            draggable
-            onDragStart={() => setDraggedBanner(index)}
-            onDragOver={e => {
-              e.preventDefault()
-              setDragOverIndex(index)
-            }}
-            onDragLeave={() => setDragOverIndex(null)}
-            onDrop={() => handleDrop(index)}
-            onDragEnd={() => {
-              setDraggedBanner(null)
-              setDragOverIndex(null)
-            }}
-          >
-            <div className='row mx-0'>
-              <div className='col-md-8 d-flex align-items-center'>
-                <img
-                  src={banner.image}
-                  alt='Banner'
-                  className='card-img object-fit-cover w-100'
-                />
-              </div>
-              <div className='col-md-4'>
-                <div className='card-body'>
-                  <p className='mb-1'>
-                    <strong>Ruta:</strong> {banner.path}
-                  </p>
-                  <p className='mb-1'>
-                    <strong>Status:</strong> {banner.status}
-                  </p>
-                  <button
-                    className='btn btn-danger'
-                    onClick={() => handleDelete(banner._id, banner.status)}
-                  >
-                    Eliminar
-                  </button>
-                </div>
-              </div>
+  {banners
+    .filter(banner => banner.status === 'Valida')
+    .map((banner, index) => (
+      <div
+        key={banner._id}
+        className={`card mx-auto col-6 ${
+          index === draggedBanner ? 'dragging' : ''
+        } ${index === dragOverIndex ? 'drag-over' : ''}`}
+        draggable
+        onDragStart={() => setDraggedBanner(index)}
+        onDragOver={e => {
+          e.preventDefault()
+          setDragOverIndex(index)
+        }}
+        onDragLeave={() => setDragOverIndex(null)}
+        onDrop={() => handleDrop(index)}
+        onDragEnd={() => {
+          setDraggedBanner(null)
+          setDragOverIndex(null)
+        }}
+      >
+        <div className='row mx-0'>
+          <div className='col-md-8 d-flex align-items-center'>
+            <img
+              src={banner.image}
+              alt='Banner'
+              className='card-img object-fit-cover w-100'
+            />
+          </div>
+          <div className='col-md-4'>
+            <div className='card-body'>
+              <p className='mb-1'>
+                <strong>Ruta:</strong> {banner.path}
+              </p>
+              <p className='mb-1'>
+                <strong>Status:</strong> {banner.status}
+              </p>
+              <button
+                className='btn btn-danger'
+                onClick={() => handleDelete(banner._id, banner.status)}
+              >
+                Eliminar
+              </button>
             </div>
           </div>
-        ))}
+        </div>
       </div>
+    ))}
+</div>      
+<button className='btn btn-success my-3' onClick={saveReorder}>
+        Guardar orden
+      </button>
+      <h5 className='text-center my-4'>Banners inactivos</h5>
+
+      <div className='d-flex flex-column'>
+  {banners
+    .filter(banner => banner.status == 'Invalida')
+    .map((banner, index) => (
+      <div
+        key={banner._id}
+        className='card mx-auto col-6'
+      >
+        <div className='row mx-0'>
+          <div className='col-md-8 d-flex align-items-center'>
+            <img
+              src={getResizedCloudinaryUrl(banner.image,"e_grayscale")}
+              alt='Banner'
+              className='card-img object-fit-cover w-100'
+            />
+          </div>
+          <div className='col-md-4'>
+            <div className='card-body'>
+              <p className='mb-1'>
+                <strong>Ruta:</strong> {banner.path}
+              </p>
+              <p className='mb-1'>
+                <strong>Status:</strong> {banner.status}
+              </p>
+              <button
+                className='btn btn-danger'
+                onClick={() => handleDelete(banner._id, banner.status)}
+              >
+                Eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+</div>
+      <input
+        type='file'
+        multiple
+        accept='image/*'
+        className='form-control mt-4'
+        onChange={e => uploadImages(e.target.files)}
+        disabled={loading}
+      />
       <Modal
         show={showModal}
         onHide={handleCloseModal}
