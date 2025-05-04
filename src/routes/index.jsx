@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import { Home, About, ProductsData, Banners, BannersPage } from '@/pages'
+import { Home, About, ProductsData, Banners, BannersPage, Categories } from '@/pages'
 import ProductDetail from '../pages/ProductDetail'
 import SearchPage from '../pages/SearchPage'
 import EditProduct from '../pages/editProduct'
@@ -38,6 +38,15 @@ const App = () => {
           element={
             <RequireAuth>
               <BannersPage />
+            </RequireAuth>
+          }
+        />
+        
+        <Route
+          path='/admin/categories'
+          element={
+            <RequireAuth>
+              <Categories />
             </RequireAuth>
           }
         />
