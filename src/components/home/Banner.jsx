@@ -32,7 +32,7 @@ const Banner = () => {
             <img
               src={banner.image}
               alt=''
-              className='d-block w-100 h-100'
+              className='d-block w-100 h-50'
               style={{
                 objectFit: 'cover'
               }}
