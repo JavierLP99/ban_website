@@ -188,6 +188,14 @@ export default function Header () {
                       Banners2
                     </a>
                   </li>
+                  <li className='nav-item'>
+                    <a
+                      className='nav-link fw-bold text-primary'
+                      href='/admin/categories'
+                    >
+                      Categorías
+                    </a>
+                  </li>
                   </>: null
               }
                   

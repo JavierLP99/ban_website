@@ -39,6 +39,9 @@ export function getResizedCloudinaryUrl(originalUrl, transformation) {
     return getResizedCloudinaryUrl(originalUrl, 't_MidSize');
   }
   
+  export function getInvalid(originalUrl) {
+    return getResizedCloudinaryUrl(originalUrl, 'w_300,h_300,c_fill,e_grayscale');
+  }
 
   export function handleImageError(event) {
     event.target.src = 'https://res.cloudinary.com/drnge8otv/image/upload/t_MidSize/v1745423218/Default_tjxbsn.png'
