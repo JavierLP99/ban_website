@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import { Home, About, ProductsData, Banners, BannersPage, Categories } from '@/pages'
+import { Home, About, ProductsData, BannersPage, Categories } from '@/pages'
 import ProductDetail from '../pages/ProductDetail'
 import SearchPage from '../pages/SearchPage'
 import EditProduct from '../pages/editProduct'
@@ -27,14 +27,6 @@ const App = () => {
         />
         <Route
           path='/banners'
-          element={
-            <RequireAuth>
-              <Banners />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path='/bannersPagina'
           element={
             <RequireAuth>
               <BannersPage />

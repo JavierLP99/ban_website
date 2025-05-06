@@ -161,12 +161,20 @@ const BannersPage = () => {
   const buildPath = (type, name) => {
     if (!type || !name) return '';
     switch (type) {
-      case 'producto':
-        return `/products/${encodeURIComponent(name)}`;
+      case 'producto': {
+        const product = products.find(p => p.name === name);
+        return product ? `/products/${encodeURIComponent(product.slug)}` : '';
+      }
       case 'categoría':
-        return `/categories/${encodeURIComponent(name)}`;
+        {
+          const category = categories.find(c => c.name === name);
+          return category ? `/categories/${encodeURIComponent(category.slug)}` : '';
+        }
       case 'temporada':
-        return `/seasons/${encodeURIComponent(name)}`;
+        {
+          const season = seasons.find(s => s.name === name);
+          return season ? `/seasons/${encodeURIComponent(season.slug)}` : '';
+        }
       default:
         return '';
     }
