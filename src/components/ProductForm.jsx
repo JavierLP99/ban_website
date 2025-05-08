@@ -205,7 +205,7 @@ const ProductForm = () => {
       setValue('category', product.category)
       setValue('status', product.status)
       setValue('season', product.seasons?.[0] || '')
-      setSelectedImages(product.images || [])
+      setSelectedImages([])
 
       const formattedPrices = product.price.map((p, index) => ({
         id: index,
@@ -230,14 +230,14 @@ const ProductForm = () => {
       setCustomizations(formattedCustomizations)
       setValue('customizations', formattedCustomizations)
 
-      if (!isClone && Array.isArray(product.customizationImageMap)) {
-        setCustomizationImageMap(
-          product.customizationImageMap.map(entry => ({
-            combination: entry.combination || {},
-            imageUrls: entry.imageUrls || []
-          }))
-        )
-      }
+      // if (!isClone && Array.isArray(product.customizationImageMap)) {
+      //   setCustomizationImageMap(
+      //     product.customizationImageMap.map(entry => ({
+      //       combination: entry.combination || {},
+      //       imageUrls: entry.imageUrls || []
+      //     }))
+      //   )
+      // }
     }
 
     loadData()
@@ -501,7 +501,7 @@ const ProductForm = () => {
                   <button
                     type='button'
                     onClick={() => setShowCategoryModal(true)}
-                    className='btn btn-outline-secondary'
+                    className='btn btn-outline-primary'
                   >
                     +
                   </button>
@@ -521,7 +521,7 @@ const ProductForm = () => {
                   <button
                     type='button'
                     onClick={() => setShowSeasonModal(true)}
-                    className='btn btn-outline-secondary'
+                    className='btn btn-outline-primary'
                   >
                     +
                   </button>
