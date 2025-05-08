@@ -27,12 +27,12 @@ const Banner = () => {
         controls={false}
       >
         {content.map((banner, index) => (
-          <Carousel.Item key={index} className='d-block w-100 h-100'>
+          <Carousel.Item key={index} className='d-block w-100 h-50'>
             <a href={banner.path}>
             <img
               src={banner.image}
               alt=''
-              className='d-block w-100 h-50'
+              className='d-block w-100 h-100'
               style={{
                 objectFit: 'cover'
               }}
