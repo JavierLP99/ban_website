@@ -1,8 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
-import { Home, About, ProductsData, BannersPage, Categories } from '@/pages'
+import { Home, About, ProductsData, BannersPage, Categories, EditProduct } from '@/pages'
 import ProductDetail from '../pages/ProductDetail'
 import SearchPage from '../pages/SearchPage'
-import EditProduct from '../pages/editProduct'
 import Login from '../pages/Login'
 import ErrorBoundary from './ErrorBoundary'
 import RequireAuth from './RequireAuth' // Auth guard wrapper
