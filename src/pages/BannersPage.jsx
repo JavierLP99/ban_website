@@ -9,23 +9,27 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 const BannersPage = () => {
   const [banners, setBanners] = useState([])
   const [showModal, setShowModal] = useState(false)
+  const [showRestoreUpdate, setShowRestoreUpdate] = useState(false)
   const [showBannerModal, setShowBannerModal] = useState(false)
   const handleCloseModal = () => setShowModal(false)
+  const handleCloseRestoreUpdate = () => setShowRestoreUpdate(false)
   const handleCloseConfirmModal = () => setShowConfirmModal(false)
   const handleCloseBannerModal = () => setShowBannerModal(false)
+  const handleCloseRestoreModal = () => setShowRestoreModal(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [showRestoreModal, setShowRestoreModal] = useState(false)
   const [draggedBanner, setDraggedBanner] = useState(null)
   const [dragOverIndex, setDragOverIndex] = useState(null)
   const [images, setImages] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [bannerToDelete, setBannerToDelete] = useState(null)
+  const [bannerToRestore, setBannerToRestore] = useState(null)
   const [destinationType, setDestinationType] = useState('')
   const [destinationName, setDestinationName] = useState('')
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
   const [seasons, setSeasons] = useState([])
-  const [selectedType, setSelectedType] = useState('Selecciona tipo')
   const [path, setPath] = useState('')
   const [selectedImage, setSelectedImage] = useState([])
   const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
@@ -48,11 +52,7 @@ const BannersPage = () => {
     }
   }
 
-  const uploadBanner = async () => {
-    setShowBannerModal(true)
-  }
-
-  const confirmDelete = async _id => {
+  const confirmDelete = async () => {
     console.log(bannerToDelete)
     try {
       await axios.delete(
@@ -60,19 +60,36 @@ const BannersPage = () => {
       )
       setShowConfirmModal(false)
       setShowModal(true)
-      setBanners(banners.filter(banner => banner._id !== _id))
+      //setBanners(banners.filter(banner => banner._id !== _id))
       setTimeout(() => setShowModal(false), 5000)
     } catch (error) {
       console.error('Error al eliminar el producto:', error)
     }
   }
 
-  const restore = async _id => {
-    console.log(_id)
+  const uploadBanner = async () => {
+    setShowBannerModal(true)
+  }
+
+  const handleRestore = async (_id, status) => {
+    if (!_id) return
+
+    if (status === 'Invalida') {
+      setBannerToRestore(_id)
+      setShowRestoreModal(true)
+      return
+    }
+  }
+
+  const confirmRestore = async () => {
+    console.log(bannerToRestore)
     try {
-      await axios.put(`https://banannylandapp.onrender.com/banners/${_id}`, {
+      await axios.put(`https://banannylandapp.onrender.com/banners/${bannerToRestore}`, {
         status: 'Valida'
       })
+      setShowRestoreModal(false)
+      setShowRestoreUpdate(true)
+      setTimeout(() => setShowRestoreUpdate(false), 5000)
     } catch (error) {
       console.error('Error al eliminar el producto:', error)
     }
@@ -141,7 +158,7 @@ const BannersPage = () => {
 
   const handleDestinationNameSelect = name => {
     setDestinationName(name)
-    const newPath = buildPath(destinationType, name);
+    const newPath = buildPath(destinationType, name)
     setPath(newPath)
   }
 
@@ -159,49 +176,49 @@ const BannersPage = () => {
   }
 
   const buildPath = (type, name) => {
-    if (!type || !name) return '';
+    if (!type || !name) return ''
     switch (type) {
       case 'producto': {
-        const product = products.find(p => p.name === name);
-        return product ? `/products/${encodeURIComponent(product.slug)}` : '';
+        const product = products.find(p => p.name === name)
+        return product ? `/products/${encodeURIComponent(product.slug)}` : ''
       }
-      case 'categoría':
-        {
-          const category = categories.find(c => c.name === name);
-          return category ? `/categories/${encodeURIComponent(category.slug)}` : '';
-        }
-      case 'temporada':
-        {
-          const season = seasons.find(s => s.name === name);
-          return season ? `/seasons/${encodeURIComponent(season.slug)}` : '';
-        }
+      case 'categoría': {
+        const category = categories.find(c => c.name === name)
+        return category
+          ? `/categories/${encodeURIComponent(category.slug)}`
+          : ''
+      }
+      case 'temporada': {
+        const season = seasons.find(s => s.name === name)
+        return season ? `/seasons/${encodeURIComponent(season.slug)}` : ''
+      }
       default:
-        return '';
+        return ''
     }
   }
 
   const handleSaveBanner = async () => {
-    console.log(images[0].url,path)
+    console.log(images[0].url, path)
     if (!destinationType || !destinationName || !selectedImage) {
-      alert('Por favor, completa todos los campos y selecciona una imagen.');
-      return;
+      alert('Por favor, completa todos los campos y selecciona una imagen.')
+      return
     }
     try {
       await axios.post('https://banannylandapp.onrender.com/banners', {
-        image:images[0].url, path:path
+        image: images[0].url,
+        path: path
       })
       console.log('Banner guardado exitosamente')
     } catch (error) {
       console.error('Error al guardar el banner:', error)
     }
 
-
-  handleCloseBannerModal();
-  setDestinationType('');
-  setDestinationName('');
-  setPath('');
-  setSelectedImage(null);
-}
+    handleCloseBannerModal()
+    setDestinationType('')
+    setDestinationName('')
+    setPath('')
+    setSelectedImage(null)
+  }
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -235,7 +252,9 @@ const BannersPage = () => {
 
   useEffect(() => {
     axios
-      .get('https://banannylandapp.onrender.com/products', { params: {limit:100}})
+      .get('https://banannylandapp.onrender.com/products', {
+        params: { limit: 100 }
+      })
       .then(response => setProducts(response.data.products))
       .catch(error => console.error('Error al obtener productos:', error))
 
@@ -279,7 +298,10 @@ const BannersPage = () => {
               <div className='row mx-0'>
                 <div className='col-md-8 d-flex align-items-center'>
                   <img
-                    src={banner.image}
+                    src={getResizedCloudinaryUrl(
+                      banner.image,
+                      'c_fill,w_1919,h_718,g_auto'
+                    )}
                     alt='Banner'
                     className='card-img object-fit-cover w-100'
                   />
@@ -331,10 +353,10 @@ const BannersPage = () => {
                       <strong>Status:</strong> {banner.status}
                     </p>
                     <button
-                      className='btn btn-danger'
-                      onClick={() => restore(banner._id, banner.status)}
+                      className='btn btn-success'
+                      onClick={() => handleRestore(banner._id, banner.status)}
                     >
-                      Eliminar
+                      Reactivar
                     </button>
                   </div>
                 </div>
@@ -353,8 +375,10 @@ const BannersPage = () => {
         centered
       >
         <Modal.Body className='rounded'>
-          <h2 className='text-center text-success'>Banner eliminado</h2>
-          <p className='text-center'>El banner fue eliminado correctamente.</p>
+          <h2 className='text-center text-success'>Banner desactivado</h2>
+          <p className='text-center'>
+            El banner ha cambiado de estatus correctamente.
+          </p>
 
           <div className='text-center mt-4'>
             <Button variant='success' onClick={handleCloseModal}>
@@ -381,6 +405,41 @@ const BannersPage = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      <Modal show={showRestoreModal} onHide={handleCloseRestoreModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Reactivar Banner</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Este banner pasará al estatus de <strong>Activo</strong>.
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant='secondary' onClick={handleCloseRestoreModal}>
+            Cancelar
+          </Button>
+          <Button variant='success' onClick={confirmRestore}>
+            Sí, cambiar estatus
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal
+        show={showRestoreUpdate}
+        onHide={handleCloseRestoreUpdate}
+        className='align-self-center'
+        centered
+      >
+        <Modal.Body className='rounded'>
+          <h2 className='text-center text-success'>Banner reactivado</h2>
+          <p className='text-center'>
+            El banner se ha reactivado correctamente.
+          </p>
+
+          <div className='text-center mt-4'>
+            <Button variant='success' onClick={handleCloseRestoreUpdate}>
+              Cerrar
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
       <Modal
         show={showBannerModal}
         onHide={handleCloseBannerModal}
@@ -400,18 +459,18 @@ const BannersPage = () => {
             <Dropdown.Item eventKey='temporada'>Temporada</Dropdown.Item>
           </DropdownButton>
           {destinationType && (
-        <DropdownButton
-        id="dropdown-destination-name"
-        title={destinationName || 'Selecciona nombre'}
-        onSelect={handleDestinationNameSelect}
-        variant="light border border-2"
-      >
-        {getOptionsByType().map((option, index) => (
-          <Dropdown.Item key={index} eventKey={option}>
-            {option}
-          </Dropdown.Item>
-        ))}
-      </DropdownButton>
+            <DropdownButton
+              id='dropdown-destination-name'
+              title={destinationName || 'Selecciona nombre'}
+              onSelect={handleDestinationNameSelect}
+              variant='light border border-2'
+            >
+              {getOptionsByType().map((option, index) => (
+                <Dropdown.Item key={index} eventKey={option}>
+                  {option}
+                </Dropdown.Item>
+              ))}
+            </DropdownButton>
           )}
           <input
             type='file'
@@ -420,14 +479,18 @@ const BannersPage = () => {
             onChange={e => uploadImages(e.target.files)}
             disabled={loading}
           />
-        <div className='text-center mt-4'>
-          <Button variant='success' onClick={handleSaveBanner} className='me-2'>
-            Guardar
-          </Button>
-          <Button variant='danger' onClick={handleCloseBannerModal}>
-            Cerrar
-          </Button>
-        </div>
+          <div className='text-center mt-4'>
+            <Button
+              variant='success'
+              onClick={handleSaveBanner}
+              className='me-2'
+            >
+              Guardar
+            </Button>
+            <Button variant='danger' onClick={handleCloseBannerModal}>
+              Cerrar
+            </Button>
+          </div>
         </Modal.Body>
       </Modal>
     </div>
