@@ -16,8 +16,10 @@ const BannersPage = () => {
   const handleCloseConfirmModal = () => setShowConfirmModal(false)
   const handleCloseBannerModal = () => setShowBannerModal(false)
   const handleCloseRestoreModal = () => setShowRestoreModal(false)
+  const handleCloseHardDeleteModal = () => setshowHardDeleteModal(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [showRestoreModal, setShowRestoreModal] = useState(false)
+  const [showHardDeleteModal, setshowHardDeleteModal] = useState(false)
   const [draggedBanner, setDraggedBanner] = useState(null)
   const [dragOverIndex, setDragOverIndex] = useState(null)
   const [images, setImages] = useState([])
@@ -32,6 +34,7 @@ const BannersPage = () => {
   const [seasons, setSeasons] = useState([])
   const [path, setPath] = useState('')
   const [selectedImage, setSelectedImage] = useState([])
+  const [bannerToHardDelete, setBannerToHardDelete] = useState(null)
   const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
   const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET
 
@@ -61,9 +64,33 @@ const BannersPage = () => {
       setShowConfirmModal(false)
       setShowModal(true)
       //setBanners(banners.filter(banner => banner._id !== _id))
-      setTimeout(() => setShowModal(false), 5000)
+      setTimeout(() => reloadPage(), 3000)
     } catch (error) {
       console.error('Error al eliminar el producto:', error)
+    }
+  }
+
+    const handleHardDelete = async (_id, status) => {
+    if (!_id) return
+
+    if (status === 'Invalida') {
+      setBannerToHardDelete(_id)
+      setshowHardDeleteModal(true)
+      return
+    }
+  }
+
+  const confirmHardDelete = async () => {
+    console.log(bannerToHardDelete)
+    try {
+      await axios.delete(
+        `https://banannylandapp.onrender.com/products/${bannerToHardDelete}/hardDelete`
+      )
+      setshowHardDeleteModal(false)
+      setShowModal(true)
+      setTimeout(() => reloadPage(), 3000)
+    } catch (error) {
+      console.error('Error al hacer hardDelete:', error)
     }
   }
 
@@ -84,15 +111,22 @@ const BannersPage = () => {
   const confirmRestore = async () => {
     console.log(bannerToRestore)
     try {
-      await axios.put(`https://banannylandapp.onrender.com/banners/${bannerToRestore}`, {
-        status: 'Valida'
-      })
+      await axios.put(
+        `https://banannylandapp.onrender.com/banners/${bannerToRestore}`,
+        {
+          status: 'Valida'
+        }
+      )
       setShowRestoreModal(false)
       setShowRestoreUpdate(true)
-      setTimeout(() => setShowRestoreUpdate(false), 5000)
+      setTimeout(() => reloadPage(), 3000)
     } catch (error) {
       console.error('Error al eliminar el producto:', error)
     }
+  }
+
+  const reloadPage = () => {
+    window.location.reload()
   }
 
   const handleDrop = async index => {
@@ -358,6 +392,12 @@ const BannersPage = () => {
                     >
                       Reactivar
                     </button>
+                    <button
+                      className='btn btn-danger'
+                      onClick={() => handleHardDelete(banner._id, banner.status)}
+                    >
+                      Eliminar
+                    </button>
                   </div>
                 </div>
               </div>
@@ -381,12 +421,13 @@ const BannersPage = () => {
           </p>
 
           <div className='text-center mt-4'>
-            <Button variant='success' onClick={handleCloseModal}>
+            <Button variant='success' onClick={reloadPage}>
               Cerrar
             </Button>
           </div>
         </Modal.Body>
       </Modal>
+
       <Modal show={showConfirmModal} onHide={handleCloseConfirmModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>¿Estás seguro?</Modal.Title>
@@ -405,6 +446,26 @@ const BannersPage = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      <Modal
+        show={showHardDeleteModal}
+        onHide={handleCloseHardDeleteModal}
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>¿Estás seguro?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Este banner será eliminado</Modal.Body>
+        <Modal.Footer>
+          <Button variant='secondary' onClick={handleCloseHardDeleteModal}>
+            Cancelar
+          </Button>
+          <Button variant='danger' onClick={confirmHardDelete}>
+            Sí, eliminar
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <Modal show={showRestoreModal} onHide={handleCloseRestoreModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>Reactivar Banner</Modal.Title>
@@ -421,6 +482,7 @@ const BannersPage = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
       <Modal
         show={showRestoreUpdate}
         onHide={handleCloseRestoreUpdate}
@@ -434,7 +496,7 @@ const BannersPage = () => {
           </p>
 
           <div className='text-center mt-4'>
-            <Button variant='success' onClick={handleCloseRestoreUpdate}>
+            <Button variant='success' onClick={reloadPage}>
               Cerrar
             </Button>
           </div>
