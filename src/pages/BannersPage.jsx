@@ -9,14 +9,22 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 const BannersPage = () => {
   const [banners, setBanners] = useState([])
   const [showModal, setShowModal] = useState(false)
+  const [deleteModal, setDeleteModal] = useState(false)
   const [showRestoreUpdate, setShowRestoreUpdate] = useState(false)
   const [showBannerModal, setShowBannerModal] = useState(false)
+  const [showUploadBanner, setShowUploadBanner] = useState(false)
+  const [savedOrder, setSavedOrder] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [bannerToEdit, setBannerToEdit] = useState(null)
+  const handleCloseSavedOrder = () => setSavedOrder(false)
   const handleCloseModal = () => setShowModal(false)
+  const handleCloseDeleteModal = () => setDeleteModal(false)
   const handleCloseRestoreUpdate = () => setShowRestoreUpdate(false)
   const handleCloseConfirmModal = () => setShowConfirmModal(false)
   const handleCloseBannerModal = () => setShowBannerModal(false)
   const handleCloseRestoreModal = () => setShowRestoreModal(false)
   const handleCloseHardDeleteModal = () => setshowHardDeleteModal(false)
+  const handleCloseUploadBanner = () => setShowUploadBanner(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [showRestoreModal, setShowRestoreModal] = useState(false)
   const [showHardDeleteModal, setshowHardDeleteModal] = useState(false)
@@ -45,14 +53,31 @@ const BannersPage = () => {
       .catch(error => console.error('Error al obtener los banners:', error))
   }, [])
 
-  const handleDelete = async (_id, status) => {
+  const handleEditBanner = banner => {
+    setIsEditing(true)
+    setBannerToEdit(banner)
+    setDestinationType(getTypeFromPath(banner.path))
+    setDestinationName(getNameFromPath(banner.path))
+    setShowBannerModal(true)
+  }
+
+  const getTypeFromPath = path => {
+    if (path.includes('/products/')) return 'producto'
+    if (path.includes('/categories/')) return 'categoría'
+    if (path.includes('/seasons/')) return 'temporada'
+    return ''
+  }
+
+  const getNameFromPath = path => {
+    return decodeURIComponent(path.split('/').pop())
+  }
+
+  const handleDeactivate = async _id => {
     if (!_id) return
 
-    if (status === 'Valida') {
-      setBannerToDelete(_id)
-      setShowConfirmModal(true)
-      return
-    }
+    setBannerToDelete(_id)
+    setShowConfirmModal(true)
+    return
   }
 
   const confirmDelete = async () => {
@@ -63,31 +88,28 @@ const BannersPage = () => {
       )
       setShowConfirmModal(false)
       setShowModal(true)
-      //setBanners(banners.filter(banner => banner._id !== _id))
       setTimeout(() => reloadPage(), 3000)
     } catch (error) {
-      console.error('Error al eliminar el producto:', error)
+      console.error('Error al desactivar el producto:', error)
     }
   }
 
-    const handleHardDelete = async (_id, status) => {
+  const handleHardDelete = async _id => {
     if (!_id) return
 
-    if (status === 'Invalida') {
-      setBannerToHardDelete(_id)
-      setshowHardDeleteModal(true)
-      return
-    }
+    setBannerToHardDelete(_id)
+    setshowHardDeleteModal(true)
+    return
   }
 
   const confirmHardDelete = async () => {
     console.log(bannerToHardDelete)
     try {
       await axios.delete(
-        `https://banannylandapp.onrender.com/products/${bannerToHardDelete}/hardDelete`
+        `https://banannylandapp.onrender.com/banners/${bannerToHardDelete}/hardDelete`
       )
       setshowHardDeleteModal(false)
-      setShowModal(true)
+      setDeleteModal(true)
       setTimeout(() => reloadPage(), 3000)
     } catch (error) {
       console.error('Error al hacer hardDelete:', error)
@@ -130,11 +152,10 @@ const BannersPage = () => {
   }
 
   const handleDrop = async index => {
-    if (draggedBanner === null) return
+    if (draggedBanner === null || draggedBanner === index) return
 
     const bannersCopy = [...banners]
     const draggedItem = bannersCopy[draggedBanner]
-
     bannersCopy.splice(draggedBanner, 1)
     bannersCopy.splice(index, 0, draggedItem)
 
@@ -149,7 +170,8 @@ const BannersPage = () => {
       await axios.put('https://banannylandapp.onrender.com/banners/reorder', {
         ids: bannersID
       })
-      console.log('Orden guardado exitosamente')
+      setSavedOrder(true)
+      setTimeout(() => reloadPage(), 3000)
     } catch (error) {
       console.error('Error al guardar el orden:', error)
     }
@@ -219,7 +241,7 @@ const BannersPage = () => {
       case 'categoría': {
         const category = categories.find(c => c.name === name)
         return category
-          ? `/categories/${encodeURIComponent(category.slug)}`
+          ? `/search?category=/${encodeURIComponent(category.name)}`
           : ''
       }
       case 'temporada': {
@@ -232,19 +254,37 @@ const BannersPage = () => {
   }
 
   const handleSaveBanner = async () => {
-    console.log(images[0].url, path)
-    if (!destinationType || !destinationName || !selectedImage) {
+    if (
+      !destinationType ||
+      !destinationName ||
+      (!selectedImage && !isEditing)
+    ) {
       alert('Por favor, completa todos los campos y selecciona una imagen.')
       return
     }
+
     try {
-      await axios.post('https://banannylandapp.onrender.com/banners', {
-        image: images[0].url,
-        path: path
-      })
-      console.log('Banner guardado exitosamente')
+      const finalImageUrl = selectedImage ? images[0].url : bannerToEdit.image
+      const finalPath = path || bannerToEdit.path
+
+      if (isEditing && bannerToEdit) {
+        await axios.put(
+          `https://banannylandapp.onrender.com/banners/${bannerToEdit._id}`,
+          {
+            image: finalImageUrl,
+            path: finalPath
+          }
+        )
+        console.log('Banner actualizado exitosamente')
+      } else {
+        await axios.post('https://banannylandapp.onrender.com/banners', {
+          image: finalImageUrl,
+          path: finalPath
+        })
+        console.log('Banner guardado exitosamente')
+      }
     } catch (error) {
-      console.error('Error al guardar el banner:', error)
+      console.error('Error al guardar o actualizar el banner:', error)
     }
 
     handleCloseBannerModal()
@@ -252,6 +292,11 @@ const BannersPage = () => {
     setDestinationName('')
     setPath('')
     setSelectedImage(null)
+    setShowUploadBanner(true)
+    setIsEditing(false)
+    setBannerToEdit(null)
+
+    setTimeout(() => reloadPage(), 3000)
   }
 
   useEffect(() => {
@@ -313,7 +358,7 @@ const BannersPage = () => {
           .map((banner, index) => (
             <div
               key={banner._id}
-              className={`card mx-auto col-6 ${
+              className={`card mx-auto col-9 ${
                 index === draggedBanner ? 'dragging' : ''
               } ${index === dragOverIndex ? 'drag-over' : ''}`}
               draggable
@@ -330,7 +375,7 @@ const BannersPage = () => {
               }}
             >
               <div className='row mx-0'>
-                <div className='col-md-8 d-flex align-items-center'>
+                <div className='d-flex align-items-center p-3 col-md-8'>
                   <img
                     src={getResizedCloudinaryUrl(
                       banner.image,
@@ -340,7 +385,7 @@ const BannersPage = () => {
                     className='card-img object-fit-cover w-100'
                   />
                 </div>
-                <div className='col-md-4'>
+                <div className='my-auto col-md-4'>
                   <div className='card-body'>
                     <p className='mb-1'>
                       <strong>Ruta:</strong> {banner.path}
@@ -348,12 +393,31 @@ const BannersPage = () => {
                     <p className='mb-1'>
                       <strong>Status:</strong> {banner.status}
                     </p>
-                    <button
-                      className='btn btn-danger'
-                      onClick={() => handleDelete(banner._id, banner.status)}
-                    >
-                      Eliminar
-                    </button>
+
+                    <div className='d-flex justify-content-center gap-1'>
+                      <button
+                        className='btn btn-success'
+                        onClick={() => handleEditBanner(banner)}
+                      >
+                        Modificar
+                      </button>
+                      <button
+                        className='btn btn-secondary'
+                        onClick={() =>
+                          handleDeactivate(banner._id, banner.status)
+                        }
+                      >
+                        Desactivar
+                      </button>
+                      <button
+                        className='btn btn-danger'
+                        onClick={() =>
+                          handleHardDelete(banner._id, banner.status)
+                        }
+                      >
+                        Eliminar
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -386,18 +450,23 @@ const BannersPage = () => {
                     <p className='mb-1'>
                       <strong>Status:</strong> {banner.status}
                     </p>
-                    <button
-                      className='btn btn-success'
-                      onClick={() => handleRestore(banner._id, banner.status)}
-                    >
-                      Reactivar
-                    </button>
-                    <button
-                      className='btn btn-danger'
-                      onClick={() => handleHardDelete(banner._id, banner.status)}
-                    >
-                      Eliminar
-                    </button>
+
+                    <div className='d-flex justify-content-center'>
+                      <button
+                        className='btn btn-success'
+                        onClick={() => handleRestore(banner._id, banner.status)}
+                      >
+                        Reactivar
+                      </button>
+                      <button
+                        className='btn btn-danger'
+                        onClick={() =>
+                          handleHardDelete(banner._id, banner.status)
+                        }
+                      >
+                        Eliminar
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -407,6 +476,26 @@ const BannersPage = () => {
       <button className='btn btn-success my-3' onClick={() => uploadBanner()}>
         Añadir banner
       </button>
+
+      <Modal
+        show={savedOrder}
+        onHide={handleCloseSavedOrder}
+        className='align-self-center'
+        centered
+      >
+        <Modal.Body className='rounded'>
+          <h2 className='text-center text-success'>Orden guardado</h2>
+          <p className='text-center'>
+            El orden de los banners se ha guardado correctamente.
+          </p>
+
+          <div className='text-center mt-4'>
+            <Button variant='success' onClick={reloadPage}>
+              Cerrar
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
 
       <Modal
         show={showModal}
@@ -466,6 +555,26 @@ const BannersPage = () => {
         </Modal.Footer>
       </Modal>
 
+      <Modal
+        show={deleteModal}
+        onHide={handleCloseDeleteModal}
+        className='align-self-center'
+        centered
+      >
+        <Modal.Body className='rounded'>
+          <h2 className='text-center text-success'>Banner eliminado</h2>
+          <p className='text-center'>
+            El banner ha sido eliminado correctamente.
+          </p>
+
+          <div className='text-center mt-4'>
+            <Button variant='success' onClick={reloadPage}>
+              Cerrar
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
+
       <Modal show={showRestoreModal} onHide={handleCloseRestoreModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>Reactivar Banner</Modal.Title>
@@ -502,6 +611,7 @@ const BannersPage = () => {
           </div>
         </Modal.Body>
       </Modal>
+
       <Modal
         show={showBannerModal}
         onHide={handleCloseBannerModal}
@@ -520,20 +630,18 @@ const BannersPage = () => {
             <Dropdown.Item eventKey='categoría'>Categoría</Dropdown.Item>
             <Dropdown.Item eventKey='temporada'>Temporada</Dropdown.Item>
           </DropdownButton>
-          {destinationType && (
-            <DropdownButton
-              id='dropdown-destination-name'
-              title={destinationName || 'Selecciona nombre'}
-              onSelect={handleDestinationNameSelect}
-              variant='light border border-2'
-            >
-              {getOptionsByType().map((option, index) => (
-                <Dropdown.Item key={index} eventKey={option}>
-                  {option}
-                </Dropdown.Item>
-              ))}
-            </DropdownButton>
-          )}
+          <DropdownButton
+            id='dropdown-destination-name'
+            title={destinationName || 'Selecciona nombre'}
+            onSelect={handleDestinationNameSelect}
+            variant='light border border-2'
+          >
+            {getOptionsByType().map((option, index) => (
+              <Dropdown.Item key={index} eventKey={option}>
+                {option}
+              </Dropdown.Item>
+            ))}
+          </DropdownButton>
           <input
             type='file'
             accept='image/*'
@@ -550,6 +658,24 @@ const BannersPage = () => {
               Guardar
             </Button>
             <Button variant='danger' onClick={handleCloseBannerModal}>
+              Cerrar
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
+
+      <Modal
+        show={showUploadBanner}
+        onHide={handleCloseUploadBanner}
+        className='align-self-center'
+        centered
+      >
+        <Modal.Body className='rounded'>
+          <h2 className='text-center text-success'>Banner añadido</h2>
+          <p className='text-center'>El banner se ha añadido correctamente.</p>
+
+          <div className='text-center mt-4'>
+            <Button variant='success' onClick={reloadPage}>
               Cerrar
             </Button>
           </div>

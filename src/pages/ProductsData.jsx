@@ -203,7 +203,7 @@ const ProductsData = () => {
       </td>
       <td>{item.status}</td>
       <td className='d-none d-md-table-cell'>{item.category}</td>
-      <td className='d-none d-md-table-cell'>$ 120</td>
+      <td className='d-none d-md-table-cell'>$ {item.price[0]?.price}</td>
       <td className='d-none d-sm-table-cell'>
         {new Date(item.updatedAt).toLocaleDateString()}
       </td>
