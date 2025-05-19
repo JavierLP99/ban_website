@@ -275,10 +275,10 @@ const BannersPage = () => {
   const handleEditBanner = async () => {
     console.log(bannerToEdit)
     if (!bannerToEdit || !bannerToEdit._id) return
-      if (!destinationType || !destinationName) {
-    alert('Por favor, completa todos los campos.')
-    return
-  }
+    if (!destinationType || !destinationName) {
+      alert('Por favor, completa todos los campos.')
+      return
+    }
     try {
       await axios.put(
         `https://banannylandapp.onrender.com/banners/${bannerToEdit._id}`,
@@ -317,6 +317,28 @@ const BannersPage = () => {
       .catch(error => console.error('Error al obtener temporadas:', error))
   }, [])
 
+  const moveBannerUp = index => {
+    if (index === 0) return
+
+    const newBanners = [...banners]
+    ;[newBanners[index - 1], newBanners[index]] = [
+      newBanners[index],
+      newBanners[index - 1]
+    ]
+    setBanners(newBanners)
+  }
+
+  const moveBannerDown = index => {
+    if (index === banners.length - 1) return
+
+    const newBanners = [...banners]
+    ;[newBanners[index + 1], newBanners[index]] = [
+      newBanners[index],
+      newBanners[index + 1]
+    ]
+    setBanners(newBanners)
+  }
+
   return (
     <div className='container py-4'>
       <h2>Administrar Banners</h2>
@@ -327,7 +349,7 @@ const BannersPage = () => {
           .map((banner, index) => (
             <div
               key={banner._id}
-              className={`card mx-auto col-9 ${
+              className={`card mx-lg-auto col-lg-9 ${
                 index === draggedBanner ? 'dragging' : ''
               } ${index === dragOverIndex ? 'drag-over' : ''}`}
               draggable
@@ -354,8 +376,8 @@ const BannersPage = () => {
                     className='card-img object-fit-cover w-100'
                   />
                 </div>
-                <div className='my-auto col-md-4'>
-                  <div className='card-body'>
+                <div className='my-auto col-md-4 p-3 pt-0 ps-lg-0'>
+                  <div className='card-body p-0'>
                     <p className='mb-1'>
                       <strong>Ruta:</strong> {banner.path}
                     </p>
@@ -363,15 +385,15 @@ const BannersPage = () => {
                       <strong>Status:</strong> {banner.status}
                     </p>
 
-                    <div className='d-flex justify-content-center gap-1'>
+                    <div className='d-flex justify-content-between justify-content-lg-center gap-1'>
                       <button
-                        className='btn btn-success'
+                        className='btn btn-outline-success'
                         onClick={() => handleOpenBanner(banner)}
                       >
                         Modificar
                       </button>
                       <button
-                        className='btn btn-secondary'
+                        className='btn btn-outline-primary'
                         onClick={() =>
                           handleDeactivate(banner._id, banner.status)
                         }
@@ -379,13 +401,25 @@ const BannersPage = () => {
                         Desactivar
                       </button>
                       <button
-                        className='btn btn-danger'
+                        className='btn btn-outline-danger'
                         onClick={() =>
                           handleHardDelete(banner._id, banner.status)
                         }
                       >
                         Eliminar
                       </button>
+                    </div>
+                    <div className='d-flex d-lg-none justify-content-center gap-2 pt-2'>
+                      <i
+                        className='bi bi-arrow-up-square fs-4 text-primary'
+                        onClick={() => moveBannerUp(index)}
+                        disabled={index === 0}
+                      ></i>
+                      <i
+                        className='bi bi-arrow-down-square fs-4 text-primary'
+                        onClick={() => moveBannerDown(index)}
+                        disabled={index === banners.length - 1}
+                      ></i>
                     </div>
                   </div>
                 </div>
@@ -402,17 +436,20 @@ const BannersPage = () => {
         {banners
           .filter(banner => banner.status == 'Invalida')
           .map(banner => (
-            <div key={banner._id} className='card mx-auto col-9'>
+            <div key={banner._id} className='card mx-lg-auto col-lg-9'>
               <div className='row mx-0'>
                 <div className='d-flex align-items-center p-3 col-md-8'>
                   <img
-                    src={getResizedCloudinaryUrl(banner.image, 'e_grayscale,c_fill,w_1919,h_718,g_auto')}
+                    src={getResizedCloudinaryUrl(
+                      banner.image,
+                      'e_grayscale,c_fill,w_1919,h_718,g_auto'
+                    )}
                     alt='Banner'
                     className='card-img object-fit-cover w-100'
                   />
                 </div>
-                <div className='my-auto col-md-4'>
-                  <div className='card-body'>
+                <div className='my-auto col-md-4 p-3 pt-0 ps-lg-0'>
+                  <div className='card-body p-0'>
                     <p className='mb-1'>
                       <strong>Ruta:</strong> {banner.path}
                     </p>
@@ -420,15 +457,15 @@ const BannersPage = () => {
                       <strong>Status:</strong> {banner.status}
                     </p>
 
-                    <div className='d-flex justify-content-center'>
+                    <div className='d-flex gap-2'>
                       <button
-                        className='btn btn-success'
+                        className='btn btn-outline-success'
                         onClick={() => handleRestore(banner._id, banner.status)}
                       >
                         Reactivar
                       </button>
                       <button
-                        className='btn btn-danger'
+                        className='btn btn-outline-danger'
                         onClick={() =>
                           handleHardDelete(banner._id, banner.status)
                         }
