@@ -183,6 +183,7 @@ const BannersPage = () => {
       )
 
       setImages(uploadedImages)
+      setSelectedImage(uploadedImages[0])
     } catch {
       setError('Error cargando imagen.')
     } finally {
@@ -230,7 +231,7 @@ const BannersPage = () => {
       }
       case 'temporada': {
         const season = seasons.find(s => s.name === name)
-        return season ? `/seasons/${encodeURIComponent(season.slug)}` : ''
+        return season ? `/seasons/${encodeURIComponent(season.name)}` : ''
       }
       default:
         return ''
@@ -275,10 +276,6 @@ const BannersPage = () => {
   const handleEditBanner = async () => {
     console.log(bannerToEdit)
     if (!bannerToEdit || !bannerToEdit._id) return
-    if (!destinationType || !destinationName) {
-      alert('Por favor, completa todos los campos.')
-      return
-    }
     try {
       await axios.put(
         `https://banannylandapp.onrender.com/banners/${bannerToEdit._id}`,
@@ -296,6 +293,7 @@ const BannersPage = () => {
     setDestinationName('')
     setPath('')
     setSelectedImage(null)
+    setTimeout(() => reloadPage(), 3000)
   }
 
   useEffect(() => {
@@ -349,7 +347,7 @@ const BannersPage = () => {
           .map((banner, index) => (
             <div
               key={banner._id}
-              className={`card mx-lg-auto col-lg-9 ${
+              className={`card mx-lg-auto col-lg-10 ${
                 index === draggedBanner ? 'dragging' : ''
               } ${index === dragOverIndex ? 'drag-over' : ''}`}
               draggable
@@ -366,7 +364,7 @@ const BannersPage = () => {
               }}
             >
               <div className='row mx-0'>
-                <div className='d-flex align-items-center p-3 col-md-8'>
+                <div className='d-flex flex-column justify-content-center align-items-center p-3 col-md-7 col-xl-8'>
                   <img
                     src={getResizedCloudinaryUrl(
                       banner.image,
@@ -375,8 +373,20 @@ const BannersPage = () => {
                     alt='Banner'
                     className='card-img object-fit-cover w-100'
                   />
+                  <div className='d-none d-md-flex d-xl-none justify-content-center gap-2 pt-2'>
+                    <i
+                      className='bi bi-arrow-up-square fs-4 text-primary'
+                      onClick={() => moveBannerUp(index)}
+                      disabled={index === 0}
+                    ></i>
+                    <i
+                      className='bi bi-arrow-down-square fs-4 text-primary'
+                      onClick={() => moveBannerDown(index)}
+                      disabled={index === banners.length - 1}
+                    ></i>
+                  </div>
                 </div>
-                <div className='my-auto col-md-4 p-3 pt-0 ps-lg-0'>
+                <div className='d-flex align-items-center p-3 pt-0 pt-md-3 ps-lg-0 col-md-5 col-xl-4'>
                   <div className='card-body p-0'>
                     <p className='mb-1'>
                       <strong>Ruta:</strong> {banner.path}
@@ -385,9 +395,9 @@ const BannersPage = () => {
                       <strong>Status:</strong> {banner.status}
                     </p>
 
-                    <div className='d-flex justify-content-between justify-content-lg-center gap-1'>
+                    <div className='d-flex d-md-block d-lg-flex justify-content-evenly justify-content-lg-start gap-2'>
                       <button
-                        className='btn btn-outline-success'
+                        className='btn btn-outline-success me-md-2 m-lg-0'
                         onClick={() => handleOpenBanner(banner)}
                       >
                         Modificar
@@ -401,7 +411,7 @@ const BannersPage = () => {
                         Desactivar
                       </button>
                       <button
-                        className='btn btn-outline-danger'
+                        className='btn btn-outline-danger mt-md-2 mt-lg-0'
                         onClick={() =>
                           handleHardDelete(banner._id, banner.status)
                         }
@@ -409,7 +419,7 @@ const BannersPage = () => {
                         Eliminar
                       </button>
                     </div>
-                    <div className='d-flex d-lg-none justify-content-center gap-2 pt-2'>
+                    <div className='d-flex d-md-none justify-content-center gap-2 pt-2'>
                       <i
                         className='bi bi-arrow-up-square fs-4 text-primary'
                         onClick={() => moveBannerUp(index)}
@@ -436,9 +446,9 @@ const BannersPage = () => {
         {banners
           .filter(banner => banner.status == 'Invalida')
           .map(banner => (
-            <div key={banner._id} className='card mx-lg-auto col-lg-9'>
+            <div key={banner._id} className='card mx-lg-auto col-lg-10'>
               <div className='row mx-0'>
-                <div className='d-flex align-items-center p-3 col-md-8'>
+                <div className='d-flex flex-column justify-content-center align-items-center p-3 col-md-7 col-xl-8'>
                   <img
                     src={getResizedCloudinaryUrl(
                       banner.image,
@@ -448,7 +458,7 @@ const BannersPage = () => {
                     className='card-img object-fit-cover w-100'
                   />
                 </div>
-                <div className='my-auto col-md-4 p-3 pt-0 ps-lg-0'>
+                <div className='d-flex align-items-center p-3 pt-0 pt-md-3 ps-lg-0 col-md-5 col-xl-4'>
                   <div className='card-body p-0'>
                     <p className='mb-1'>
                       <strong>Ruta:</strong> {banner.path}
