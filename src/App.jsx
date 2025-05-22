@@ -12,6 +12,7 @@ const cognitoAuthConfig = {
   scope: "phone openid email",
 };
 
+console.log(cognitoAuthConfig)
 function App () {
   const updateUrl = url => {
     const newHeight = window.innerHeight

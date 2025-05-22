@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import './NewProducts.css' // Assuming external CSS file for styling
+import ProductList from '../ProductList'
 
 const NewProducts = () => {
   const [products, setProducts] = useState([])
@@ -57,7 +58,7 @@ const NewProducts = () => {
 
     return (
       <a
-        href={`/producto/${name}`}
+        href={`/producto/${url}`}
         className='card-wrap'
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
@@ -108,7 +109,7 @@ const NewProducts = () => {
               <Card
                 image={product.images[0]}
                 name={product.name}
-                url={product.url}
+                url={product.slug}
                 description={product.description}
               />
             </div>
@@ -118,6 +119,8 @@ const NewProducts = () => {
           Ver todos los productos
         </button>
       </div>
+
+                <ProductList products={products} />
     </section>
   )
 }
