@@ -23,6 +23,7 @@ const Banner = () => {
   return (
     <div className='position-relative overflow-hidden'>
       <Carousel
+        id='Bannercarousel'
         className='z-0 d-flex position-relative w-100 top-0 start-0'
         style={{ gridColumn: '1 / 1', gridRow: '1 / 1' }}
         fade
@@ -43,6 +44,30 @@ const Banner = () => {
                   objectFit: 'cover'
                 }}
               />
+              <button
+                className='carousel-control-prev justify-content-start'
+                type='button'
+                data-bs-target='#Bannercarousel'
+                data-bs-slide='prev'
+              >
+                <span
+                  className='carousel-control-prev-icon'
+                  aria-hidden='true'
+                />
+                <span className='visually-hidden'>Previous</span>
+              </button>
+              <button
+                className='carousel-control-next justify-content-end'
+                type='button'
+                data-bs-target='#Bannercarousel'
+                data-bs-slide='next'
+              >
+                <span
+                  className='carousel-control-next-icon'
+                  aria-hidden='true'
+                />
+                <span className='visually-hidden'>Next</span>
+              </button>
             </a>
           </Carousel.Item>
         ))}

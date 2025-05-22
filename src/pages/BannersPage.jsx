@@ -317,7 +317,7 @@ const BannersPage = () => {
 
   const moveBannerUp = index => {
     if (index === 0) return
-
+    console.log(index)
     const newBanners = [...banners]
     ;[newBanners[index - 1], newBanners[index]] = [
       newBanners[index],
@@ -328,7 +328,7 @@ const BannersPage = () => {
 
   const moveBannerDown = index => {
     if (index === banners.length - 1) return
-
+    console.log(index)
     const newBanners = [...banners]
     ;[newBanners[index + 1], newBanners[index]] = [
       newBanners[index],
