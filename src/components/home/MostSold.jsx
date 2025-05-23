@@ -64,7 +64,7 @@ const MostSold = () => {
     <div key={item.id} className='row justify-content-center p-2 mx-0 mb-4 col-11 col-lg-3'>
       <div className='d-flex justify-content-center rounded-4 shadow-lg lights px-0 py-2 col-8 col-lg-12'>
         <div className='card rounded-4 shadow-lg col-10 col-lg-11'>
-          <a href={`/products/${item.slug}`}>
+          <a href={`/producto/${item.slug}`}>
             <div className='ratio ratio-1x1'>
               <div className='d-flex justify-content-center align-items-center'>
                 <img
