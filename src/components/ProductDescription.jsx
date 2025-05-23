@@ -30,7 +30,7 @@ const ProductDescription = ({ productName }) => {
 
         const initialSelections = {};
 
-        product.customizationOptions.forEach(option => {
+        fetchedProduct.customizationOptions.forEach(option => {
           if (option.options.length > 0) {
             initialSelections[option.name] = option.options[0].trim();
           }
@@ -143,25 +143,38 @@ const ProductDescription = ({ productName }) => {
         <div className='col-md-6 pt-3'>
           <h2 className='mb-3'>{product.name}</h2>
           <div className='mb-3'>
-            <strong>Tags:</strong>
-            {product.tags.map((tag, index) => (
-              <button key={index} className='btn btn-secondary p-1 mx-2'>
-                {tag}
-              </button>
-            ))}
-          </div>
+  <strong>Tags:</strong>
+  {product.tags.map((tag, index) => (
+    <a
+      key={index}
+      href={`/search?tags=${encodeURIComponent(tag)}`}
+      className='btn btn-secondary p-1 mx-2'
+    >
+      {tag}
+    </a>
+  ))}
+</div>
+
           <div className='mb-3'>
-            <strong>Temporada:</strong>
-            {product.seasons.map((season, index) => (
-              <button key={index} className='btn btn-primary p-1 mx-2'>
-                {season}
-              </button>
-            ))}
-            <strong>Categoría:</strong>
-            <button className='btn btn-primary p-1 mx-2'>
-              {product.category}
-            </button>
-          </div>
+  <strong>Temporada:</strong>
+  {product.seasons.map((season, index) => (
+    <a
+      key={index}
+      href={`/search?season=${encodeURIComponent(season)}`}
+      className='btn btn-primary p-1 mx-2'
+    >
+      {season}
+    </a>
+  ))}
+  <strong>Categoría:</strong>
+  <a
+    href={`/search?category=${encodeURIComponent(product.category)}`}
+    className='btn btn-primary p-1 mx-2'
+  >
+    {product.category}
+  </a>
+</div>
+
 
           <div className='mb-3'>
             <strong>Precios:</strong>
