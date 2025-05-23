@@ -120,7 +120,6 @@ const NewProducts = () => {
         </button>
       </div>
 
-                <ProductList products={products} />
     </section>
   )
 }
