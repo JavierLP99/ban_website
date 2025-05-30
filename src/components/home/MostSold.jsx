@@ -65,8 +65,8 @@ const MostSold = () => {
       key={item.id}
       className='mb-4 col-11 col-sm-8 col-md-6 col-lg-4 col-xl-3'
     >
-      <div className='d-flex rounded-4 shadow-lg lights h-100 p-3'>
-        <div className='card rounded-4 shadow-lg w-100'>
+      <div className='d-flex rounded-4 lights h-100 p-3'>
+        <div className='card rounded-4 w-100'>
           <a href={`/producto/${item.slug}`}>
             <div className='ratio ratio-1x1'>
               <div className='d-flex justify-content-center align-items-center'>
@@ -77,10 +77,12 @@ const MostSold = () => {
                 />
               </div>
             </div>
-            <div className='ratio ratio-21x9'>
+            <div className='ratio ratio-21x9 text-dark'>
+              <div className='d-flex align-items-center'>
               <div className='card-body d-flex flex-column py-2'>
-                <p className='card-title'>{item.name}</p>
+                <h6 className='card-title'>{item.name}</h6>
                 <p className='card-subtitle'>$ {item.referencePrice}</p>
+              </div>
               </div>
             </div>
           </a>
