@@ -26,7 +26,7 @@ const MostSold = () => {
     //   })
     //   .catch(error => console.error('Error fetching products:', error))
   }, [])
-/*
+  /*
   useEffect(() => {
     fetch('/products.json') // Adjust the path as needed
       .then(response => response.json())
@@ -60,10 +60,13 @@ const MostSold = () => {
     )
   }
 
-  const card = (item) => (
-    <div key={item.id} className='row justify-content-center p-2 mx-0 mb-4 col-11 col-lg-3'>
-      <div className='d-flex justify-content-center rounded-4 shadow-lg lights px-0 py-2 col-8 col-lg-12'>
-        <div className='card rounded-4 shadow-lg col-10 col-lg-11'>
+  const card = item => (
+    <div
+      key={item.id}
+      className='mb-4 col-11 col-sm-8 col-md-6 col-lg-4 col-xl-3'
+    >
+      <div className='d-flex rounded-4 lights h-100 p-3'>
+        <div className='card rounded-4 w-100'>
           <a href={`/producto/${item.slug}`}>
             <div className='ratio ratio-1x1'>
               <div className='d-flex justify-content-center align-items-center'>
@@ -74,10 +77,12 @@ const MostSold = () => {
                 />
               </div>
             </div>
-            <div className='ratio ratio-21x9'>
+            <div className='ratio ratio-21x9 text-dark'>
+              <div className='d-flex align-items-center'>
               <div className='card-body d-flex flex-column py-2'>
-                <p className='card-title'>{item.name}</p>
-                <p className='card-subtitle'>{item.referencePrice}</p>
+                <h6 className='card-title'>{item.name}</h6>
+                <p className='card-subtitle'>$ {item.referencePrice}</p>
+              </div>
               </div>
             </div>
           </a>
@@ -91,26 +96,26 @@ const MostSold = () => {
       <div className='container text-center d-flex flex-column align-items-center'>
         <h2 className='fw-bold mb-3'>Los más vendidos</h2>
         <div className='rainbow-divider mb-3'></div>
-      </div>
-      <div className='row justify-content-center'>
-        <p className='text-justify col-10 col-5'>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
-        </p>
-      </div>
-      <div className='d-flex justify-content-center'>
-        <a href='#' className='btn btn-light btn-outline-dark rounded-5'>
-          Ver todos los productos
-        </a>
-      </div>
-      <div className='row justify-content-center mx-auto mt-4 col-12 col-lg-8'>
-        {/*{content.map((item, index) => card(item, index))}*/}
-        {content.map((item) => card(item))}
+        <div className='row justify-content-center'>
+          <p className='text-justify col-10 col-5'>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat. Duis aute irure dolor in
+            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+            culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+        </div>
+        <div className='d-flex justify-content-center mb-5'>
+          <a href='/search' className='btn btn-light btn-outline-dark rounded-5'>
+            Ver todos los productos
+          </a>
+        </div>
+        <div className='row justify-content-center col-12'>
+          {/*{content.map((item, index) => card(item, index))}*/}
+          {content.map(item => card(item))}
+        </div>
       </div>
     </div>
   )

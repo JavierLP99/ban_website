@@ -58,74 +58,76 @@ const Contact = () => {
   return (
     <div className='py-5'>
       <div className='container text-center d-flex flex-column align-items-center'>
-        <h2 className='fw-bold fs-5 mb-3 col-6'>{content.title}</h2>
+        <h2 className='fw-bold mb-3'>{content.title}</h2>
         <div className='rainbow-divider mb-3'></div>
-      </div>
-      <div className='row justify-content-center'>
-        <p className='text-justify text-center col-5'>{content.description}</p>
-      </div>
-      <div className='contact-container'>
-        <div className='row mx-auto col-5'>
-          <form
-            onSubmit={handleSubmit(whenSubmit)}
-            ref={form}
-            className='d-block'
-            name='contact'
-          >
-            <div className='d-flex flex-column col-12'>
-              <label htmlFor='email'>Correo</label>
-              <input
-                type='text'
-                name='email'
-                placeholder='correo@mail.com'
-                id='email'
-                {...register('email')}
-                className='my-2 p-2 border border-2'
-              />
-              <p className='text-warning text-center'>
-                {errors.email?.message}
-              </p>
-            </div>
+        <div className='row justify-content-center'>
+          <p className='text-justify text-center col-10'>
+            {content.description}
+          </p>
+        </div>
+        <div className='col-12 col-md-10 col-lg-8 col-xl-6'>
+          <div className='row mx-auto col-12'>
+            <form
+              onSubmit={handleSubmit(whenSubmit)}
+              ref={form}
+              className='d-block'
+              name='contact'
+            >
+              <div className='d-flex flex-column col-12'>
+                <label htmlFor='email'>Correo</label>
+                <input
+                  type='text'
+                  name='email'
+                  placeholder='correo@mail.com'
+                  id='email'
+                  {...register('email')}
+                  className='my-2 p-2 border border-2'
+                />
+                <p className='text-warning text-center'>
+                  {errors.email?.message}
+                </p>
+              </div>
 
-            <div className='d-flex flex-column col-12'>
-              <label htmlFor='phone'>Teléfono (Opcional)</label>
-              <input
-                type='text'
-                name='phone'
-                placeholder='55 1234 5678'
-                id='phone'
-                {...register('phone')}
-                className='my-2 p-2 border border-2'
-              />
-              <p className='text-warning text-center'>
-                {errors.phone?.message}
-              </p>
-            </div>
+              <div className='d-flex flex-column col-12'>
+                <label htmlFor='phone'>Teléfono (Opcional)</label>
+                <input
+                  type='text'
+                  name='phone'
+                  placeholder='55 1234 5678'
+                  id='phone'
+                  {...register('phone')}
+                  className='my-2 p-2 border border-2'
+                />
+                <p className='text-warning text-center'>
+                  {errors.phone?.message}
+                </p>
+              </div>
 
-            <div className='d-flex flex-column col-12'>
-              <label htmlFor='message'>Mensaje</label>
-              <textarea
-                name='message'
-                placeholder='Escribe tu mensaje'
-                id='message'
-                {...register('message')}
-                className='my-2 p-2 border border-2'
-                rows='3'
-              />
-              <p className='text-warning text-center'>
-                {errors.message?.message}
-              </p>
-            </div>
+              <div className='d-flex flex-column col-12'>
+                <label htmlFor='message'>Mensaje</label>
+                <textarea
+                  name='message'
+                  placeholder='Escribe tu mensaje'
+                  id='message'
+                  {...register('message')}
+                  className='my-2 p-2 border border-2'
+                  rows='3'
+                />
+                <p className='text-warning text-center'>
+                  {errors.message?.message}
+                </p>
+              </div>
 
-            <div className='text-center'>
-              <button
-                type='submit'
-                className='btn btn-primary rounded-pill text-light my-3'
-              >
-                Enviar
-              </button>
-            </div>
-          </form>
+              <div className='text-center'>
+                <button
+                  type='submit'
+                  className='btn btn-primary rounded-pill text-light'
+                >
+                  Enviar
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
 
