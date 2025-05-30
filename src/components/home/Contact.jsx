@@ -58,14 +58,13 @@ const Contact = () => {
   return (
     <div className='py-5'>
       <div className='container text-center d-flex flex-column align-items-center'>
-        <h2 className='fw-bold fs-5 mb-3 col-6'>{content.title}</h2>
+        <h2 className='fw-bold mb-3'>{content.title}</h2>
         <div className='rainbow-divider mb-3'></div>
-      </div>
-      <div className='row justify-content-center'>
-        <p className='text-justify text-center col-5'>{content.description}</p>
+              <div className='row justify-content-center'>
+        <p className='text-justify text-center col-10'>{content.description}</p>
       </div>
       <div className='contact-container'>
-        <div className='row mx-auto col-5'>
+        <div className='row mx-auto col-12'>
           <form
             onSubmit={handleSubmit(whenSubmit)}
             ref={form}
@@ -120,13 +119,14 @@ const Contact = () => {
             <div className='text-center'>
               <button
                 type='submit'
-                className='btn btn-primary rounded-pill text-light my-3'
+                className='btn btn-primary rounded-pill text-light'
               >
                 Enviar
               </button>
             </div>
           </form>
         </div>
+      </div>
       </div>
 
       <Modal
