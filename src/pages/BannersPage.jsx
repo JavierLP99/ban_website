@@ -221,7 +221,7 @@ const BannersPage = () => {
     switch (type) {
       case 'producto': {
         const product = products.find(p => p.name === name)
-        return product ? `/products/${encodeURIComponent(product.slug)}` : ''
+        return product ? `/producto/${encodeURIComponent(product.slug)}` : ''
       }
       case 'categoría': {
         const category = categories.find(c => c.name === name)
