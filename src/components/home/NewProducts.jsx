@@ -115,9 +115,11 @@ const NewProducts = () => {
             </div>
           ))}
         </div>
-        <button className='btn btn-dark rounded-pill px-4 py-2 mt-4'>
+
+
+        <a href='/search' className='btn btn-dark rounded-5'>
           Ver todos los productos
-        </button>
+        </a>
       </div>
 
     </section>
