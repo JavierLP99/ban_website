@@ -5,15 +5,16 @@ import emailjs from '@emailjs/browser'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
-const Contact = () => {
   const schema = yup
     .object({
+      name: yup.string().required('Ingesa tu nombre'),
       phone: yup.string(),
       email: yup.string().required('Ingesa un email para contactarte'),
       message: yup.string().required('Escribe tu mensaje')
     })
     .required()
-
+    
+const Contact = () => {
   const [showModal, setShowModal] = useState(false)
   const form = useRef()
   const {
@@ -27,9 +28,7 @@ const Contact = () => {
 
   const whenSubmit = data => {
     emailjs
-      .sendForm('contact_service', 'contact_form', form.current, {
-        publicKey: 'ZbCsu0DS45Vozgnve'
-      })
+      .sendForm('service_d6s5ar5', 'template_9ffmfaw', form.current, 'XRcANWSPimH7Fxmnv')
       .then(
         () => {
           console.log('SUCCESS!')
@@ -39,7 +38,7 @@ const Contact = () => {
         }
       )
 
-    const result = { message: '' }
+    const result = { email: '', phone: '', message: '' }
     reset(result)
     setShowModal(true)
   }
@@ -73,6 +72,21 @@ const Contact = () => {
               className='d-block'
               name='contact'
             >
+              <div className='d-flex flex-column col-12'>
+                <label htmlFor='name'>Nombre</label>
+                <input
+                  type='text'
+                  name='name'
+                  placeholder='nombre'
+                  id='name'
+                  {...register('name')}
+                  className='my-2 p-2 border border-2'
+                />
+                <p className='text-warning text-center'>
+                  {errors.name?.message}
+                </p>
+              </div>
+
               <div className='d-flex flex-column col-12'>
                 <label htmlFor='email'>Correo</label>
                 <input

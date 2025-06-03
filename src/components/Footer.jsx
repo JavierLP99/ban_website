@@ -25,17 +25,18 @@ const Footer = () => {
   if (!content) return <div>Loading...</div>
 
   return (
-    <footer className='bg-light text-dark py-4'>
+    <footer className='bg-light text-dark py-5'>
       <div className='container'>
-        <div className='row align-items-center'>
-          <div className='row mt-4'>
+        <div className='justify-content-center align-items-center'>
+          <div className='row'>
             <div className='col-md-3'>
-              <img
-                src={ImportDrivePhoto(content.footer.logo, 250)}
-                alt='Logo'
-                className='img-fluid me-3'
-                style={{ maxWidth: '300px' }}
-              />
+              <a href='/'>
+                <img
+                  src={ImportDrivePhoto(content.footer.logo, 250)}
+                  alt='Logo'
+                  className='img-fluid me-3'
+                />
+              </a>
               <div className='d-flex justify-content-center'>
                 {content.socialMedia.map((social, index) => (
                   <a
@@ -86,17 +87,16 @@ const Footer = () => {
               <p>Suscríbete a nuestro newsletter</p>
               <form className='d-block' name='contact'>
                 <div className='row'>
-                <div className='col-8'>
-                  <input
-                    type='text'
-                    name='email'
-                    placeholder='correo@mail.com'
-                    id='email'
-                    className='my-2 p-2 border border-2'
-                  />
-
-                </div>
-                <div className='d-flex align-items-center col-4'>
+                  <div className='col-8 col-md-12 col-xl-9'>
+                    <input
+                      type='text'
+                      name='email'
+                      placeholder='correo@mail.com'
+                      id='email'
+                      className='my-2 p-2 border border-2 col-12'
+                    />
+                  </div>
+                  <div className='d-flex align-items-center col-4 col-xl-3'>
                     <button
                       type='submit'
                       className='btn btn-primary rounded-pill text-light'
@@ -105,7 +105,6 @@ const Footer = () => {
                     </button>
                   </div>
                 </div>
-
               </form>
               <p>Mándanos un mensaje</p>
               <p className='mb-1'>
