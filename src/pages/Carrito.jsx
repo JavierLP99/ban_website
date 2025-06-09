@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import axios from 'axios'
 import { getThumbnailUrl, handleImageError } from '../utils/tools.jsx'
+import { Modal, Button } from 'react-bootstrap'
+import emailjs from '@emailjs/browser'
 import PropTypes from 'prop-types'
 
 const ShoppingCart = () => {
@@ -8,6 +10,23 @@ const ShoppingCart = () => {
   const [products, setProducts] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [showModal, setShowModal] = useState(false)
+  const handleCloseModal = () => setShowModal(false)
+  const form = useRef()
+
+  const whenSubmit = data => {
+    emailjs
+      .sendForm('service_d6s5ar5', 'template_awatiom', form.current, 'XRcANWSPimH7Fxmnv')
+      .then(
+        () => {
+          console.log('SUCCESS!')
+        },
+        error => {
+          console.log('FAILED...', error.text)
+        }
+      )
+    setShowModal(true)
+  }
 
   // Function to determine price based on quantity
   const getPriceForQuantity = useCallback((priceTiers, quantity) => {
@@ -198,6 +217,7 @@ const ShoppingCart = () => {
         </div>
       ) : (
         <>
+        <form ref={form} onSubmit={whenSubmit}>
           <div className='row'>
             <div className='col-lg-8'>
               {groupedCartItems.map(group => {
@@ -388,7 +408,8 @@ const ShoppingCart = () => {
                     <span>Total:</span>
                     <span>${calculateTotal().toFixed(2)}</span>
                   </div>
-                  <button className='btn btn-primary w-100 mt-3'>
+                  <input type="hidden" name="subtotal" value={calculateTotal().toFixed(2)} />
+                  <button className='btn btn-primary w-100 mt-3' type="submit">
                     Realizar orden
                   </button>
                   <a
@@ -401,8 +422,26 @@ const ShoppingCart = () => {
               </div>
             </div>
           </div>
+          </form>
         </>
       )}
+            <Modal
+        show={showModal}
+        onHide={handleCloseModal}
+        className='align-self-center'
+        centered
+      >
+        <Modal.Body className='rounded'>
+          <h2 className='text-center'>¡Tu pedido se ha realizado con éxito!</h2>
+          <p className='text-center'>Revisa tu correo para ver la información de tu pedido</p>
+
+          <div className='text-center mt-4'>
+            <Button variant='dark' onClick={handleCloseModal}>
+              Cerrar
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   )
 }
