@@ -16,7 +16,12 @@ const ShoppingCart = () => {
 
   const whenSubmit = data => {
     emailjs
-      .sendForm('service_d6s5ar5', 'template_awatiom', form.current, 'XRcANWSPimH7Fxmnv')
+      .sendForm(
+        'service_d6s5ar5',
+        'template_awatiom',
+        form.current,
+        'XRcANWSPimH7Fxmnv'
+      )
       .then(
         () => {
           console.log('SUCCESS!')
@@ -217,215 +222,241 @@ const ShoppingCart = () => {
         </div>
       ) : (
         <>
-        <form ref={form} onSubmit={whenSubmit}>
-          <div className='row'>
-            <div className='col-lg-8'>
-              {groupedCartItems.map(group => {
-                const product = products.find(p => p._id === group.product)
-                if (!product) return null
+          <form ref={form} onSubmit={whenSubmit}>
+            <div className='row'>
+              <div className='col-lg-8'>
+                {groupedCartItems.map(group => {
+                  const product = products.find(p => p._id === group.product)
+                  if (!product) return null
 
-                const { selectedCustomizations, totalQuantity } = group
-                const displayImage = getCustomImage(
-                  product,
-                  selectedCustomizations
-                )
-                const unitPrice = getPriceForQuantity(
-                  product.price,
-                  totalQuantity
-                )
-                const subtotal = unitPrice * totalQuantity
+                  const { selectedCustomizations, totalQuantity } = group
+                  const displayImage = getCustomImage(
+                    product,
+                    selectedCustomizations
+                  )
+                  const unitPrice = getPriceForQuantity(
+                    product.price,
+                    totalQuantity
+                  )
+                  const subtotal = unitPrice * totalQuantity
 
-                // Get all available quantity tiers for this product
-                const quantityTiers = product.price || []
+                  // Get all available quantity tiers for this product
+                  const quantityTiers = product.price || []
 
-                return (
-                  <div
-                    key={`${product._id}-${JSON.stringify(
-                      selectedCustomizations
-                    )}`}
-                    className='card mb-3 bg-transparent border-0'
-                  >
-                    <hr />
-                    <div className='row g-0'>
-                      <div className='col-md-4'>
-                        <img
-                          src={getThumbnailUrl(displayImage)}
-                          className='img-fluid rounded-start'
-                          onError={handleImageError}
-                          alt={product.name}
-                          style={{ height: '200px', objectFit: 'cover' }}
-                        />
-                      </div>
-                      <div className='col-md-8'>
-                        <div className='card-body'>
-                          <div className='d-flex justify-content-between'>
-                            <h5 className='card-title'>{product.name}</h5>
-                            <button
-                              className='btn btn-outline-danger btn-sm'
-                              onClick={() =>
-                                handleRemove(
-                                  product._id,
-                                  selectedCustomizations
-                                )
-                              }
-                              aria-label={`Remove ${product.name} from cart`}
-                            >
-                              <i className='bi bi-trash'></i>
-                            </button>
-                          </div>
-                          <p className='card-text text-muted'>
-                            {product.description}
-                          </p>
-
-                          {/* Display price information */}
-                          <div className='mb-2'>
-                            <p className='mb-1'>
-                              <strong>Precio unitario:</strong> $
-                              {unitPrice.toFixed(2)}
-                              {quantityTiers.length > 1 && (
-                                <span className='text-muted ms-2'>
-                                  (
-                                  {totalQuantity <
-                                  parseInt(
-                                    quantityTiers[0].quantity.split('-')[0]
+                  return (
+                    <div
+                      key={`${product._id}-${JSON.stringify(
+                        selectedCustomizations
+                      )}`}
+                      className='card mb-3 bg-transparent border-0'
+                    >
+                      <hr />
+                      <div className='row g-0'>
+                        <div className='col-md-4'>
+                          <img
+                            src={getThumbnailUrl(displayImage)}
+                            className='img-fluid rounded-start'
+                            onError={handleImageError}
+                            alt={product.name}
+                            style={{ height: '200px', objectFit: 'cover' }}
+                          />
+                          <input
+                            type='hidden'
+                            name='name'
+                            value={product.name}
+                          />
+                          <input
+                            type='hidden'
+                            name='image'
+                            value={getThumbnailUrl(displayImage)}
+                          />
+                        </div>
+                        <div className='col-md-8'>
+                          <div className='card-body'>
+                            <div className='d-flex justify-content-between'>
+                              <h5 className='card-title'>{product.name}</h5>
+                              <button
+                                className='btn btn-outline-danger btn-sm'
+                                onClick={() =>
+                                  handleRemove(
+                                    product._id,
+                                    selectedCustomizations
                                   )
-                                    ? `Order ${
-                                        parseInt(
-                                          quantityTiers[0].quantity.split(
-                                            '-'
-                                          )[0]
-                                        ) - totalQuantity
-                                      } more for discount`
-                                    : `Mayoreo aplicado`}
-                                  )
-                                </span>
-                              )}
+                                }
+                                aria-label={`Remove ${product.name} from cart`}
+                              >
+                                <i className='bi bi-trash'></i>
+                              </button>
+                            </div>
+                            <p className='card-text text-muted'>
+                              {product.description}
                             </p>
-
-                            {/* Show quantity tiers if available */}
-                            {quantityTiers.length > 1 && (
-                              <div className='mt-2'>
-                                <small className='text-muted'>Precios:</small>
-                                <ul className='list-unstyled small'>
-                                  {quantityTiers.map((tier, index) => (
-                                    <li key={index}>
-                                      {tier.quantity} unidades: $
-                                      {tier.price.toFixed(2)} c/u
-                                      {totalQuantity >=
-                                        parseInt(tier.quantity.split('-')[0]) &&
-                                        (!tier.quantity.includes('-') ||
-                                          totalQuantity <=
-                                            parseInt(
-                                              tier.quantity.split('-')[1]
-                                            )) && (
-                                          <span className='badge bg-success ms-2'>
-                                            Ap licado
-                                          </span>
-                                        )}
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            )}
-                          </div>
-
-                          <div className='d-flex align-items-center mb-2'>
-                            <span className='me-2'>Cantidad:</span>
-                            <button
-                              className='btn btn-outline-secondary btn-sm'
-                              onClick={() =>
-                                updateQuantity(
-                                  product._id,
-                                  selectedCustomizations,
-                                  totalQuantity - 1
-                                )
-                              }
-                              disabled={totalQuantity <= 1}
-                            >
-                              -
-                            </button>
-                            <span className='mx-2'>{totalQuantity}</span>
-                            <button
-                              className='btn btn-outline-secondary btn-sm'
-                              onClick={() =>
-                                updateQuantity(
-                                  product._id,
-                                  selectedCustomizations,
-                                  totalQuantity + 1
-                                )
-                              }
-                            >
-                              +
-                            </button>
-                          </div>
-
-                          {selectedCustomizations &&
-                            Object.keys(selectedCustomizations).length > 0 && (
-                              <div className='mt-2'>
-                                <h6 className='mb-2'>Personalizacion:</h6>
-                                <ul className='list-unstyled'>
-                                  {Object.entries(selectedCustomizations).map(
-                                    ([key, val], i) => (
-                                      <li key={i}>
-                                        <small>
-                                          {key}: <strong>{val}</strong>
-                                        </small>
-                                      </li>
+                            {/* Display price information */}
+                            <div className='mb-2'>
+                              <p className='mb-1'>
+                                <strong>Precio unitario:</strong> $
+                                {unitPrice.toFixed(2)}
+                                {quantityTiers.length > 1 && (
+                                  <span className='text-muted ms-2'>
+                                    (
+                                    {totalQuantity <
+                                    parseInt(
+                                      quantityTiers[0].quantity.split('-')[0]
                                     )
-                                  )}
-                                </ul>
-                              </div>
-                            )}
+                                      ? `Order ${
+                                          parseInt(
+                                            quantityTiers[0].quantity.split(
+                                              '-'
+                                            )[0]
+                                          ) - totalQuantity
+                                        } more for discount`
+                                      : `Mayoreo aplicado`}
+                                    )
+                                  </span>
+                                )}
+                              </p>
 
-                          <p className='card-text mt-2'>
-                            <strong>Subtotal:</strong> ${subtotal.toFixed(2)}
-                          </p>
+                              {/* Show quantity tiers if available */}
+                              {quantityTiers.length > 1 && (
+                                <div className='mt-2'>
+                                  <small className='text-muted'>Precios:</small>
+                                  <ul className='list-unstyled small'>
+                                    {quantityTiers.map((tier, index) => (
+                                      <li key={index}>
+                                        {tier.quantity} unidades: $
+                                        {tier.price.toFixed(2)} c/u
+                                        {totalQuantity >=
+                                          parseInt(
+                                            tier.quantity.split('-')[0]
+                                          ) &&
+                                          (!tier.quantity.includes('-') ||
+                                            totalQuantity <=
+                                              parseInt(
+                                                tier.quantity.split('-')[1]
+                                              )) && (
+                                            <span className='badge bg-success ms-2'>
+                                              Ap licado
+                                            </span>
+                                          )}
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+                            </div>
+                            <div className='d-flex align-items-center mb-2'>
+                              <span className='me-2'>Cantidad:</span>
+                              <button
+                                className='btn btn-outline-secondary btn-sm'
+                                onClick={() =>
+                                  updateQuantity(
+                                    product._id,
+                                    selectedCustomizations,
+                                    totalQuantity - 1
+                                  )
+                                }
+                                disabled={totalQuantity <= 1}
+                              >
+                                -
+                              </button>
+                              <span className='mx-2'>{totalQuantity}</span>
+                              <button
+                                className='btn btn-outline-secondary btn-sm'
+                                onClick={() =>
+                                  updateQuantity(
+                                    product._id,
+                                    selectedCustomizations,
+                                    totalQuantity + 1
+                                  )
+                                }
+                              >
+                                +
+                              </button>
+                              <input
+                                type='hidden'
+                                name='quantity'
+                                value={totalQuantity}
+                              />
+                            </div>
+                            {selectedCustomizations &&
+                              Object.keys(selectedCustomizations).length >
+                                0 && (
+                                <div className='mt-2'>
+                                  <h6 className='mb-2'>Personalizacion:</h6>
+                                  <ul className='list-unstyled'>
+                                    {Object.entries(selectedCustomizations).map(
+                                      ([key, val], i) => (
+                                        <li key={i}>
+                                          <small>
+                                            {key}: <strong>{val}</strong>
+                                          </small>
+                                        </li>
+                                      )
+                                    )}
+                                  </ul>
+                                </div>
+                              )}
+                            <p className='card-text mt-2'>
+                              <strong>Subtotal:</strong> ${subtotal.toFixed(2)}
+                            </p>
+                            <input
+                              type='hidden'
+                              name='subtotal'
+                              value={subtotal.toFixed(2)}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )
-              })}
-            </div>
+                  )
+                })}
+              </div>
 
-            <div className='col-lg-4'>
-              <div className='card shadow'>
-                <div className='card-body'>
-                  <h5 className='card-title'>Resumen</h5>
-                  <hr />
-                  <div className='d-flex justify-content-between mb-2'>
-                    {/* <span>Subtotal ({totalItemsCount} items):</span> */}
-                    <span>Subtotal:</span>
+              <div className='col-lg-4'>
+                <div className='card shadow'>
+                  <div className='card-body'>
+                    <h5 className='card-title'>Resumen</h5>
+                    <hr />
+                    <div className='d-flex justify-content-between mb-2'>
+                      {/* <span>Subtotal ({totalItemsCount} items):</span> */}
+                      <span>Subtotal:</span>
 
-                    <span>${calculateTotal().toFixed(2)}</span>
+                      <span>${calculateTotal().toFixed(2)}</span>
+                    </div>
+                    <div className='d-flex justify-content-between mb-3'>
+                      <span>Envio:</span>
+                      <span className='text-success'>Gratis</span>
+                    </div>
+                    <hr />
+                    <div className='d-flex justify-content-between fw-bold fs-5'>
+                      <span>Total:</span>
+                      <span>${calculateTotal().toFixed(2)}</span>
+                    </div>
+                    <input
+                      type='hidden'
+                      name='total'
+                      value={calculateTotal().toFixed(2)}
+                    />
+                    <button
+                      className='btn btn-primary w-100 mt-3'
+                      type='submit'
+                    >
+                      Realizar orden
+                    </button>
+                    <a
+                      href='/products'
+                      className='btn btn-outline-info w-100 mt-2'
+                    >
+                      Seguir comprando
+                    </a>
                   </div>
-                  <div className='d-flex justify-content-between mb-3'>
-                    <span>Envio:</span>
-                    <span className='text-success'>Gratis</span>
-                  </div>
-                  <hr />
-                  <div className='d-flex justify-content-between fw-bold fs-5'>
-                    <span>Total:</span>
-                    <span>${calculateTotal().toFixed(2)}</span>
-                  </div>
-                  <input type="hidden" name="subtotal" value={calculateTotal().toFixed(2)} />
-                  <button className='btn btn-primary w-100 mt-3' type="submit">
-                    Realizar orden
-                  </button>
-                  <a
-                    href='/products'
-                    className='btn btn-outline-info w-100 mt-2'
-                  >
-                    Seguir comprando
-                  </a>
                 </div>
               </div>
             </div>
-          </div>
           </form>
         </>
       )}
-            <Modal
+      <Modal
         show={showModal}
         onHide={handleCloseModal}
         className='align-self-center'
@@ -433,7 +464,9 @@ const ShoppingCart = () => {
       >
         <Modal.Body className='rounded'>
           <h2 className='text-center'>¡Tu pedido se ha realizado con éxito!</h2>
-          <p className='text-center'>Revisa tu correo para ver la información de tu pedido</p>
+          <p className='text-center'>
+            Revisa tu correo para ver la información de tu pedido
+          </p>
 
           <div className='text-center mt-4'>
             <Button variant='dark' onClick={handleCloseModal}>
