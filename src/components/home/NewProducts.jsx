@@ -70,7 +70,7 @@ const NewProducts = () => {
             style={{ ...cardBgTransform, ...cardBgImage }}
           ></div>
           <div className='card-info'>
-            <h1>{name}</h1>
+            <h3>{name}</h3>
             <p>{description}</p>
           </div>
         </div>
@@ -94,10 +94,10 @@ const NewProducts = () => {
   return (
     <section className='py-5 new-products-section'>
       <div className='container text-center d-flex flex-column align-items-center justify-content-center'>
-        <h2 className='fw-bold mb-3'>Nuevos productos</h2>
+        <h2 className='fw-bold mb-3'>Últimas novedades en regalos personalizados</h2>
         <div className='rainbow-divider mb-3'></div>{' '}
         {/* Rainbow divider below the header */}
-        <p className='text-muted mb-5'>
+        <p className='mb-5'>
           Descubre nuestros últimos productos diseñados con pasión y calidad.
         </p>
         <div className='row justify-content-center w-100'>

@@ -60,7 +60,7 @@
     transform: translateY(0);
   }
   
-  .new-products-section .card-info h1 {
+  .new-products-section .card-info h3 {
     font-size: 24px;
     font-weight: 700;
     text-shadow: rgba(255, 255, 255, 0.5) 0 10px 10px;
@@ -88,3 +88,7 @@
     opacity: 1;
   }
   
+    .most-sold-products-section .card-body h3 {
+    font-size: 24px;
+    font-weight: 700;
+  }

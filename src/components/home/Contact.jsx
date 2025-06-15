@@ -5,15 +5,15 @@ import emailjs from '@emailjs/browser'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
-  const schema = yup
-    .object({
-      name: yup.string().required('Ingesa tu nombre'),
-      phone: yup.string(),
-      email: yup.string().required('Ingesa un email para contactarte'),
-      message: yup.string().required('Escribe tu mensaje')
-    })
-    .required()
-    
+const schema = yup
+  .object({
+    name: yup.string().required('Ingesa tu nombre'),
+    phone: yup.string(),
+    email: yup.string().required('Ingesa un email para contactarte'),
+    message: yup.string().required('Escribe tu mensaje')
+  })
+  .required()
+
 const Contact = () => {
   const [showModal, setShowModal] = useState(false)
   const form = useRef()
@@ -28,7 +28,12 @@ const Contact = () => {
 
   const whenSubmit = data => {
     emailjs
-      .sendForm('service_d6s5ar5', 'template_9ffmfaw', form.current, 'XRcANWSPimH7Fxmnv')
+      .sendForm(
+        'service_d6s5ar5',
+        'template_9ffmfaw',
+        form.current,
+        'XRcANWSPimH7Fxmnv'
+      )
       .then(
         () => {
           console.log('SUCCESS!')
@@ -60,9 +65,7 @@ const Contact = () => {
         <h2 className='fw-bold mb-3'>{content.title}</h2>
         <div className='rainbow-divider mb-3'></div>
         <div className='row justify-content-center'>
-          <p className='text-justify text-center col-10'>
-            {content.description}
-          </p>
+          <p className='text-justify col-10'>{content.description}</p>
         </div>
         <div className='col-12 col-md-10 col-lg-8 col-xl-6'>
           <div className='row mx-auto col-12'>
@@ -132,14 +135,12 @@ const Contact = () => {
                 </p>
               </div>
 
-              <div className='text-center'>
-                <button
-                  type='submit'
-                  className='btn btn-primary rounded-pill text-light'
-                >
-                  Enviar
-                </button>
-              </div>
+              <button
+                type='submit'
+                className='btn btn-primary rounded-pill text-light'
+              >
+                Enviar
+              </button>
             </form>
           </div>
         </div>
@@ -162,7 +163,6 @@ const Contact = () => {
           </div>
         </Modal.Body>
       </Modal>
-      <div className='row justify-content-center mx-auto mt-4 col-8'></div>
     </div>
   )
 }

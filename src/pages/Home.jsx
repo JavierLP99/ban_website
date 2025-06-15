@@ -5,13 +5,13 @@ import Categories from '../components/home/Categories'
 import NewProducts from '../components/home/NewProducts'
 const Home = () => {
   return (
-    <div>
+    <main>
       <Banner />
       <Categories />
       <NewProducts />
       <MostSold />
       <Contact />
-    </div>
+    </main>
   )
 }
 
