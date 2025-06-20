@@ -94,8 +94,10 @@ const NewProducts = () => {
   return (
     <section className='py-5 new-products-section'>
       <div className='container text-center d-flex flex-column align-items-center justify-content-center'>
-        <h2 className='fw-bold mb-3'>Últimas novedades en regalos personalizados</h2>
-        <div className='rainbow-divider mb-3'></div>{' '}
+          <div className="d-inline-block">
+    <h2 className="fw-bold mb-3">Novedades Banannyland</h2>
+    <div className="rainbow-divider mx-auto"></div>
+  </div>
         {/* Rainbow divider below the header */}
         <p className='mb-5'>
           Descubre nuestros últimos productos diseñados con pasión y calidad.

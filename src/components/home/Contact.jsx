@@ -62,8 +62,10 @@ const Contact = () => {
   return (
     <div className='py-5'>
       <div className='container text-center d-flex flex-column align-items-center'>
-        <h2 className='fw-bold mb-3'>{content.title}</h2>
-        <div className='rainbow-divider mb-3'></div>
+        <div className='d-inline-block'>
+          <h2 className='fw-bold mb-3'>¿Tienes alguna idea?</h2>
+          <div className='rainbow-divider mx-auto'></div>
+        </div>
         <div className='row justify-content-center'>
           <p className='text-justify col-10'>{content.description}</p>
         </div>

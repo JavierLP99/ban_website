@@ -648,7 +648,7 @@ const BannersPage = () => {
           </DropdownButton>
           <DropdownButton
             id='dropdown-destination-name'
-            title={destinationName || 'Selecciona nombre'}
+            title={destinationName || 'Selecciona opción'}
             onSelect={handleDestinationNameSelect}
             variant='light border border-2'
           >

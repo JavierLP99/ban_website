@@ -28,14 +28,14 @@ const ProductDescription = ({ productName }) => {
         const fetchedProduct = response.data.product // Assuming the API returns an array
         setProduct(fetchedProduct)
 
-        const initialSelections = {};
+        const initialSelections = {}
 
         fetchedProduct.customizationOptions.forEach(option => {
           if (option.options.length > 0) {
-            initialSelections[option.name] = option.options[0].trim();
+            initialSelections[option.name] = option.options[0].trim()
           }
-        });
-        setSelectedCustomizations(initialSelections);
+        })
+        setSelectedCustomizations(initialSelections)
       })
       .catch(error => console.error('Error loading product:', error))
   }, [productName])
@@ -54,7 +54,6 @@ const ProductDescription = ({ productName }) => {
       setLimits(limits)
     }
   }, [product])
-
 
   useEffect(() => {
     if (!product || !product.images.length) return
@@ -143,38 +142,37 @@ const ProductDescription = ({ productName }) => {
         <div className='col-md-6 pt-3'>
           <h2 className='mb-3'>{product.name}</h2>
           <div className='mb-3'>
-  <strong>Tags:</strong>
-  {product.tags.map((tag, index) => (
-    <a
-      key={index}
-      href={`/search?tags=${encodeURIComponent(tag)}`}
-      className='btn btn-secondary p-1 mx-2'
-    >
-      {tag}
-    </a>
-  ))}
-</div>
+            <strong>Tags:</strong>
+            {product.tags.map((tag, index) => (
+              <a
+                key={index}
+                href={`/search?tags=${encodeURIComponent(tag)}`}
+                className='btn btn-secondary p-1 mx-2'
+              >
+                {tag}
+              </a>
+            ))}
+          </div>
 
           <div className='mb-3'>
-  <strong>Temporada:</strong>
-  {product.seasons.map((season, index) => (
-    <a
-      key={index}
-      href={`/search?season=${encodeURIComponent(season)}`}
-      className='btn btn-primary p-1 mx-2'
-    >
-      {season}
-    </a>
-  ))}
-  <strong>Categoría:</strong>
-  <a
-    href={`/search?category=${encodeURIComponent(product.category)}`}
-    className='btn btn-primary p-1 mx-2'
-  >
-    {product.category}
-  </a>
-</div>
-
+            <strong>Temporada:</strong>
+            {product.seasons.map((season, index) => (
+              <a
+                key={index}
+                href={`/search?season=${encodeURIComponent(season)}`}
+                className='btn btn-primary p-1 mx-2'
+              >
+                {season}
+              </a>
+            ))}
+            <strong>Categoría:</strong>
+            <a
+              href={`/search?category=${encodeURIComponent(product.category)}`}
+              className='btn btn-primary p-1 mx-2'
+            >
+              {product.category}
+            </a>
+          </div>
 
           <div className='mb-3'>
             <strong>Precios:</strong>
@@ -281,7 +279,11 @@ const ProductDescription = ({ productName }) => {
             className='btn btn-primary btn-lg w-100'
             onClick={() => {
               let carrito = JSON.parse(localStorage.getItem('carrito')) || []
-              carrito.push({ product: product._id, quantity, selectedCustomizations})
+              carrito.push({
+                product: product._id,
+                quantity,
+                selectedCustomizations
+              })
               localStorage.setItem('carrito', JSON.stringify(carrito))
 
               setMessage('Producto agregado al carrito.')

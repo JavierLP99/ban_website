@@ -5,6 +5,10 @@ import { getResizedCloudinaryUrl } from '../../utils/tools'
 
 const Banner = () => {
   const [content, setContent] = useState([])
+  const [destinationType, setDestinationType] = useState('')
+  const [products, setProducts] = useState([])
+  const [categories, setCategories] = useState([])
+  const [seasons, setSeasons] = useState([])
 
   useEffect(() => {
     axios
@@ -22,6 +26,11 @@ const Banner = () => {
 
   return (
     <div className='position-relative overflow-hidden'>
+      <div className='p-4 text-center text-white bg-primary'>
+        <h1 className='fw-bold h3'>
+          Banannyland: regalos personalizados para ti
+        </h1>
+      </div>
       <Carousel
         id='Bannercarousel'
         className='z-0 d-flex position-relative w-100 top-0 start-0'
@@ -38,7 +47,7 @@ const Banner = () => {
                   banner.image,
                   'c_fill,w_1919,h_718,g_auto'
                 )}
-                alt=''
+                alt={banner.path.split('/')[2] || 'Banner'}
                 className='d-block w-100'
                 style={{
                   objectFit: 'cover'

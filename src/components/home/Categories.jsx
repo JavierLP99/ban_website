@@ -68,14 +68,10 @@ const Categories = () => {
 
   return (
     <section className='container text-center d-flex flex-column align-items-center justify-content-center my-4'>
-      <div className='rainbow-border p-4 text-center mb-5'>
-        <h1 className='fw-bold'>
-          Encuentra el regalo perfecto: productos personalizados creativos –
-          Banannyland
-        </h1>
+      <div className='d-inline-block'>
+        <h2 className='fw-bold mb-3'>Descubre por categoría</h2>
+        <div className='rainbow-divider mx-auto'></div>
       </div>
-      <h2 className='fw-bold mb-3'>Categorías de productos personalizados</h2>
-      <div className='rainbow-divider mb-3'></div>
       {/* Rainbow divider below the header */}
       <Carousel
         interval={null}
