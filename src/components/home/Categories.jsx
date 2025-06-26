@@ -1,34 +1,13 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react'
 import { Carousel } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
 
-const Categories = () => {
+const Categories = ({ data }) => {
   const [groupSize, setGroupSize] = useState(getInitialGroupSize())
-  const [categories, setCategories] = useState([])
-  const [loading, setLoading] = useState(true)
-
   const navigate = useNavigate() // Hook to programmatically navigate
 
-  const fetchCategories = async () => {
-    setLoading(true)
-    axios
-      .get(`https://banannylandapp.onrender.com/categories`, {
-        params: {
-          limit: 5
-        }
-      })
-      .then(response => {
-        console.log('API Response:', response.data)
-        setCategories(response.data.categories)
-      })
-      .catch(error => console.error('Error fetching products:', error))
-      .finally(() => setLoading(false))
-  }
-
   useEffect(() => {
-    fetchCategories()
-
     const handleResize = () => {
       if (window.innerWidth >= 1024) setGroupSize(6)
       else if (window.innerWidth >= 768) setGroupSize(4)
@@ -56,13 +35,13 @@ const Categories = () => {
     return grouped
   }
 
-  const groupedCards = groupCards(categories, groupSize)
+  const groupedCards = groupCards(data, groupSize)
 
   const handleCategoryClick = category => {
     navigate(`/search?category=${category}`) // Navigates to search with category as query parameter
   }
 
-  if (loading) {
+  if (!data) {
     return <p className='text-center'>Cargando productos...</p>
   }
 

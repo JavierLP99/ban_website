@@ -1,24 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react'
-import axios from 'axios'
+/* eslint-disable react/prop-types */
+import { useState, useRef } from 'react'
 import './NewProducts.css' // Assuming external CSS file for styling
 import ProductList from '../ProductList'
 
-const NewProducts = () => {
-  const [products, setProducts] = useState([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    axios
-      .get(
-        'https://banannylandapp.onrender.com/products?page=1&limit=3&sortBy=updatedAt&order=asc'
-      )
-      // TODO: change bacj to order descending
-      .then(response => {
-        setProducts(response.data.products)
-      })
-      .catch(error => console.error('Error fetching products:', error))
-      .finally(() => setLoading(false))
-  }, [])
+const NewProducts = ({ data }) => {
 
   const Card = ({ image, name, url, description }) => {
     const [mouseX, setMouseX] = useState(0)
@@ -78,7 +63,7 @@ const NewProducts = () => {
     )
   }
 
-  if (loading) {
+  if (!data) {
     return (
       <div className='d-flex justify-content-center align-items-center'>
         <div className='text-center'>
@@ -103,7 +88,7 @@ const NewProducts = () => {
           Descubre nuestros últimos productos diseñados con pasión y calidad.
         </p>
         <div className='row justify-content-center w-100'>
-          {products.map(product => (
+          {data.map(product => (
             <div
               key={product['_id']}
               className='col-12 col-md-6 col-lg-4 d-flex justify-content-center mb-4'

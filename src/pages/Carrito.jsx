@@ -260,16 +260,6 @@ const ShoppingCart = () => {
                             alt={product.name}
                             style={{ height: '200px', objectFit: 'cover' }}
                           />
-                          <input
-                            type='hidden'
-                            name='name'
-                            value={product.name}
-                          />
-                          <input
-                            type='hidden'
-                            name='image'
-                            value={getThumbnailUrl(displayImage)}
-                          />
                         </div>
                         <div className='col-md-8'>
                           <div className='card-body'>
@@ -372,11 +362,6 @@ const ShoppingCart = () => {
                               >
                                 +
                               </button>
-                              <input
-                                type='hidden'
-                                name='quantity'
-                                value={totalQuantity}
-                              />
                             </div>
                             {selectedCustomizations &&
                               Object.keys(selectedCustomizations).length >
@@ -399,11 +384,6 @@ const ShoppingCart = () => {
                             <p className='card-text mt-2'>
                               <strong>Subtotal:</strong> ${subtotal.toFixed(2)}
                             </p>
-                            <input
-                              type='hidden'
-                              name='subtotal'
-                              value={subtotal.toFixed(2)}
-                            />
                           </div>
                         </div>
                       </div>
@@ -411,6 +391,24 @@ const ShoppingCart = () => {
                   )
                 })}
               </div>
+
+              <input
+                type='hidden'
+                name='resumen'
+                value={cartItems
+                  .map(item => {
+                    const product = products.find(p => p._id === item.product)
+                    const unitPrice = getPriceForQuantity(
+                      product.price,
+                      item.quantity
+                    )
+                    const subtotal = unitPrice * item.quantity
+                    return `- ${product.name} x${
+                      item.quantity
+                    } – $${subtotal.toFixed(2)} MXN`
+                  })
+                  .join('<br />')}
+              />
 
               <div className='col-lg-4'>
                 <div className='card shadow'>
@@ -432,11 +430,6 @@ const ShoppingCart = () => {
                       <span>Total:</span>
                       <span>${calculateTotal().toFixed(2)}</span>
                     </div>
-                    <input
-                      type='hidden'
-                      name='total'
-                      value={calculateTotal().toFixed(2)}
-                    />
                     <button
                       className='btn btn-primary w-100 mt-3'
                       type='submit'

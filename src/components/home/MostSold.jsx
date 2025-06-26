@@ -1,31 +1,5 @@
-import { useState, useEffect } from 'react'
-import axios from 'axios'
-
-const MostSold = () => {
-  const [content, setContent] = useState([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    axios
-      .get(
-        'https://banannylandapp.onrender.com/products?page=1&limit=8&sortBy=updatedAt&order=desc'
-      )
-      .then(response => {
-        setContent(response.data.products)
-      })
-      .catch(error => console.error('Error fetching products:', error))
-      .finally(() => setLoading(false))
-    // Fetch products data from the JSON file
-    // fetch(
-    //   'https://banannylandapp.onrender.com/products?page=1&limit=3&sortBy=updatedAt&order=desc'
-    // )
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     // Update the products state with the first 3 items from the data
-    //     setProducts(data.products)
-    //   })
-    //   .catch(error => console.error('Error fetching products:', error))
-  }, [])
+/* eslint-disable react/prop-types */
+const MostSold = ({ data }) => {
 
   const ImportDrivePhoto = (driveUrl, height) => {
     const defaultUrl =
@@ -39,7 +13,7 @@ const MostSold = () => {
     return newUrl
   }
 
-  if (loading) {
+  if (!data) {
     return (
       <div className='d-flex justify-content-center align-items-center'>
         <div className='text-center'>
@@ -97,7 +71,7 @@ const MostSold = () => {
           </p>
         </div>
         <div className='row justify-content-center col-12'>
-          {content.map(item => card(item))}
+          {data.map(item => card(item))}
         </div>
         <a href='/search' className='btn btn-light btn-outline-dark rounded-5'>
           Ver todos los productos

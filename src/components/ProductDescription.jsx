@@ -11,6 +11,7 @@ import axios from 'axios'
 const ProductDescription = ({ productName }) => {
   const [product, setProduct] = useState(null)
   const [mainImage, setMainImage] = useState('')
+  const [mainAlt, setMainAlt] = useState(`Thumbnail 1`)
   const [quantity, setQuantity] = useState(1)
   const [price, setPrice] = useState(0)
   const [showModal, setShowModal] = useState(false) // State to control modal visibility
@@ -71,9 +72,10 @@ const ProductDescription = ({ productName }) => {
     }
   }, [selectedCustomizations, product])
 
-  const handleThumbnailClick = image => {
-    setMainImage(image)
-  }
+const handleThumbnailClick = (image, index) => {
+  setMainImage(image)
+  setMainAlt(`Thumbnail ${index + 1}`)
+}
 
   const handleQuantityChange = e => {
     const newQuantity = e.target.value
@@ -109,7 +111,7 @@ const ProductDescription = ({ productName }) => {
           <div className='w-100 ratio ratio-1x1'>
             <img
               src={getOptimizedImageUrl(mainImage)}
-              alt='Main Product'
+              alt={mainAlt}
               className='img-fluid rounded-3'
               onError={handleImageError}
               style={{ width: '100%', height: '100%', objectFit: 'contain' }} // Use 'contain' to maintain aspect ratio without deformation
@@ -130,7 +132,7 @@ const ProductDescription = ({ productName }) => {
                         : ''
                     }`}
                     style={{ cursor: 'pointer', objectFit: 'cover' }}
-                    onClick={() => handleThumbnailClick(image)}
+                    onClick={() => handleThumbnailClick(image, index)}
                   />
                 </div>
               </div>
@@ -175,7 +177,7 @@ const ProductDescription = ({ productName }) => {
           </div>
 
           <div className='mb-3'>
-            <strong>Precios:</strong>
+            <strong>Precio por pieza:</strong>
             <div className='d-flex justify-content-between'>
               {product.price.map((tier, index) => (
                 <div key={index} className='text-center w-25'>
@@ -207,7 +209,7 @@ const ProductDescription = ({ productName }) => {
 
           {/* Mayoreo Section */}
           <div className='mb-3'>
-            <strong>Mayoreo:</strong>
+            <strong>Descuento por mayoreo:</strong>
             <div className='d-flex align-items-center'>
               <label htmlFor='quantity' className='me-2'>
                 Cantidad:

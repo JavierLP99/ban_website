@@ -1,26 +1,8 @@
-import { useState, useEffect } from 'react'
+/* eslint-disable react/prop-types */
 import { Carousel } from 'react-bootstrap'
-import axios from 'axios'
 import { getResizedCloudinaryUrl } from '../../utils/tools'
 
-const Banner = () => {
-  const [content, setContent] = useState([])
-  const [destinationType, setDestinationType] = useState('')
-  const [products, setProducts] = useState([])
-  const [categories, setCategories] = useState([])
-  const [seasons, setSeasons] = useState([])
-
-  useEffect(() => {
-    axios
-      .get('https://banannylandapp.onrender.com/banners')
-      .then(res => {
-        const filteredBanners = res.data.banners.filter(
-          b => b.status === 'Valida'
-        )
-        setContent(filteredBanners)
-      })
-      .catch(err => console.error('Error al cargar los banners:', err))
-  }, [])
+const Banner = ({ content }) => {
 
   if (!content) return <div>Loading...</div>
 
