@@ -1,10 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useState, useRef } from 'react'
 import './NewProducts.css' // Assuming external CSS file for styling
-import ProductList from '../ProductList'
+import { getResizedCloudinaryUrl } from '../../utils/tools'
 
 const NewProducts = ({ data }) => {
-
   const Card = ({ image, name, url, description }) => {
     const [mouseX, setMouseX] = useState(0)
     const [mouseY, setMouseY] = useState(0)
@@ -79,10 +78,10 @@ const NewProducts = ({ data }) => {
   return (
     <section className='py-5 new-products-section'>
       <div className='container text-center d-flex flex-column align-items-center justify-content-center'>
-          <div className="d-inline-block">
-    <h2 className="fw-bold mb-3">Novedades Banannyland</h2>
-    <div className="rainbow-divider mx-auto"></div>
-  </div>
+        <div className='d-inline-block'>
+          <h2 className='fw-bold mb-3'>Novedades Banannyland</h2>
+          <div className='rainbow-divider mx-auto'></div>
+        </div>
         {/* Rainbow divider below the header */}
         <p className='mb-5'>
           Descubre nuestros últimos productos diseñados con pasión y calidad.
@@ -94,7 +93,10 @@ const NewProducts = ({ data }) => {
               className='col-12 col-md-6 col-lg-4 d-flex justify-content-center mb-4'
             >
               <Card
-                image={product.images[0]}
+                image={getResizedCloudinaryUrl(
+                  product.images[0],
+                  'w_300,h_300,c_fill,g_auto'
+                )}
                 name={product.name}
                 url={product.slug}
                 description={product.description}
@@ -103,12 +105,10 @@ const NewProducts = ({ data }) => {
           ))}
         </div>
 
-
         <a href='/search' className='btn btn-dark rounded-5'>
           Ver todos los productos
         </a>
       </div>
-
     </section>
   )
 }

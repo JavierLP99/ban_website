@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Modal, Button } from 'react-bootstrap'
 import emailjs from '@emailjs/browser'
@@ -26,7 +26,7 @@ const Contact = () => {
 
   const handleCloseModal = () => setShowModal(false)
 
-  const whenSubmit = data => {
+  const whenSubmit = () => {
     emailjs
       .sendForm(
         'service_d6s5ar5',
@@ -43,19 +43,12 @@ const Contact = () => {
         }
       )
 
-    const result = { email: '', phone: '', message: '' }
+    const result = { name: '', email: '', phone: '', message: '' }
     reset(result)
     setShowModal(true)
   }
 
   const [content, setContent] = useState([])
-
-  useEffect(() => {
-    fetch('/home.json') // Adjust the path as needed
-      .then(response => response.json())
-      .then(data => setContent(data.contact))
-      .catch(error => console.error('Error loading content:', error))
-  }, [])
 
   if (!content) return <div>Loading...</div>
 
@@ -67,7 +60,7 @@ const Contact = () => {
           <div className='rainbow-divider mx-auto'></div>
         </div>
         <div className='row justify-content-center'>
-          <p className='text-justify col-10'>{content.description}</p>
+          <p className='text-justify col-10'>Comúnicate con nosotros para encontrar la mejor solución para tí.</p>
         </div>
         <div className='col-12 col-md-10 col-lg-8 col-xl-6'>
           <div className='row mx-auto col-12'>

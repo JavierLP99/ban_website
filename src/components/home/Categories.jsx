@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { Carousel } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
+import { getResizedCloudinaryUrl } from '../../utils/tools'
 
 const Categories = ({ data }) => {
   const [groupSize, setGroupSize] = useState(getInitialGroupSize())
@@ -78,7 +79,10 @@ const Categories = ({ data }) => {
                   >
                     <a href={`/search?category=${item.name}`}>
                       <img
-                        src={item.image}
+                        src={getResizedCloudinaryUrl(
+                          item.image,
+                          't_Small'
+                        )}
                         alt={item.name}
                         style={{
                           objectFit: 'cover', // Ensures the image fills the container properly

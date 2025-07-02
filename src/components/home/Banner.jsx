@@ -3,8 +3,18 @@ import { Carousel } from 'react-bootstrap'
 import { getResizedCloudinaryUrl } from '../../utils/tools'
 
 const Banner = ({ content }) => {
-
-  if (!content) return <div>Loading...</div>
+  if (!content) {
+    return (
+      <div className='d-flex justify-content-center align-items-center'>
+        <div className='text-center'>
+          <div className='spinner-border text-primary' role='status'>
+            <span className='visually-hidden'>Cargando banners...</span>
+          </div>
+          <p className='mt-2 text-muted'>Por favor, espera...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className='position-relative overflow-hidden'>

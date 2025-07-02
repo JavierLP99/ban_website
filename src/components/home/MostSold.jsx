@@ -1,24 +1,12 @@
 /* eslint-disable react/prop-types */
+import { getResizedCloudinaryUrl } from '../../utils/tools'
 const MostSold = ({ data }) => {
-
-  const ImportDrivePhoto = (driveUrl, height) => {
-    const defaultUrl =
-      'https://drive.google.com/file/d/1Q7By_xG9r3a8Zr47j6b1HG7yAm91GIHO/view?usp=drive_link'
-
-    const match = driveUrl.match(/\/d\/(.*)\//)
-    const fileId = match ? match[1] : defaultUrl.match(/\/d\/(.*)\//)[1]
-
-    const newUrl = `https://lh3.googleusercontent.com/d/${fileId}=h${height}`
-
-    return newUrl
-  }
-
   if (!data) {
     return (
       <div className='d-flex justify-content-center align-items-center'>
         <div className='text-center'>
           <div className='spinner-border text-primary' role='status'>
-            <span className='visually-hidden'>Cargando...</span>
+            <span className='visually-hidden'>Cargando productos...</span>
           </div>
           <p className='mt-2 text-muted'>Por favor, espera...</p>
         </div>
@@ -28,22 +16,25 @@ const MostSold = ({ data }) => {
 
   const card = item => (
     <div
-      key={item.id}
+      key={item._id}
       className='mb-4 col-11 col-sm-8 col-md-6 col-lg-4 col-xl-3'
     >
       <div className='d-flex rounded-4 lights h-100 p-3'>
-        <div className='card rounded-4 w-100'>
+        <div className='card rounded-3 w-100'>
           <a href={`/producto/${item.slug}`}>
             <div className='ratio ratio-1x1'>
               <div className='d-flex justify-content-center align-items-center'>
                 <img
-                  src={item.images[0]}
-                  className='img-fluid rounded-top-4 h-100 w-100 object-fit-cover'
+                  src={getResizedCloudinaryUrl(
+                    item.images[0],
+                    'w_300,h_300,c_fill'
+                  )}
+                  className='img-fluid rounded-top-3 h-100 w-100 object-fit-cover'
                   alt={item.name}
                 />
               </div>
             </div>
-            <div className='ratio ratio-21x9 text-dark'>
+            <div className='ratio ratio-16x9 text-dark'>
               <div className='d-flex align-items-center'>
                 <div className='card-body d-flex flex-column py-2'>
                   <h3 className='card-title'>{item.name}</h3>
