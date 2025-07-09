@@ -2,15 +2,15 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import RoutesIndex from './routes'
 import Header from './components/Header'
 import Footer from './components/Footer'
-import { AuthProvider } from "react-oidc-context";
+import { AuthProvider } from 'react-oidc-context'
 
 const cognitoAuthConfig = {
   authority: import.meta.env.VITE_COGNITO_AUTHORITY,
   client_id: import.meta.env.VITE_COGNITO_CLIENT_ID,
   redirect_uri: import.meta.env.VITE_COGNITO_REDIRECT_URI,
-  response_type: "code",
-  scope: "phone openid email",
-};
+  response_type: 'code',
+  scope: 'phone openid email'
+}
 
 console.log(cognitoAuthConfig)
 function App () {
@@ -45,7 +45,6 @@ function App () {
         path: '/*',
         element: (
           <AuthProvider {...cognitoAuthConfig}>
-
             <div
               className='background-image'
               style={{
@@ -55,8 +54,9 @@ function App () {
                 // backgroundImage: `url(${backgroundImage})`
               }}
             >
-            <Header /> {/* Header now inside Router context */}
-            <RoutesIndex />
+              <Header /> {/* Header now inside Router context */}
+              <RoutesIndex />
+              <Footer />
             </div>
           </AuthProvider>
         )
@@ -77,7 +77,6 @@ function App () {
   return (
     <>
       <RouterProvider router={router} />
-      <Footer />
     </>
   )
 }
