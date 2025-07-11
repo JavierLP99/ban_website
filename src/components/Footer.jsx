@@ -142,7 +142,7 @@ const Footer = () => {
               <h6>Entérate de nuestras promociones</h6>
               <p>
                 Envíanos tu correo por si gustarías enterarte de nuestros nuevos
-                producots antes que todos
+                productos antes que todos
               </p>
               <form
                 onSubmit={handleSubmit(whenSubmit)}
@@ -202,8 +202,8 @@ const Footer = () => {
             © 2025 Banannyland. Todos los derechos reservados.
           </p>
           <button className='btn col-2' onClick={() => auth.signinRedirect()}>
-            <ul className='list-unstyled footer-links'>
-              <li className='me-1 hover-underline'>Iniciar sesión</li>
+            <ul className='list-unstyled footer-links m-0'>
+              <li className='hover-underline'>Iniciar sesión</li>
             </ul>
           </button>
         </div>
