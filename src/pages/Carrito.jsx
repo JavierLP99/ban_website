@@ -325,7 +325,7 @@ const ShoppingCart = () => {
                                                 tier.quantity.split('-')[1]
                                               )) && (
                                             <span className='badge bg-success ms-2'>
-                                              Ap licado
+                                              Aplicado
                                             </span>
                                           )}
                                       </li>
@@ -430,12 +430,12 @@ const ShoppingCart = () => {
                       <span>Total:</span>
                       <span>${calculateTotal().toFixed(2)}</span>
                     </div>
-                    <button
+                    <a
                       className='btn btn-primary w-100 mt-3'
-                      type='submit'
+                      href='/ordersummary'
                     >
-                      Realizar orden
-                    </button>
+                      Ver resumen del pedido
+                    </a>
                     <a
                       href='/products'
                       className='btn btn-outline-info w-100 mt-2'

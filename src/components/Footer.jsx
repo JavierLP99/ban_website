@@ -201,11 +201,23 @@ const Footer = () => {
           <p className='mb-0 col'>
             © 2025 Banannyland. Todos los derechos reservados.
           </p>
-          <button className='btn col-2' onClick={() => auth.signinRedirect()}>
-            <ul className='list-unstyled footer-links m-0'>
-              <li className='hover-underline'>Iniciar sesión</li>
-            </ul>
-          </button>
+
+          {!auth.isAuthenticated && (
+            <button className='btn col-2' onClick={() => auth.signinRedirect()}>
+              <li className='list-unstyled m-0 hover-underline'>
+                Iniciar sesión
+              </li>
+            </button>
+          )}
+          {auth.isAuthenticated && (
+            <div className='text-center col-md-3 col-lg-2'>
+              <button className='btn' onClick={() => auth.removeUser()}>
+                <li className='list-unstyled m-0 hover-underline'>
+                  Cerrar sesión
+                </li>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </footer>

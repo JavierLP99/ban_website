@@ -25,8 +25,8 @@ export default function Header () {
     const fetchData = async () => {
       try {
         const [catRes, seasonRes] = await Promise.all([
-        axios.get('https://banannylandapp.onrender.com/categories'),
-        axios.get('https://banannylandapp.onrender.com/seasons')
+          axios.get('https://banannylandapp.onrender.com/categories'),
+          axios.get('https://banannylandapp.onrender.com/seasons')
         ])
         setCategories(catRes.data.categories || [])
         setSeasons(seasonRes.data.seasons || [])
@@ -80,9 +80,13 @@ export default function Header () {
           </button>
 
           <div className='justify-content-center gap-3 ms-4 d-none d-lg-flex'>
-            <Button className='btn btn-secondary' onClick={() => navigate('/carrito')}>
+            <Button
+              className='btn btn-secondary'
+              onClick={() => navigate('/carrito')}
+            >
               <i className='bi bi-cart3 me-1'></i> Carrito
             </Button>
+            {/*
             {!auth.isAuthenticated && (
               <Button className='btn btn-secondary' onClick={() => auth.signinRedirect()}>
                 <i className='bi bi-person me-1'></i> Iniciar sesión
@@ -93,6 +97,7 @@ export default function Header () {
                 <i className='bi bi-box-arrow-right me-1'></i> Cerrar sesión
               </Button>
             )}
+              */}
           </div>
         </div>
 
@@ -100,7 +105,9 @@ export default function Header () {
           <div className='row w-100'>
             <ul className='navbar-nav mx-auto d-flex justify-content-center'>
               <li className='nav-item'>
-                <a className='nav-link fw-bold text-primary' href='/'>Inicio</a>
+                <a className='nav-link fw-bold text-primary' href='/'>
+                  Inicio
+                </a>
               </li>
 
               {/* Categories */}
@@ -138,19 +145,36 @@ export default function Header () {
               </DropdownButton>
 
               <li className='nav-item'>
-                <a className='nav-link fw-bold text-primary' href='/promotions'>Promociones</a>
+                <a className='nav-link fw-bold text-primary' href='/promotions'>
+                  Promociones
+                </a>
               </li>
 
               {auth.isAuthenticated && (
                 <>
                   <li className='nav-item'>
-                    <a className='nav-link fw-bold text-primary' href='/listadeproductos'>Listado</a>
+                    <a
+                      className='nav-link fw-bold text-primary'
+                      href='/listadeproductos'
+                    >
+                      Listado
+                    </a>
                   </li>
                   <li className='nav-item'>
-                    <a className='nav-link fw-bold text-primary' href='/banners'>Banners</a>
+                    <a
+                      className='nav-link fw-bold text-primary'
+                      href='/banners'
+                    >
+                      Banners
+                    </a>
                   </li>
                   <li className='nav-item'>
-                    <a className='nav-link fw-bold text-primary' href='/admin/categories'>Categorías</a>
+                    <a
+                      className='nav-link fw-bold text-primary'
+                      href='/admin/categories'
+                    >
+                      Categorías
+                    </a>
                   </li>
                 </>
               )}
@@ -158,9 +182,13 @@ export default function Header () {
 
             {/* Mobile Buttons */}
             <div className='d-flex justify-content-center gap-3 d-lg-none mt-3'>
-              <Button className='btn btn-secondary' onClick={() => navigate('/carrito')}>
+              <Button
+                className='btn btn-secondary'
+                onClick={() => navigate('/carrito')}
+              >
                 <i className='bi bi-cart3 me-1'></i> Carrito
               </Button>
+              {/*
               {!auth.isAuthenticated && (
                 <Button className='btn btn-secondary' onClick={() => auth.signinRedirect()}>
                   <i className='bi bi-person me-1'></i> Iniciar sesión
@@ -171,6 +199,7 @@ export default function Header () {
                   <i className='bi bi-box-arrow-right me-1'></i> Cerrar sesión
                 </Button>
               )}
+                */}
             </div>
           </div>
         </div>

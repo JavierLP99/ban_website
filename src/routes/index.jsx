@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
-import { Home, About, ProductsData, BannersPage, Categories, EditProduct, Carrito } from '@/pages'
+import { Home, About, ProductsData, BannersPage, Categories, EditProduct, Carrito, OrderSummary } from '@/pages'
 import ProductDetail from '../pages/ProductDetail'
 import SearchPage from '../pages/SearchPage'
 import Login from '../pages/Login'
@@ -17,6 +17,7 @@ const App = () => {
         <Route path='/admin/catalogo/' element={<EditProduct />} />
         <Route path='/search' element={<SearchPage />} />
         <Route path='/carrito' element={<Carrito />} />
+        <Route path='/ordersummary' element={<OrderSummary />} />
         <Route
           path='/listadeproductos'
           element={
