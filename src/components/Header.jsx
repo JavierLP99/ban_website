@@ -25,8 +25,8 @@ export default function Header () {
     const fetchData = async () => {
       try {
         const [catRes, seasonRes] = await Promise.all([
-          axios.get('https://banannylandapp.onrender.com/categories'),
-          axios.get('https://banannylandapp.onrender.com/seasons')
+          axios.get('https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/categories'),
+          axios.get('https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/seasons')
         ])
         setCategories(catRes.data.categories || [])
         setSeasons(seasonRes.data.seasons || [])

@@ -64,7 +64,7 @@ const ProductsData = () => {
     }
 
     try {
-      await axios.delete(`https://banannylandapp.onrender.com/products/${_id}`)
+      await axios.delete(`https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/products/${_id}`)
       setShowModal(true)
       fetchProducts()
       setTimeout(() => setShowModal(false), 5000)
@@ -76,7 +76,7 @@ const ProductsData = () => {
   const confirmHardDelete = async () => {
     try {
       await axios.delete(
-        `https://banannylandapp.onrender.com/products/${productToHardDelete}/hardDelete`
+        `https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/products/${productToHardDelete}/hardDelete`
       )
       setShowConfirmModal(false)
       setShowModal(true)
@@ -92,7 +92,7 @@ const ProductsData = () => {
     try {
       await Promise.all(
         selectedProducts.map(_id =>
-          axios.delete(`https://banannylandapp.onrender.com/products/${_id}`)
+          axios.delete(`https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/products/${_id}`)
         )
       )
       setSelectedProducts([])
@@ -132,7 +132,7 @@ const ProductsData = () => {
     }
 
     axios
-      .get(`https://banannylandapp.onrender.com/products/all`, {
+      .get(`https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/products/all`, {
         params: axiosParams
       })
       .then(response => {
@@ -150,7 +150,7 @@ const ProductsData = () => {
 
   useEffect(() => {
     axios
-      .get(`https://banannylandapp.onrender.com/categories`)
+      .get(`https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/categories`)
       .then(response => {
         setCategories(response.data.categories)
       })

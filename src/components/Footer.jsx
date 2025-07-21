@@ -52,8 +52,8 @@ const Footer = () => {
   useEffect(() => {
     axios
       .all([
-        axios.get(`https://banannylandapp.onrender.com/categories`),
-        axios.get('https://banannylandapp.onrender.com/seasons')
+        axios.get(`https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/categories`),
+        axios.get('https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/seasons')
       ])
       .then(([categoriesRes, seasonRes]) => {
         setCategories(categoriesRes.data.categories || [])

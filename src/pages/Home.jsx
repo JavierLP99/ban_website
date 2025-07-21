@@ -15,19 +15,19 @@ const Home = () => {
   useEffect(() => {
     axios
       .all([
-        axios.get('https://banannylandapp.onrender.com/banners'),
-        axios.get(`https://banannylandapp.onrender.com/categories`, {
+        axios.get('https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/banners'),
+        axios.get(`https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/categories`, {
           params: {
             limit: 5
           }
         }),
       axios
         .get(
-          'https://banannylandapp.onrender.com/products?page=1&limit=3&sortBy=updatedAt&order=asc'
+          'https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/products?page=1&limit=3&sortBy=updatedAt&order=asc'
         ),
     axios
       .get(
-        'https://banannylandapp.onrender.com/products?page=1&limit=8&sortBy=updatedAt&order=desc'
+        'https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/products?page=1&limit=8&sortBy=updatedAt&order=desc'
       )
       ])
       .then(([bannersRes, categoriesRes, newProductsRes, mostSoldRes]) => {

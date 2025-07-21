@@ -51,7 +51,7 @@ const BannersPage = () => {
 
   useEffect(() => {
     axios
-      .get('https://banannylandapp.onrender.com/banners/all')
+      .get('https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/banners/all')
       .then(response => setBanners(response.data.banners))
       .catch(error => console.error('Error al obtener los banners:', error))
   }, [])
@@ -68,7 +68,7 @@ const BannersPage = () => {
     console.log(bannerToDelete)
     try {
       await axios.delete(
-        `https://banannylandapp.onrender.com/banners/${bannerToDelete}`
+        `https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/banners/${bannerToDelete}`
       )
       setShowConfirmModal(false)
       setShowModal(true)
@@ -90,7 +90,7 @@ const BannersPage = () => {
     console.log(bannerToHardDelete)
     try {
       await axios.delete(
-        `https://banannylandapp.onrender.com/banners/${bannerToHardDelete}/hardDelete`
+        `https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/banners/${bannerToHardDelete}/hardDelete`
       )
       setshowHardDeleteModal(false)
       setDeleteModal(true)
@@ -118,7 +118,7 @@ const BannersPage = () => {
     console.log(bannerToRestore)
     try {
       await axios.put(
-        `https://banannylandapp.onrender.com/banners/${bannerToRestore}`,
+        `https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/banners/${bannerToRestore}`,
         {
           status: 'Valida'
         }
@@ -151,7 +151,7 @@ const BannersPage = () => {
     const bannersID = banners.map(banner => banner._id)
 
     try {
-      await axios.put('https://banannylandapp.onrender.com/banners/reorder', {
+      await axios.put('https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/banners/reorder', {
         ids: bannersID
       })
       setSavedOrder(true)
@@ -246,7 +246,7 @@ const BannersPage = () => {
     }
 
     try {
-      await axios.post('https://banannylandapp.onrender.com/banners', {
+      await axios.post('https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/banners', {
         image: images[0].url,
         path: path
       })
@@ -278,7 +278,7 @@ const BannersPage = () => {
     if (!bannerToEdit || !bannerToEdit._id) return
     try {
       await axios.put(
-        `https://banannylandapp.onrender.com/banners/${bannerToEdit._id}`,
+        `https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/banners/${bannerToEdit._id}`,
         {
           image: selectedImage?.url || bannerToEdit.image,
           path: path
@@ -298,19 +298,19 @@ const BannersPage = () => {
 
   useEffect(() => {
     axios
-      .get('https://banannylandapp.onrender.com/products', {
+      .get('https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/products', {
         params: { limit: 100 }
       })
       .then(response => setProducts(response.data.products))
       .catch(error => console.error('Error al obtener productos:', error))
 
     axios
-      .get('https://banannylandapp.onrender.com/categories')
+      .get('https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/categories')
       .then(response => setCategories(response.data.categories))
       .catch(error => console.error('Error al obtener categorías:', error))
 
     axios
-      .get('https://banannylandapp.onrender.com/seasons')
+      .get('https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/seasons')
       .then(response => setSeasons(response.data.seasons))
       .catch(error => console.error('Error al obtener temporadas:', error))
   }, [])
