@@ -21,9 +21,17 @@ const OrderSummary = () => {
   const schema = yup
     .object({
       name: yup.string().required('Ingesa tu nombre'),
-      phone: yup.string(),
       email: yup.string().required('Ingesa un email para contactarte'),
-      message: yup.string().required('Escribe tu mensaje')
+      phone: yup.string().when('contact', {
+        is: val => val === 'whatsapp',
+        then: schema =>
+          schema
+            .required('Ingresa tu número de WhatsApp')
+            .matches(/^[0-9\s]+$/, 'Sólo se permiten números'),
+        otherwise: schema => schema.notRequired()
+      }),
+      contact: yup.string().required('Selecciona una opción de contacto'),
+      delivery: yup.string().required('Selecciona una opción de entrega')
     })
     .required()
   const form = useRef()
@@ -195,32 +203,39 @@ const OrderSummary = () => {
           </div>
           <div className='mt-4'>
             <h6>Método de contacto preferido</h6>
-            <p>Los detalles y el seguimiento de tu pedido se enviarán al método de contacto que hayas seleccionado</p>
+            <p>
+              Los detalles y el seguimiento de tu pedido se enviarán al método
+              de contacto que hayas seleccionado
+            </p>
             <table className='row table align-middle mt-4'>
-              <tbody>
-                <tr>
-                  <th scope='row'>
-                    <input
-                      className='form-check-input border-dark'
-                      type='radio'
-                      name='radioDefault'
-                      id='radioDefault1'
-                    />
-                  </th>
-                  <td>WhatsApp</td>
-                </tr>
-                <tr>
-                  <th scope='row'>
-                    <input
-                      className='form-check-input border-dark'
-                      type='radio'
-                      name='radioDefault'
-                      id='radioDefault1'
-                    />
-                  </th>
-                  <td>Correo elctrónico</td>
-                </tr>
-              </tbody>
+              <tr>
+                <th scope='row'>
+                  <input
+                    type='radio'
+                    name='contact'
+                    id='contact'
+                    value='whatsapp'
+                    {...register('contact')}
+                    className='form-check-input border-dark'
+                  />
+                </th>
+                <td>WhatsApp</td>
+              </tr>
+              <tr>
+                <th scope='row'>
+                  <input
+                    type='radio'
+                    name='contact'
+                    id='contact'
+                    {...register('contact')}
+                    className='form-check-input border-dark'
+                  />
+                </th>
+                <td>Correo elctrónico</td>
+              </tr>
+              <p className='text-warning text-center'>
+                {errors.contact?.message}
+              </p>
             </table>
           </div>
           <div className='mt-4'>
@@ -230,10 +245,11 @@ const OrderSummary = () => {
                 <tr>
                   <th scope='row'>
                     <input
-                      className='form-check-input border-dark'
                       type='radio'
-                      name='radioDefault'
-                      id='radioDefault1'
+                      name='delivery'
+                      id='delivery'
+                      {...register('delivery')}
+                      className='form-check-input border-dark'
                     />
                   </th>
                   <td>Entrega a domicilio</td>
@@ -241,10 +257,11 @@ const OrderSummary = () => {
                 <tr>
                   <th scope='row'>
                     <input
-                      className='form-check-input border-dark'
                       type='radio'
-                      name='radioDefault'
-                      id='radioDefault1'
+                      name='delivery'
+                      id='delivery'
+                      {...register('delivery')}
+                      className='form-check-input border-dark'
                     />
                   </th>
                   <td>Recoger producto en puerta</td>
@@ -252,15 +269,19 @@ const OrderSummary = () => {
                 <tr>
                   <th scope='row'>
                     <input
-                      className='form-check-input border-dark'
                       type='radio'
-                      name='radioDefault'
-                      id='radioDefault2'
+                      name='delivery'
+                      id='delivery'
+                      {...register('delivery')}
+                      className='form-check-input border-dark'
                     />
                   </th>
                   <td>Entrega en estación del metro</td>
                 </tr>
               </tbody>
+              <p className='text-warning text-center'>
+                {errors.delivery?.message}
+              </p>
             </table>
           </div>
         </div>
@@ -277,7 +298,7 @@ const OrderSummary = () => {
             return (
               <div
                 key={`${product._id}-${JSON.stringify(selectedCustomizations)}`}
-                className='card mb-3 bg-transparent border-0'
+                className='card mb-3 bg-white border-0'
               >
                 <div className='row'>
                   <div className='col-2'>
@@ -312,23 +333,43 @@ const OrderSummary = () => {
                     </div>
                   </div>
                 </div>
+
+                <input
+                  type='hidden'
+                  name='resumen'
+                  value={cartItems
+                    .map(item => {
+                      const product = products.find(p => p._id === item.product)
+                      const unitPrice = getPriceForQuantity(
+                        product.price,
+                        item.quantity
+                      )
+                      const subtotal = unitPrice * item.quantity
+                      return `- ${product.name} x${
+                        item.quantity
+                      } – $${subtotal.toFixed(2)} MXN`
+                    })
+                    .join('<br />')}
+                />
               </div>
             )
           })}
-          <div className='d-flex justify-content-between fw-bold mb-3'>
-            <span>Envio:</span>
-            <span className='text-success'>
-              Dependiendo del tipo de entrega
-            </span>
-          </div>
-          <div className='d-flex justify-content-between fw-bold fs-5'>
-            <span>Total:</span>
-            <span>${calculateTotal().toFixed(2)}</span>
-          </div>
-          <div className='d-flex justify-content-center'>
-            <button className='btn btn-primary mt-3' type='submit'>
-              Realizar pedido
-            </button>
+          <div className='bg-white'>
+            <div className='d-flex justify-content-between fw-bold mb-3'>
+              <span>Envio:</span>
+              <span className='text-success'>
+                Dependiendo del tipo de entrega
+              </span>
+            </div>
+            <div className='d-flex justify-content-between fw-bold fs-5'>
+              <span>Total:</span>
+              <span>${calculateTotal().toFixed(2)}</span>
+            </div>
+            <div className='d-flex justify-content-center'>
+              <button className='btn btn-primary mt-3' type='submit'>
+                Realizar pedido
+              </button>
+            </div>
           </div>
         </div>
       </form>
