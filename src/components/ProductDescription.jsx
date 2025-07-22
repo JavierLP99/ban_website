@@ -23,7 +23,7 @@ const ProductDescription = ({ productName }) => {
   useEffect(() => {
     // Fetch product from API based on productName
     axios
-      .get(`https://banannylandapp.onrender.com/products/${productName}`)
+      .get(`https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/products/${productName}`)
       .then(response => {
         console.log(response)
         const fetchedProduct = response.data.product // Assuming the API returns an array

@@ -130,8 +130,8 @@ const ProductForm = () => {
   const fetchCategories = useCallback(async () => {
     try {
       const [categoriesRes, seasonsRes] = await Promise.all([
-        axios.get('https://banannylandapp.onrender.com/categories'),
-        axios.get('https://banannylandapp.onrender.com/seasons')
+        axios.get('https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/categories'),
+        axios.get('https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/seasons')
       ])
       setCategories(categoriesRes.data.categories.map(c => c.name))
       setSeasons(seasonsRes.data.seasons.map(s => s.name))
@@ -155,7 +155,7 @@ const ProductForm = () => {
         if (id) {
           setProcedure('Edit')
           const response = await axios.get(
-            `https://banannylandapp.onrender.com/products/${id}`,
+            `https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/products/${id}`,
             { signal }
           )
           const product = response.data.product
@@ -165,11 +165,11 @@ const ProductForm = () => {
           setProcedure('Clone')
           const [original, provisioned] = await Promise.all([
             axios.get(
-              `https://banannylandapp.onrender.com/products/${cloneId}`,
+              `https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/products/${cloneId}`,
               { signal }
             ),
             axios.post(
-              `https://banannylandapp.onrender.com/products/provision`,
+              `https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/products/provision`,
               null,
               { signal }
             )
@@ -179,7 +179,7 @@ const ProductForm = () => {
         } else if (operationState.needsProvisioning) {
           setProcedure('Create')
           const response = await axios.post(
-            `https://banannylandapp.onrender.com/products/provision`,
+            `https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/products/provision`,
             null,
             { signal }
           )
@@ -378,7 +378,7 @@ const ProductForm = () => {
       delete payload.prices
 
       const response = await axios.put(
-        `https://banannylandapp.onrender.com/products/${galleryName}`,
+        `https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/products/${galleryName}`,
         payload
       )
 

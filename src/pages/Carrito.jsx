@@ -43,7 +43,7 @@ const ShoppingCart = () => {
     try {
       const uniqueProductIds = [...new Set(carrito.map(item => item.product))]
       const requests = uniqueProductIds.map(id =>
-        axios.get(`https://banannylandapp.onrender.com/products/${id}`)
+        axios.get(`https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/products/${id}`)
       )
       const responses = await Promise.all(requests)
       setProducts(responses.map(r => r.data.product))

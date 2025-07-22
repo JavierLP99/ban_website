@@ -21,7 +21,7 @@ const Categories = () => {
   useEffect(() => {
     setLoading(true)
     axios
-      .get('https://banannylandapp.onrender.com/categories/all', {
+      .get('https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/categories/all', {
         params: { limit: 50 }
       })
       .then(response => setCategories(response.data.categories || []))
@@ -42,7 +42,7 @@ const Categories = () => {
 
     try {
       await axios.put(
-        `https://banannylandapp.onrender.com/categories/${selectedCategory._id}`,
+        `https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/categories/${selectedCategory._id}`,
         {
           linkedProduct: product._id,
           image: product.images[0]
@@ -85,7 +85,7 @@ const Categories = () => {
   // Example API call inside useEffect or handler
   const fetchProductsByCategory = async category => {
     axios
-      .get(`https://banannylandapp.onrender.com/products/all`, {
+      .get(`https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/products/all`, {
         params: { category: category.name, limit: 100 }
       })
       .then(response => {
@@ -99,11 +99,11 @@ const Categories = () => {
     try {
       if (selectedCategory.status === 'Valida') {
         await axios.delete(
-          `https://banannylandapp.onrender.com/categories/${selectedCategory._id}`
+          `https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/categories/${selectedCategory._id}`
         )
       } else {
         await axios.put(
-          `https://banannylandapp.onrender.com/categories/${selectedCategory._id}`,
+          `https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/categories/${selectedCategory._id}`,
           {
             status: 'Valida'
           }

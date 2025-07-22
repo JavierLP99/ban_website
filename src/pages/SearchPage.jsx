@@ -22,7 +22,7 @@ export default function SearchPage () {
       setError(null)
       try {
         const response = await axios.get(
-          `https://banannylandapp.onrender.com/products`,
+          `https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/products`,
           {
             params: {
               limit: 1000,
