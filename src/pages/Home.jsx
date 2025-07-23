@@ -39,7 +39,7 @@ const Home = () => {
         setNewProducts(newProductsRes.data.products)
         setMostSold(mostSoldRes.data.products)
       })
-      .catch(error => console.error('Error al cargar la información:', error))
+      .catch(error => console.log('Error al cargar la información:', error))
   }, [])
 
   return (
