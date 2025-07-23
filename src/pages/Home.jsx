@@ -39,7 +39,16 @@ const Home = () => {
         setNewProducts(newProductsRes.data.products)
         setMostSold(mostSoldRes.data.products)
       })
-      .catch(error => console.log('Error al cargar la información:', error))
+      .catch(error => {
+        console.error('Handler error:', error)
+    return {
+      statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+      body: JSON.stringify({ message: 'Internal Server Error' }),
+    }
+      })
   }, [])
 
   return (
