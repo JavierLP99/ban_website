@@ -37,10 +37,13 @@ const OrderSummary = () => {
   const form = useRef()
   const {
     register,
+    watch,
     handleSubmit,
     formState: { errors },
     reset
   } = useForm({ resolver: yupResolver(schema) })
+
+  const deliveryOption = watch('delivery')
 
   const whenSubmit = data => {
     emailjs
@@ -88,7 +91,9 @@ const OrderSummary = () => {
     try {
       const uniqueProductIds = [...new Set(carrito.map(item => item.product))]
       const requests = uniqueProductIds.map(id =>
-        axios.get(`https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/products/${id}`)
+        axios.get(
+          `https://1zy0q39b80.execute-api.eu-north-1.amazonaws.com/banannyland-api/products/${id}`
+        )
       )
       const responses = await Promise.all(requests)
       setProducts(responses.map(r => r.data.product))
@@ -247,7 +252,8 @@ const OrderSummary = () => {
                     <input
                       type='radio'
                       name='delivery'
-                      id='delivery'
+                      id='delivery-home'
+                      value='adress'
                       {...register('delivery')}
                       className='form-check-input border-dark'
                     />
@@ -259,7 +265,8 @@ const OrderSummary = () => {
                     <input
                       type='radio'
                       name='delivery'
-                      id='delivery'
+                      id='delivery-pickup'
+                      value='door'
                       {...register('delivery')}
                       className='form-check-input border-dark'
                     />
@@ -271,7 +278,8 @@ const OrderSummary = () => {
                     <input
                       type='radio'
                       name='delivery'
-                      id='delivery'
+                      id='delivery-metro'
+                      value='metro'
                       {...register('delivery')}
                       className='form-check-input border-dark'
                     />
@@ -356,9 +364,15 @@ const OrderSummary = () => {
           })}
           <div className='bg-white'>
             <div className='d-flex justify-content-between fw-bold mb-3'>
-              <span>Envio:</span>
+              <span>Envío:</span>
               <span className='text-success'>
-                Dependiendo del tipo de entrega
+                {deliveryOption === 'adress'
+                  ? '$100.00 MXN'
+                  : deliveryOption === 'door'
+                  ? 'Gratis'
+                  : deliveryOption === 'metro'
+                  ? 'Gratis'
+                  : 'Selecciona un método de entrega'}
               </span>
             </div>
             <div className='d-flex justify-content-between fw-bold fs-5'>
@@ -388,7 +402,7 @@ const OrderSummary = () => {
         <Modal.Body className='rounded'>
           <h2 className='text-center'>¡Tu pedido se ha realizado con éxito!</h2>
           <p className='text-center'>
-            Revisa tu correo para ver la información de tu pedido
+            Te contactaremos para el proceso de entrega de tu producto
           </p>
 
           <div className='text-center mt-4'>
