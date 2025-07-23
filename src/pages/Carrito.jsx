@@ -14,25 +14,6 @@ const ShoppingCart = () => {
   const handleCloseModal = () => setShowModal(false)
   const form = useRef()
 
-  const whenSubmit = data => {
-    emailjs
-      .sendForm(
-        'service_d6s5ar5',
-        'template_awatiom',
-        form.current,
-        'XRcANWSPimH7Fxmnv'
-      )
-      .then(
-        () => {
-          console.log('SUCCESS!')
-        },
-        error => {
-          console.log('FAILED...', error.text)
-        }
-      )
-    setShowModal(true)
-  }
-
   // Function to determine price based on quantity
   const getPriceForQuantity = useCallback((priceTiers, quantity) => {
     if (!priceTiers || priceTiers.length === 0) return 0
@@ -222,7 +203,7 @@ const ShoppingCart = () => {
         </div>
       ) : (
         <>
-          <form ref={form} onSubmit={whenSubmit}>
+          <form ref={form}>
             <div className='row'>
               <div className='col-lg-8'>
                 {groupedCartItems.map(group => {
