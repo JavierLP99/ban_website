@@ -365,15 +365,7 @@ const OrderSummary = () => {
           <div className='bg-white'>
             <div className='d-flex justify-content-between fw-bold mb-3'>
               <span>Envío:</span>
-              <span className='text-success'>
-                {deliveryOption === 'adress'
-                  ? '$100.00 MXN'
-                  : deliveryOption === 'door'
-                  ? 'Gratis'
-                  : deliveryOption === 'metro'
-                  ? 'Gratis'
-                  : 'Selecciona un método de entrega'}
-              </span>
+              <span className='text-success'>A determinar</span>
             </div>
             <div className='d-flex justify-content-between fw-bold fs-5'>
               <span>Total:</span>
@@ -402,7 +394,8 @@ const OrderSummary = () => {
         <Modal.Body className='rounded'>
           <h2 className='text-center'>¡Tu pedido se ha realizado con éxito!</h2>
           <p className='text-center'>
-            Te contactaremos para el proceso de entrega de tu producto
+            Te contactaremos para seguir con el proceso de entrega de tu
+            producto
           </p>
 
           <div className='text-center mt-4'>
